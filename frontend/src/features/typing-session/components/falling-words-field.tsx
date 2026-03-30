@@ -1,9 +1,12 @@
-import type { FallingWord } from '../utils/fallingWords'
+import type {
+  FallingWord,
+  GamePhase,
+} from '../games/falling-words/types'
 
 type FallingWordsFieldProps = {
   words: FallingWord[]
   currentInput: string
-  phase: 'idle' | 'running' | 'game-over'
+  phase: GamePhase
   score: number
   onFieldClick: () => void
 }

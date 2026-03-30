@@ -1,22 +1,31 @@
 import { createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
-import DifficultySelector from './components/DifficultySelector'
-import FallingWordsField from './components/FallingWordsField'
-import GameHud from './components/GameHud'
+import type { GameDefinition } from '../../entities/game/types'
+import { getWordBank } from '../../entities/word-bank/get-word-bank'
 import {
   createFallingWord,
-  formatScore,
   getDifficulty,
-  type DifficultyKey,
-  type FallingWord,
-} from './utils/fallingWords'
+} from './games/falling-words/falling-words-game'
+import type {
+  DifficultyKey,
+  FallingWord,
+  GamePhase,
+} from './games/falling-words/types'
 
-type GamePhase = 'idle' | 'running' | 'game-over'
+function formatScore(elapsedMs: number) {
+  return Math.floor(elapsedMs / 1000)
+}
 
-function App() {
+function findExactMatch(words: FallingWord[], value: string) {
+  return words
+    .filter((word) => word.text === value)
+    .sort((left, right) => right.y - left.y)[0]
+}
+
+export function useTypingSession(game: GameDefinition) {
+  const wordBank = getWordBank(game.defaultLanguage)
+
   let inputRef: HTMLInputElement | undefined
-  let fieldRef: HTMLDivElement | undefined
   let animationFrame = 0
-  let resizeObserver: ResizeObserver | undefined
   let nextWordId = 1
   let lastFrameTime = 0
   let lastSpawnTime = 0
@@ -31,7 +40,7 @@ function App() {
   const [elapsedMs, setElapsedMs] = createSignal(0)
 
   const selectedDifficulty = createMemo(() => getDifficulty(difficulty()))
-
+  const score = createMemo(() => formatScore(elapsedMs()))
   const phaseLabel = createMemo(() => {
     if (phase() === 'running') {
       return selectedDifficulty().label
@@ -41,8 +50,6 @@ function App() {
     }
     return 'STANDBY'
   })
-
-  const score = createMemo(() => formatScore(elapsedMs()))
 
   const stopLoop = () => {
     if (animationFrame) {
@@ -56,10 +63,19 @@ function App() {
     setFieldHeight(window.innerHeight)
   }
 
+  const focusInput = () => {
+    inputRef?.focus()
+  }
+
   const spawnWord = () => {
+    if (!wordBank || wordBank.words.length === 0) {
+      return
+    }
+
     const nextWord = createFallingWord(
       nextWordId,
       fieldWidth(),
+      wordBank.words,
       selectedDifficulty(),
     )
     nextWordId += 1
@@ -74,8 +90,8 @@ function App() {
     setCurrentInput('')
     if (inputRef) {
       inputRef.value = ''
-      inputRef.focus()
     }
+    focusInput()
     setElapsedMs(0)
     lastFrameTime = 0
     lastSpawnTime = 0
@@ -97,11 +113,7 @@ function App() {
   }
 
   const submitExactMatch = (value: string) => {
-    const exactMatches = activeWords()
-      .filter((word) => word.text === value)
-      .sort((left, right) => right.y - left.y)
-
-    const targetWord = exactMatches[0]
+    const targetWord = findExactMatch(activeWords(), value)
     if (!targetWord) {
       return false
     }
@@ -114,12 +126,22 @@ function App() {
     return true
   }
 
+  const handleDifficultyChange = (nextDifficulty: DifficultyKey) => {
+    if (phase() === 'running') {
+      resetGame(nextDifficulty)
+      return
+    }
+
+    setDifficulty(nextDifficulty)
+  }
+
   const handleInput = (event: InputEvent & { currentTarget: HTMLInputElement }) => {
     const sanitized = event.currentTarget.value.replace(/\s+/g, '')
     if (phase() !== 'running') {
       event.currentTarget.value = ''
       return
     }
+
     setCurrentInput(sanitized)
     submitExactMatch(sanitized)
   }
@@ -207,12 +229,12 @@ function App() {
       tick(timestamp)
     })
 
-    onCleanup(() => stopLoop())
+    onCleanup(stopLoop)
   })
 
   onMount(() => {
     updateFieldSize()
-    inputRef?.focus()
+    focusInput()
     window.addEventListener('resize', updateFieldSize)
   })
 
@@ -221,83 +243,21 @@ function App() {
     window.removeEventListener('resize', updateFieldSize)
   })
 
-  return (
-    <div class="relative h-screen w-screen overflow-hidden bg-black text-white selection:bg-white selection:text-black">
-      {/* Background Layer */}
-      <div ref={fieldRef} class="absolute inset-0 z-0">
-        <FallingWordsField
-          words={activeWords()}
-          currentInput={currentInput()}
-          phase={phase()}
-          score={score()}
-          onFieldClick={() => inputRef?.focus()}
-        />
-      </div>
-
-      {/* Overlay UI Layer */}
-      <div class="pointer-events-none relative z-10 flex h-full flex-col p-8 sm:p-12">
-        <header class="flex items-start justify-between">
-          <div class="flex flex-col gap-1">
-            <h1 class="text-xs font-bold tracking-[0.5em] text-white opacity-40 uppercase">
-              Void Protocol v1.0
-            </h1>
-          </div>
-          <div class="pointer-events-auto">
-            <DifficultySelector
-              activeDifficulty={difficulty()}
-              onChange={(nextDifficulty) => {
-                if (phase() === 'running') {
-                  resetGame(nextDifficulty)
-                } else {
-                  setDifficulty(nextDifficulty)
-                }
-              }}
-            />
-          </div>
-        </header>
-
-        <div class="mt-auto flex items-end justify-between">
-          <GameHud
-            score={score()}
-            phaseLabel={phaseLabel()}
-            typedValue={currentInput()}
-          />
-
-          <div class="pointer-events-auto flex flex-col items-end gap-4">
-            <button
-              type="button"
-              class="border border-white/10 bg-black/40 px-6 py-2 text-[10px] font-bold tracking-[0.3em] text-white/60 backdrop-blur-sm uppercase transition-all hover:border-white/40 hover:text-white"
-              onClick={() => {
-                if (phase() === 'running') {
-                  resetGame()
-                } else {
-                  startGame()
-                }
-              }}
-            >
-              {phase() === 'running' ? '[ Reset ]' : phase() === 'game-over' ? '[ Reconnect ]' : '[ Initialize ]'}
-            </button>
-            <p class="text-[9px] tracking-widest text-white/20 uppercase">
-              ESC to abort
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Hidden input for focus handling */}
-      <input
-        ref={inputRef}
-        value={currentInput()}
-        class="absolute -left-[9999px] top-0 opacity-0"
-        autocapitalize="off"
-        autocomplete="off"
-        autocorrect="off"
-        spellcheck={false}
-        onInput={handleInput}
-        onKeyDown={handleKeyDown}
-      />
-    </div>
-  )
+  return {
+    activeWords,
+    currentInput,
+    difficulty,
+    handleDifficultyChange,
+    handleInput,
+    handleKeyDown,
+    phase,
+    phaseLabel,
+    resetGame,
+    score,
+    setInputRef: (element: HTMLInputElement) => {
+      inputRef = element
+    },
+    startGame,
+    focusInput,
+  }
 }
-
-export default App

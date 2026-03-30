@@ -1,7 +1,5 @@
-import {
-  difficultyOptions,
-  type DifficultyKey,
-} from '../utils/fallingWords'
+import { difficultyOptions } from '../games/falling-words/falling-words-game'
+import type { DifficultyKey } from '../games/falling-words/types'
 
 type DifficultySelectorProps = {
   activeDifficulty: DifficultyKey

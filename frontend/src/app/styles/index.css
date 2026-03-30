@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
-@source "./index.tsx";
-@source "./App.tsx";
-@source "./components/**/*.tsx";
+@source "../../main.tsx";
+@source "../../app/**/*.tsx";
+@source "../../pages/**/*.tsx";
+@source "../../features/**/*.tsx";
 
 @theme {
   --font-sans: "Space Grotesk", "IBM Plex Sans", sans-serif;
@@ -23,18 +24,17 @@ html, body {
   color: var(--fg);
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent scrolling for full-screen game */
+  overflow: hidden;
   height: 100%;
   width: 100%;
   font-family: var(--font-sans);
 }
 
 body {
-  background: 
+  background:
     radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
 }
 
-/* Add a subtle grain effect */
 body::before {
   content: "";
   position: fixed;
@@ -57,16 +57,18 @@ button {
   color: #000000;
 }
 
-/* Custom scrollbar if needed (though we hidden it) */
 ::-webkit-scrollbar {
   width: 4px;
 }
+
 ::-webkit-scrollbar-track {
   background: #000;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #222;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #333;
 }

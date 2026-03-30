@@ -1,26 +1,4 @@
-import wordBank from '../data/wordBank'
-
-export type DifficultyKey = 'easy' | 'medium' | 'hard'
-
-export type DifficultyConfig = {
-  key: DifficultyKey
-  label: string
-  spawnIntervalMs: number
-  baseSpeed: number
-  speedJitter: number
-  gravity: number
-}
-
-export type FallingWord = {
-  id: number
-  text: string
-  x: number
-  y: number
-  velocityX: number
-  velocityY: number
-  rotation: number
-  angularVelocity: number
-}
+import type { DifficultyConfig, DifficultyKey, FallingWord } from './types'
 
 export const difficultyOptions: DifficultyConfig[] = [
   {
@@ -64,9 +42,10 @@ export function getDifficulty(key: DifficultyKey) {
 export function createFallingWord(
   id: number,
   width: number,
+  words: string[],
   difficulty: DifficultyConfig,
 ) {
-  const text = wordBank[Math.floor(Math.random() * wordBank.length)]
+  const text = words[Math.floor(Math.random() * words.length)]
   const estimatedWidth = estimateWordWidth(text)
   const safeWidth = Math.max(width - estimatedWidth - 24, 24)
   const x = randomBetween(24, safeWidth)
@@ -83,8 +62,4 @@ export function createFallingWord(
   }
 
   return word
-}
-
-export function formatScore(elapsedMs: number) {
-  return Math.floor(elapsedMs / 1000)
 }
