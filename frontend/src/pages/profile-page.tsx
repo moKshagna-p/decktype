@@ -4,6 +4,8 @@ import AuthForms from '@/features/auth/components/auth-forms'
 import ResultHistory from '@/features/results/components/result-history'
 import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
+import { Typography } from '@/app/components/ui/typography'
+import { Button } from '@/app/components/ui/button'
 
 type ProfilePageProps = {
   onNavigate: (target: string) => void
@@ -69,31 +71,33 @@ function ProfilePage(props: ProfilePageProps) {
             <section class="rounded-xl bg-(--sub-alt)/32 p-5">
               <div class="flex flex-wrap items-start justify-between gap-5">
               <div>
-                <div class="t-label font-semibold uppercase tracking-[0.16em] text-(--sub)">
+                <Typography variant="label" weight="semibold" class="uppercase tracking-[0.16em] text-(--sub)">
                   profile
-                </div>
-                <div class="t-metric mt-2 text-(--text)">
+                </Typography>
+                <Typography variant="metric" class="mt-2 text-(--text)">
                   {session().data?.user.name}
-                </div>
-                <div class="t-body mt-2 text-(--sub)">{session().data?.user.email}</div>
+                </Typography>
+                <Typography variant="body" class="mt-2 text-(--sub)">{session().data?.user.email}</Typography>
               </div>
 
-              <div class="t-body flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  class="rounded-md border border-(--sub)/35 px-3 py-1.5 text-(--sub) transition hover:text-(--text)"
+              <div class="flex flex-wrap items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  class="px-3 py-1.5"
                   onClick={() => props.onNavigate('/')}
                 >
                   back home
-                </button>
-                <button
-                  type="button"
-                  class="rounded-md border border-(--sub)/35 px-3 py-1.5 text-(--sub) transition hover:text-(--text) disabled:cursor-not-allowed disabled:opacity-60"
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  class="px-3 py-1.5"
                   onClick={handleSignOut}
                   disabled={isSigningOut()}
                 >
                   {isSigningOut() ? 'signing out...' : 'sign out'}
-                </button>
+                </Button>
               </div>
               </div>
             </section>
@@ -104,13 +108,13 @@ function ProfilePage(props: ProfilePageProps) {
 
             <Show when={statusMessage()}>
               {(message) => (
-                <div class="t-body text-(--main)">{message()}</div>
+                <Typography variant="body" class="text-(--main)">{message()}</Typography>
               )}
             </Show>
 
             <Show when={errorMessage()}>
               {(message) => (
-                <div class="t-body text-(--error)">{message()}</div>
+                <Typography variant="body" class="text-(--error)">{message()}</Typography>
               )}
             </Show>
           </div>

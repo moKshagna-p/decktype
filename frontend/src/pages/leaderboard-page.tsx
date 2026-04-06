@@ -1,33 +1,38 @@
-import { For, createMemo, createSignal } from 'solid-js'
+import { For, Show, createMemo, createSignal } from 'solid-js'
 
 import type { LeaderboardDifficulty } from '@/features/leaderboard/api/contract'
 import { useLeaderboardQuery } from '@/features/leaderboard/api/hooks'
 import { gameRegistry } from '@/features/games/registry'
 import type { GameId } from '@/features/games/types'
 import { getErrorMessage } from '@/lib/api-client'
+import { Typography } from '@/app/components/ui/typography'
+import { Card } from '@/app/components/ui/card'
 
 const difficultyFilters: {
   value: LeaderboardDifficulty
   label: string
 }[] = [
-  { value: 'easy', label: 'EASY' },
-  { value: 'medium', label: 'MEDIUM' },
-  { value: 'hard', label: 'HARD' },
+  { value: 'easy', label: 'easy' },
+  { value: 'medium', label: 'medium' },
+  { value: 'hard', label: 'hard' },
 ]
-
-function toTitleCase(value: string) {
-  if (!value) {
-    return value
-  }
-
-  return `${value[0].toUpperCase()}${value.slice(1).toLowerCase()}`
-}
 
 function formatBestResultAt(value: string) {
   return new Intl.DateTimeFormat(undefined, {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(value))
+}
+
+function toTitleCase(value: string) {
+  if (!value) {
+    return value
+  }
+
+  return value
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
 }
 
 function LeaderboardPage() {
@@ -50,10 +55,10 @@ function LeaderboardPage() {
     <div class="w-full min-h-[72vh]">
       <div class="grid items-start gap-7 lg:grid-cols-[15rem_minmax(0,1fr)]">
         <aside class="space-y-4">
-          <div class="rounded-xl bg-(--sub-alt)/55 p-3">
-            <div class="t-label px-1 pb-2 font-semibold uppercase tracking-[0.16em] text-(--sub)">
+          <Card class="bg-(--sub-alt)/55 p-3 rounded-xl">
+            <Typography variant="label" class="px-1 pb-2 font-semibold uppercase tracking-[0.16em] text-(--sub)">
               game
-            </div>
+            </Typography>
             <div class="space-y-1.5">
               <For each={gameRegistry}>
                 {(game) => (
@@ -71,18 +76,18 @@ function LeaderboardPage() {
                 )}
               </For>
             </div>
-          </div>
+          </Card>
 
-          <div class="rounded-xl bg-(--sub-alt)/55 p-3">
-            <div class="t-label px-1 pb-2 font-semibold uppercase tracking-[0.16em] text-(--sub)">
+          <Card class="bg-(--sub-alt)/55 p-3 rounded-xl">
+            <Typography variant="label" class="px-1 pb-2 font-semibold uppercase tracking-[0.16em] text-(--sub)">
               difficulty
-            </div>
+            </Typography>
             <div class="space-y-1.5">
               <For each={difficultyFilters}>
                 {(option) => (
                     <button
                       type="button"
-                      class={`t-label block w-full rounded-md px-3 py-2 text-left font-semibold uppercase tracking-[0.05em] transition ${
+                      class={`t-body block w-full rounded-md px-3 py-2 text-left tracking-[0.05em] transition ${
                         difficulty() === option.value
                           ? 'bg-(--main)/20 text-(--main)'
                           : 'text-(--text)/90 hover:bg-(--sub)/20'
@@ -94,59 +99,59 @@ function LeaderboardPage() {
                 )}
               </For>
             </div>
-          </div>
+          </Card>
         </aside>
 
         <section class="min-w-0">
           <div class="mb-5 border-b border-(--sub)/25 pb-5">
-            <h1 class="t-page-title leading-tight text-(--text)">
-              {selectedGameName()} {toTitleCase(difficulty())} Leaderboard
-            </h1>
+            <Typography variant="page-title" as="h1" class="leading-tight text-(--text)">
+              {toTitleCase(`${selectedGameName()} ${difficulty()} leaderboard`)}
+            </Typography>
           </div>
 
-          {leaderboardQuery.isPending && (
+          <Show when={leaderboardQuery.isPending}>
             <div class="t-body rounded-lg bg-(--sub-alt) px-4 py-4 text-(--sub)">
               loading leaderboard...
             </div>
-          )}
+          </Show>
 
-          {leaderboardQuery.error && (
+          <Show when={leaderboardQuery.error}>
             <div class="t-body rounded-lg bg-(--sub-alt) px-4 py-4 text-(--error)">
               {getErrorMessage(leaderboardQuery.error, 'Unable to load leaderboard.')}
             </div>
-          )}
+          </Show>
 
-          {leaderboardQuery.data && leaderboardQuery.data.length > 0 && (
+          <Show when={leaderboardQuery.data && leaderboardQuery.data.length > 0}>
             <div class="overflow-hidden rounded-xl bg-(--sub-alt)/35">
-              <div class="t-body hidden border-b border-(--sub)/20 px-4 py-3.5 text-(--sub) sm:grid sm:grid-cols-[0.45fr_1.5fr_0.85fr_0.85fr_1fr] sm:items-center">
-                <div>#</div>
-                <div>player</div>
-                <div>score</div>
-                <div>difficulty</div>
-                <div>date</div>
+              <div class="t-body hidden border-b border-(--sub)/20 px-4 py-3.5 uppercase text-(--sub) sm:grid sm:grid-cols-[0.45fr_1.5fr_0.85fr_0.85fr_1fr] sm:items-center">
+                <Typography variant="label" weight="bold">#</Typography>
+                <Typography variant="label" weight="bold">player</Typography>
+                <Typography variant="label" weight="bold">score</Typography>
+                <Typography variant="label" weight="bold">difficulty</Typography>
+                <Typography variant="label" weight="bold">date</Typography>
               </div>
 
               <For each={leaderboardQuery.data}>
                 {(entry) => (
                   <div class="t-body grid gap-2 border-b border-(--sub)/10 px-4 py-3.5 last:border-b-0 sm:grid-cols-[0.45fr_1.5fr_0.85fr_0.85fr_1fr] sm:items-center">
-                    <div class="font-semibold text-(--main)">{entry.rank}</div>
+                    <Typography variant="body" weight="semibold" class="text-(--main)">{entry.rank}</Typography>
                     <div>
-                      <div class="truncate text-(--text)">{entry.displayName}</div>
+                      <Typography variant="body" class="truncate text-(--text)">{entry.displayName}</Typography>
                     </div>
-                    <div class="font-semibold text-(--text)">{entry.bestScore}</div>
-                    <div class="text-(--sub)">{entry.difficulty}</div>
-                    <div class="text-(--sub)">{formatBestResultAt(entry.bestResultAt)}</div>
+                    <Typography variant="body" weight="semibold" class="text-(--text)">{entry.bestScore}</Typography>
+                    <Typography variant="body" class="text-(--sub)">{entry.difficulty}</Typography>
+                    <Typography variant="body" class="text-(--sub)">{formatBestResultAt(entry.bestResultAt)}</Typography>
                   </div>
                 )}
               </For>
             </div>
-          )}
+          </Show>
 
-          {leaderboardQuery.data && leaderboardQuery.data.length === 0 && (
+          <Show when={leaderboardQuery.data && leaderboardQuery.data.length === 0 && !leaderboardQuery.isPending}>
             <div class="t-body rounded-lg bg-(--sub-alt) px-4 py-4 text-(--sub)">
               no scores yet
             </div>
-          )}
+          </Show>
         </section>
       </div>
     </div>

@@ -1,4 +1,5 @@
-import { createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
+import { createEffect, createMemo, onMount, type ParentProps } from 'solid-js'
+import { Router, Route, useNavigate, useLocation } from '@solidjs/router'
 import ToastRegion from '@/app/components/toast-region'
 import Commandline from '@/features/commandline/components/commandline'
 import { games } from '@/features/games/registry'
@@ -12,226 +13,72 @@ import {
   buildHomePath,
   getSelectedGameId,
   getSelectedWordBankId,
-  normalizePath,
-  primaryRoutes,
 } from './routes'
-import { themes } from '@/features/content/themes/registry'
-import { applyTheme } from '@/features/content/themes/manager'
-import type { ThemeName } from '@/features/content/themes/types'
-import { authClient } from '@/lib/auth-client'
+import { themeManager } from '@/features/content/themes/manager'
+import { Navbar } from './components/navbar'
+import { Footer } from './components/footer'
 
-const THEME_STORAGE_KEY = 'decktype-theme'
-
-function App() {
-  const getCurrentLocation = () => ({
-    path: normalizePath(window.location.pathname),
-    search: window.location.search,
-  })
-
-  const getInitialTheme = (): ThemeName => {
-    const saved = localStorage.getItem(THEME_STORAGE_KEY) as ThemeName
-    if (saved && themes[saved]) {
-      return saved
-    }
-    return 'carbon'
-  }
-
-  const [currentLocation, setCurrentLocation] = createSignal(getCurrentLocation())
-  const [isCommandlineOpen, setIsCommandlineOpen] = createSignal(false)
-  const [currentThemeName, setCurrentThemeName] = createSignal<ThemeName>(getInitialTheme())
-  const session = authClient.useSession()
-  const currentUserLabel = createMemo(() => session().data?.user.name ?? 'guest')
-
-  const selectTheme = (name: ThemeName) => {
-    setCurrentThemeName(name)
-    applyTheme(themes[name])
-    localStorage.setItem(THEME_STORAGE_KEY, name)
-  }
-
-  const previewTheme = (name: ThemeName) => {
-    applyTheme(themes[name])
-  }
-
-  createEffect(() => {
-    if (!isCommandlineOpen()) {
-      // Re-apply the confirmed theme when the modal closes
-      applyTheme(themes[currentThemeName()])
-    }
-  })
-
-  const navigate = (target: string) => {
-    const nextUrl = new URL(target, window.location.origin)
-    const nextPath = normalizePath(nextUrl.pathname)
-    const nextSearch = nextUrl.search
-    const location = currentLocation()
-
-    if (nextPath === location.path && nextSearch === location.search) {
-      return
-    }
-
-    window.history.pushState({}, '', `${nextPath}${nextSearch}`)
-    setCurrentLocation({ path: nextPath, search: nextSearch })
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const goHome = () => navigate('/')
-  const selectedGameId = createMemo(
-    () => getSelectedGameId(currentLocation().search) as GameId | null,
-  )
-  const selectedWordBankId = createMemo(
-    () => (getSelectedWordBankId(currentLocation().search) || 'english/core-1k') as WordBankId,
-  )
-  const openGame = (gameId: GameId) => navigate(buildHomePath(gameId, selectedWordBankId()))
-  const selectGameFromCommandline = (gameId: GameId | null) =>
-    navigate(buildHomePath(gameId, selectedWordBankId()))
-  const selectWordBankFromCommandline = (wordBankId: WordBankId) =>
-    navigate(buildHomePath(selectedGameId(), wordBankId))
-
-  createEffect(() => {
-    const { path } = currentLocation()
-    const gameId = selectedGameId()
-
-    if (path !== '/' || !gameId) {
-      return
-    }
-
-    if (games[gameId]) {
-      return
-    }
-
-    window.history.replaceState({}, '', '/')
-    setCurrentLocation({ path: '/', search: '' })
-  })
-
-  const currentPage = createMemo(() => {
-    const { path, search } = currentLocation()
-
-    if (path === '/') {
-      return (
-        <HomePage
-          selectedGameId={getSelectedGameId(search) as GameId | null}
-          selectedWordBankId={getSelectedWordBankId(search) as WordBankId | null}
-          onSelectGame={openGame}
-        />
-      )
-    }
-    if (path === '/leaderboard') {
-      return <LeaderboardPage />
-    }
-    if (path === '/profile') {
-      return <ProfilePage onNavigate={navigate} />
-    }
-    if (path === '/about') {
-      return <AboutPage />
-    }
-
-    return (
-      <HomePage
-        selectedGameId={null}
-        selectedWordBankId={selectedWordBankId()}
-        onSelectGame={openGame}
-      />
-    )
-  })
-
-  const handlePopState = () => {
-    setCurrentLocation(getCurrentLocation())
-  }
-
+function Layout(props: ParentProps) {
   onMount(() => {
-    applyTheme(themes[currentThemeName()])
-
-    const handleCommandlineShortcut = (event: KeyboardEvent) => {
-      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 'k') {
-        return
-      }
-
-      event.preventDefault()
-      setIsCommandlineOpen((current) => !current)
-    }
-
-    window.addEventListener('popstate', handlePopState)
-    window.addEventListener('keydown', handleCommandlineShortcut)
-
-    onCleanup(() => {
-      window.removeEventListener('keydown', handleCommandlineShortcut)
-    })
-  })
-
-  onCleanup(() => {
-    window.removeEventListener('popstate', handlePopState)
+    themeManager.init()
   })
 
   return (
     <div class="relative min-h-screen bg-(--bg) font-mono text-(--text)">
-      <Commandline
-        isOpen={isCommandlineOpen()}
-        currentPath={currentLocation().path}
-        selectedGameId={selectedGameId()}
-        selectedWordBankId={selectedWordBankId()}
-        currentThemeName={currentThemeName()}
-        onClose={() => setIsCommandlineOpen(false)}
-        onNavigate={navigate}
-        onSelectGame={selectGameFromCommandline}
-        onSelectWordBank={selectWordBankFromCommandline}
-        onSelectTheme={selectTheme}
-        onPreviewTheme={previewTheme}
-      />
+      <Commandline />
       <ToastRegion />
       <div class="mx-auto flex min-h-screen w-full max-w-[1320px] flex-col px-5 py-8 sm:px-8 lg:px-10 xl:px-12">
-        <header class="mb-8 flex items-center justify-between">
-          <div class="flex items-baseline gap-10">
-            <button
-              type="button"
-              class="flex items-center group"
-              onClick={goHome}
-            >
-              <span class="t-title font-bold tracking-tight text-(--text)">decktype</span>
-            </button>
-
-            <nav class="t-body flex items-center gap-8">
-              {primaryRoutes.map((route) => {
-                const isActive = currentLocation().path === route.path
-
-                return (
-                  <button
-                    type="button"
-                    class={`transition ${isActive ? 'text-(--main)' : 'text-(--sub) hover:text-(--text)'
-                      }`}
-                    onClick={() => navigate(route.path)}
-                  >
-                    {route.label.toLowerCase()}
-                  </button>
-                )
-              })}
-            </nav>
-          </div>
-
-          <div class="flex items-center text-(--sub)">
-            <button type="button" class="flex items-center gap-2 hover:text-(--text) transition" onClick={() => navigate('/profile')}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-              <span class="t-caption max-w-32 truncate font-bold uppercase tracking-widest">{currentUserLabel()}</span>
-            </button>
-          </div>
-        </header>
+        <Navbar />
 
         <main class="flex-1 flex flex-col justify-center py-8">
-          {currentPage()}
+          {props.children}
         </main>
 
-        <footer class="t-caption mt-8 flex items-center justify-between text-(--sub)">
-          <div class="flex items-center gap-4">
-            <a href="#" class="hover:text-(--text)">
-              contact
-            </a>
-            <a href="#" class="hover:text-(--text)">support</a>
-            <a href="#" class="hover:text-(--text)">github</a>
-            <a href="#" class="hover:text-(--text)">discord</a>
-          </div>
-          <span>v1.0.0</span>
-        </footer>
+        <Footer />
       </div>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <Router root={Layout}>
+      <Route
+        path="/"
+        component={() => {
+          const navigate = useNavigate()
+          const location = useLocation()
+          const selectedGameId = createMemo(() => getSelectedGameId(location.search) as GameId | null)
+          const selectedWordBankId = createMemo(() => getSelectedWordBankId(location.search) as WordBankId | null)
+
+          createEffect(() => {
+            const gameId = selectedGameId()
+            if (gameId && !games[gameId]) {
+              navigate('/', { replace: true })
+            }
+          })
+
+          return (
+            <HomePage
+              selectedGameId={selectedGameId()}
+              selectedWordBankId={selectedWordBankId()}
+              onSelectGame={(gameId) => navigate(buildHomePath(gameId, selectedWordBankId()))}
+            />
+          )
+        }}
+      />
+      <Route path="/leaderboard" component={LeaderboardPage} />
+      <Route path="/profile" component={() => {
+        const navigate = useNavigate()
+        return <ProfilePage onNavigate={navigate} />
+      }} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="*paramName" component={() => {
+        const navigate = useNavigate()
+        navigate('/', { replace: true })
+        return null
+      }} />
+    </Router>
   )
 }
 

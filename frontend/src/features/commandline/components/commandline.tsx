@@ -1,19 +1,21 @@
-import { createEffect, createMemo, createSignal, onCleanup, Show } from 'solid-js'
+import { createEffect, createMemo, createSignal, onCleanup, onMount, Show } from 'solid-js'
 
 import CommandlineInput from '@/features/commandline/components/commandline-input'
 import CommandlineList from '@/features/commandline/components/commandline-list'
 import { createCommandlineRegistry } from '@/features/commandline/registry'
 import type { CommandlineItem, CommandlineProps, CommandlineScope } from '@/features/commandline/types'
 import { filterCommands, getScopeLabel } from '@/features/commandline/utils'
+import { themeManager } from '@/features/content/themes/manager'
 
 function Commandline(props: CommandlineProps) {
   let searchInputRef: HTMLInputElement | undefined
+  const [isOpen, setIsOpen] = createSignal(false)
   const [query, setQuery] = createSignal('')
   const [selectedIndex, setSelectedIndex] = createSignal(0)
   const [scope, setScope] = createSignal<CommandlineScope>('root')
 
   const registry = createMemo(() =>
-    createCommandlineRegistry(props, setScope),
+    createCommandlineRegistry({ ...props, isOpen: isOpen(), onClose: () => setIsOpen(false) } as any, setScope),
   )
 
   const itemsForScope = createMemo(() => registry()[scope()])
@@ -50,7 +52,7 @@ function Commandline(props: CommandlineProps) {
       return
     }
 
-    props.onClose()
+    setIsOpen(false)
   }
 
   const handleSelectItem = (item: CommandlineItem) => {
@@ -58,7 +60,7 @@ function Commandline(props: CommandlineProps) {
     item.onSelect()
 
     if (previousScope === scope()) {
-      props.onClose()
+      setIsOpen(false)
       return
     }
 
@@ -67,25 +69,26 @@ function Commandline(props: CommandlineProps) {
   }
 
   createEffect(() => {
-    if (scope() === 'themes' && props.isOpen) {
+    if (scope() === 'themes' && isOpen()) {
       const item = visibleItems()[selectedIndex()]
 
       if (item && item.id.startsWith('theme-')) {
-        props.onPreviewTheme(item.id.replace('theme-', '') as CommandlineProps['currentThemeName'])
+        themeManager.preview(item.id.replace('theme-', '') as any)
       }
 
       return
     }
 
-    if (props.isOpen) {
-      props.onPreviewTheme(props.currentThemeName)
+    if (isOpen()) {
+      themeManager.reset()
     }
   })
 
   createEffect(() => {
-    if (!props.isOpen) {
+    if (!isOpen()) {
       resetInteractionState()
       setScope('root')
+      themeManager.reset()
       return
     }
 
@@ -102,8 +105,25 @@ function Commandline(props: CommandlineProps) {
     }
   })
 
+  onMount(() => {
+    const handleCommandlineShortcut = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 'k') {
+        return
+      }
+
+      event.preventDefault()
+      setIsOpen((current) => !current)
+    }
+
+    window.addEventListener('keydown', handleCommandlineShortcut)
+
+    onCleanup(() => {
+      window.removeEventListener('keydown', handleCommandlineShortcut)
+    })
+  })
+
   createEffect(() => {
-    if (!props.isOpen) {
+    if (!isOpen()) {
       return
     }
 
@@ -164,10 +184,10 @@ function Commandline(props: CommandlineProps) {
   })
 
   return (
-    <Show when={props.isOpen}>
+    <Show when={isOpen()}>
       <div
         class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-(--bg)/90 px-5"
-        onClick={props.onClose}
+        onClick={() => setIsOpen(false)}
       >
         <div class="w-full max-w-[450px]">
           <div

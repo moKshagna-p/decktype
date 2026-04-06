@@ -2,6 +2,8 @@ import { For, Show } from 'solid-js'
 
 import { useContributorsQuery } from '@/features/contributors/api/hooks'
 import { getErrorMessage } from '@/lib/api-client'
+import { Typography } from '@/app/components/ui/typography'
+import { Button } from '@/app/components/ui/button'
 
 function formatSyncedAt(value: string | null) {
   if (!value) {
@@ -22,74 +24,89 @@ function AboutPage() {
   return (
     <div class="w-full min-h-[72vh] space-y-6">
       <section class="rounded-xl bg-(--sub-alt)/32 p-5">
-        <h1 class="t-page-title leading-tight text-(--text)">about decktype</h1>
-        <p class="t-body mt-3 max-w-3xl text-(--sub)">
+        <Typography variant="page-title" as="h1" class="leading-tight text-(--text)">about decktype</Typography>
+        <Typography variant="body" class="mt-3 max-w-3xl text-(--sub)">
           decktype is inspired by monkeytype&apos;s speed-typing experience. the project takes
           inspiration from the flow and focus of monkeytype while building its own direction.
-        </p>
-        <div class="t-body mt-4 flex flex-wrap gap-3">
-          <a
+        </Typography>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <Button
+            as="a"
             href="https://monkeytype.com"
             target="_blank"
             rel="noreferrer"
-            class="rounded-md border border-(--sub)/35 px-3 py-1.5 text-(--sub) transition hover:text-(--text)"
+            variant="outline"
+            size="sm"
+            class="px-3 py-1.5"
           >
             monkeytype website
-          </a>
-          <a
+          </Button>
+          <Button
+            as="a"
             href="https://github.com/monkeytypegame/monkeytype"
             target="_blank"
             rel="noreferrer"
-            class="rounded-md border border-(--sub)/35 px-3 py-1.5 text-(--sub) transition hover:text-(--text)"
+            variant="outline"
+            size="sm"
+            class="px-3 py-1.5"
           >
             monkeytype github
-          </a>
+          </Button>
         </div>
       </section>
 
       <section class="rounded-xl bg-(--sub-alt)/32 p-5">
-        <div class="t-label font-semibold uppercase tracking-[0.16em] text-(--sub)">
+        <Typography variant="label" weight="semibold" class="uppercase tracking-[0.16em] text-(--sub)">
           creator
-        </div>
-        <div class="t-title mt-2 text-(--text)">d1rshan</div>
-        <div class="t-body mt-3 flex flex-wrap gap-3">
-          <a
+        </Typography>
+        <Typography variant="title" class="mt-2 text-(--text)">d1rshan</Typography>
+        <div class="mt-3 flex flex-wrap gap-3">
+          <Button
+            as="a"
             href="https://github.com/d1rshan"
             target="_blank"
             rel="noreferrer"
-            class="rounded-md border border-(--sub)/35 px-3 py-1.5 text-(--sub) transition hover:text-(--text)"
+            variant="outline"
+            size="sm"
+            class="px-3 py-1.5"
           >
             github profile
-          </a>
-          <a
+          </Button>
+          <Button
+            as="a"
             href="https://github.com/d1rshan/decktype"
             target="_blank"
             rel="noreferrer"
-            class="rounded-md border border-(--sub)/35 px-3 py-1.5 text-(--sub) transition hover:text-(--text)"
+            variant="outline"
+            size="sm"
+            class="px-3 py-1.5"
           >
             decktype repository
-          </a>
+          </Button>
         </div>
       </section>
 
       <section class="rounded-xl bg-(--sub-alt)/32 p-5">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <div class="t-label font-semibold uppercase tracking-[0.16em] text-(--sub)">
+            <Typography variant="label" weight="semibold" class="uppercase tracking-[0.16em] text-(--sub)">
               contributors
-            </div>
-            <div class="t-body mt-1 text-(--sub)">
+            </Typography>
+            <Typography variant="body" class="mt-1 text-(--sub)">
               synced: {formatSyncedAt(contributorsQuery.data?.syncedAt ?? null)}
-            </div>
+            </Typography>
           </div>
-          <a
+          <Button
+            as="a"
             href="https://github.com/d1rshan/decktype/graphs/contributors"
             target="_blank"
             rel="noreferrer"
-            class="t-body rounded-md border border-(--sub)/35 px-3 py-1.5 text-(--sub) transition hover:text-(--text)"
+            variant="outline"
+            size="sm"
+            class="px-3 py-1.5"
           >
             view on github
-          </a>
+          </Button>
         </div>
 
         <Show when={contributorsQuery.isPending}>
@@ -123,12 +140,12 @@ function AboutPage() {
                     />
                   </div>
                   <div class="min-w-0">
-                    <div class="t-body truncate text-(--text)">
+                    <Typography variant="body" class="truncate text-(--text)">
                       {contributor.displayName ?? contributor.login}
-                    </div>
-                    <div class="t-caption truncate text-(--sub)">
+                    </Typography>
+                    <Typography variant="caption" class="truncate text-(--sub)">
                       @{contributor.login} • {contributor.contributions} contributions
-                    </div>
+                    </Typography>
                   </div>
                 </a>
               )}
@@ -143,9 +160,9 @@ function AboutPage() {
         </Show>
       </section>
 
-      <div class="t-caption text-(--sub)">
+      <Typography variant="caption" class="text-(--sub)">
         thank you to everyone who contributed code, feedback, and ideas.
-      </div>
+      </Typography>
     </div>
   )
 }
