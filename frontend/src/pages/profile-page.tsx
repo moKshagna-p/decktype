@@ -120,7 +120,7 @@ function ProfilePage(props: ProfilePageProps) {
                 <div class="t-label font-semibold uppercase tracking-[0.16em] text-(--sub)">
                   profile
                 </div>
-                <div class="t-metric-lg mt-2 text-(--text)">
+                <div class="t-metric mt-2 text-(--text)">
                   {session().data?.user.name}
                 </div>
                 <div class="t-body mt-2 text-(--sub)">{session().data?.user.email}</div>
@@ -148,21 +148,21 @@ function ProfilePage(props: ProfilePageProps) {
             <div class="mt-5 grid gap-4 sm:grid-cols-3">
               <div class="rounded-lg bg-(--sub-alt)/55 px-4 py-4">
                 <div class="t-label uppercase tracking-[0.14em] text-(--sub)">tests started</div>
-                <div class="t-metric-lg mt-2 text-(--text)">
+                <div class="t-metric mt-2 text-(--text)">
                   {profileResultsQuery.isPending ? '--' : profileStats().testsStarted}
                 </div>
               </div>
 
               <div class="rounded-lg bg-(--sub-alt)/55 px-4 py-4">
                 <div class="t-label uppercase tracking-[0.14em] text-(--sub)">tests completed</div>
-                <div class="t-metric-lg mt-2 text-(--text)">
+                <div class="t-metric mt-2 text-(--text)">
                   {profileResultsQuery.isPending ? '--' : profileStats().testsCompleted}
                 </div>
               </div>
 
               <div class="rounded-lg bg-(--sub-alt)/55 px-4 py-4">
                 <div class="t-label uppercase tracking-[0.14em] text-(--sub)">highest score</div>
-                <div class="t-metric-lg mt-2 text-(--text)">
+                <div class="t-metric mt-2 text-(--text)">
                   {profileResultsQuery.isPending ? '--' : profileStats().highestScore}
                 </div>
               </div>
@@ -178,14 +178,14 @@ function ProfilePage(props: ProfilePageProps) {
               <div class="mt-4 grid gap-y-4 sm:grid-cols-2">
                 <div>
                   <div class="t-caption text-(--sub)">average score</div>
-                  <div class="t-metric-lg mt-1 text-(--text)">
+                  <div class="t-metric mt-1 text-(--text)">
                     {profileResultsQuery.isPending ? '--' : profileStats().averageScore}
                   </div>
                 </div>
 
                 <div>
                   <div class="t-caption text-(--sub)">average score (last 10)</div>
-                  <div class="t-metric-lg mt-1 text-(--text)">
+                  <div class="t-metric mt-1 text-(--text)">
                     {profileResultsQuery.isPending ? '--' : profileStats().averageLastTen}
                   </div>
                 </div>
@@ -200,21 +200,21 @@ function ProfilePage(props: ProfilePageProps) {
               <div class="mt-4 grid grid-cols-3 gap-4">
                 <div>
                   <div class="t-caption uppercase tracking-[0.1em] text-(--sub)">easy</div>
-                  <div class="t-metric-md mt-1 text-(--text)">
+                  <div class="t-metric mt-1 text-(--text)">
                     {profileResultsQuery.isPending ? '--' : profileStats().easyCount}
                   </div>
                 </div>
 
                 <div>
                   <div class="t-caption uppercase tracking-[0.1em] text-(--sub)">medium</div>
-                  <div class="t-metric-md mt-1 text-(--text)">
+                  <div class="t-metric mt-1 text-(--text)">
                     {profileResultsQuery.isPending ? '--' : profileStats().mediumCount}
                   </div>
                 </div>
 
                 <div>
                   <div class="t-caption uppercase tracking-[0.1em] text-(--sub)">hard</div>
-                  <div class="t-metric-md mt-1 text-(--text)">
+                  <div class="t-metric mt-1 text-(--text)">
                     {profileResultsQuery.isPending ? '--' : profileStats().hardCount}
                   </div>
                 </div>

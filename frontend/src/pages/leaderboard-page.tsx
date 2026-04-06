@@ -82,7 +82,7 @@ function LeaderboardPage() {
                 {(option) => (
                     <button
                       type="button"
-                      class={`t-label-strong block w-full rounded-md px-3 py-2 text-left font-semibold uppercase tracking-[0.05em] transition ${
+                      class={`t-label block w-full rounded-md px-3 py-2 text-left font-semibold uppercase tracking-[0.05em] transition ${
                         difficulty() === option.value
                           ? 'bg-(--main)/20 text-(--main)'
                           : 'text-(--text)/90 hover:bg-(--sub)/20'

@@ -9,7 +9,7 @@ type DifficultySelectorProps = {
 
 function DifficultySelector(props: DifficultySelectorProps) {
   return (
-    <div class="t-label-strong flex items-center gap-1 rounded-xl bg-(--sub-alt) px-2 py-1.5 font-bold uppercase tracking-widest transition-all">
+    <div class="t-label flex items-center gap-1 rounded-xl bg-(--sub-alt) px-2 py-1.5 font-bold uppercase tracking-widest transition-all">
       {difficultyOptions.map((option) => (
         <button
           type="button"

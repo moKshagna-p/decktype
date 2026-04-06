@@ -1,5 +1,6 @@
 import { For, Match, Switch } from 'solid-js'
 
+import { games } from '@/features/games/registry'
 import { useMyResultsQuery } from '@/features/results/api/hooks'
 import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
@@ -9,6 +10,12 @@ function formatPlayedAt(value: string) {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(value))
+}
+
+function getGameName(gameId: string) {
+  const game = games[gameId as keyof typeof games]
+
+  return game?.name ?? gameId
 }
 
 function ResultHistory() {
@@ -49,7 +56,7 @@ function ResultHistory() {
             <For each={resultsQuery.data}>
               {(result) => (
                 <div class="t-body grid gap-2 border-b border-(--sub)/10 px-4 py-3.5 last:border-b-0 sm:grid-cols-[1.2fr_0.7fr_0.8fr_1fr] sm:items-center">
-                  <div class="text-(--text)">{result.gameId}</div>
+                  <div class="text-(--text)">{getGameName(result.gameId)}</div>
                   <div class="font-semibold text-(--text)">{result.score}</div>
                   <div class="text-(--sub)">{result.difficulty}</div>
                   <div class="text-(--sub)">{formatPlayedAt(result.createdAt)}</div>

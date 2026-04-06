@@ -43,7 +43,7 @@ function FallingWordsField(props: FallingWordsFieldProps) {
             <p class="t-label font-bold tracking-[0.5em] text-(--sub) uppercase">
               final score
             </p>
-            <p class="t-display-hero mt-4 font-bold tracking-tighter text-(--main)">
+            <p class="t-display mt-4 font-bold tracking-tighter text-(--main)">
               {props.score}
             </p>
             <div class="mt-12 flex flex-col items-center gap-4">
@@ -65,7 +65,7 @@ function FallingWordsField(props: FallingWordsFieldProps) {
             <p class="t-label font-bold tracking-[0.5em] text-(--sub) uppercase">
               paused
             </p>
-            <p class="t-display-score mt-4 font-bold tracking-tighter text-(--main)">
+            <p class="t-display mt-4 font-bold tracking-tighter text-(--main)">
               {props.score}
             </p>
             <div class="t-body mt-10 flex items-center justify-center gap-2 text-(--sub)">

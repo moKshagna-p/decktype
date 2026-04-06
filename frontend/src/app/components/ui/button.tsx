@@ -19,8 +19,8 @@ const variantClassMap: Record<ButtonVariant, string> = {
 }
 
 const sizeClassMap: Record<ButtonSize, string> = {
-  md: 'px-4 py-2 t-input',
-  lg: 'px-4 py-3 t-button-lg',
+  md: 'px-4 py-2 t-emphasis',
+  lg: 'px-4 py-3 t-emphasis',
 }
 
 function Button(props: ButtonProps) {
