@@ -1,4 +1,5 @@
 import {
+  contributorsCollection,
   leaderboardCollection,
   resultsCollection,
 } from './collections'
@@ -30,7 +31,22 @@ const ensureLeaderboardIndexes = async () => {
   ])
 }
 
+const ensureContributorsIndexes = async () => {
+  await contributorsCollection.createIndexes([
+    {
+      key: { githubId: 1 },
+      unique: true,
+      name: 'github_id_unique',
+    },
+    {
+      key: { isActive: 1, contributions: -1, login: 1 },
+      name: 'active_contributions_desc_login',
+    },
+  ])
+}
+
 export const ensureDatabaseIndexes = async () => {
   await ensureResultsIndexes()
   await ensureLeaderboardIndexes()
+  await ensureContributorsIndexes()
 }

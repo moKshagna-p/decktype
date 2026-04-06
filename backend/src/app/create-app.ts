@@ -2,6 +2,7 @@ import { Elysia } from 'elysia'
 
 import { authRoutes } from '../features/auth/routes'
 import { authPlugin } from '../features/auth/plugin'
+import { contributorRoutes } from '../features/contributors/routes'
 import { leaderboardRoutes } from '../features/leaderboard/routes'
 import { resultRoutes } from '../features/results/routes'
 import { corsPlugin } from './plugins/cors'
@@ -19,6 +20,7 @@ export const app = new Elysia()
     ok: true,
   }))
   .use(authRoutes)
+  .use(contributorRoutes)
   .use(leaderboardRoutes)
   .use(resultRoutes)
 

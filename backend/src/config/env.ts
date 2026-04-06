@@ -8,6 +8,16 @@ const readRequiredEnv = (name: string) => {
   return value
 }
 
+const readOptionalEnv = (name: string) => {
+  const value = Bun.env[name]
+
+  if (!value) {
+    return undefined
+  }
+
+  return value
+}
+
 const readPort = () => {
   const rawPort = Bun.env.PORT ?? '3000'
   const port = Number(rawPort)
@@ -26,4 +36,8 @@ export const env = {
   betterAuthSecret: readRequiredEnv('BETTER_AUTH_SECRET'),
   betterAuthUrl: Bun.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
   frontendOrigin: Bun.env.FRONTEND_ORIGIN ?? 'http://localhost:5173',
+  githubOwner: Bun.env.GITHUB_OWNER ?? 'd1rshan',
+  githubRepo: Bun.env.GITHUB_REPO ?? 'decktype',
+  githubToken: readOptionalEnv('GITHUB_TOKEN'),
+  contributorsSyncSecret: readOptionalEnv('CONTRIBUTORS_SYNC_SECRET'),
 }
