@@ -167,7 +167,7 @@ function AuthForms(props: AuthFormsProps) {
             void registerForm.handleSubmit()
           }}
         >
-          <Typography variant="body" weight="semibold" class="mb-1 text-(--sub)">register</Typography>
+          <Typography variant="body" weight="semibold" color="sub" class="mb-1">register</Typography>
 
           <registerForm.Field name="name">
             {(field) => {
@@ -186,7 +186,7 @@ function AuthForms(props: AuthFormsProps) {
                     required
                   />
                   <Show when={validationMessage && registerFormState().submissionAttempts > 0}>
-                    <Typography variant="body" class="pt-1 text-(--error)">{validationMessage}</Typography>
+                    <Typography variant="body" color="error" class="pt-1">{validationMessage}</Typography>
                   </Show>
                 </>
               )
@@ -211,7 +211,7 @@ function AuthForms(props: AuthFormsProps) {
                     required
                   />
                   <Show when={validationMessage && registerFormState().submissionAttempts > 0}>
-                    <Typography variant="body" class="pt-1 text-(--error)">{validationMessage}</Typography>
+                    <Typography variant="body" color="error" class="pt-1">{validationMessage}</Typography>
                   </Show>
                 </>
               )
@@ -236,7 +236,7 @@ function AuthForms(props: AuthFormsProps) {
                     required
                   />
                   <Show when={validationMessage && registerFormState().submissionAttempts > 0}>
-                    <Typography variant="body" class="pt-1 text-(--error)">{validationMessage}</Typography>
+                    <Typography variant="body" color="error" class="pt-1">{validationMessage}</Typography>
                   </Show>
                 </>
               )
@@ -261,7 +261,7 @@ function AuthForms(props: AuthFormsProps) {
                     required
                   />
                   <Show when={validationMessage && registerFormState().submissionAttempts > 0}>
-                    <Typography variant="body" class="pt-1 text-(--error)">{validationMessage}</Typography>
+                    <Typography variant="body" color="error" class="pt-1">{validationMessage}</Typography>
                   </Show>
                 </>
               )
@@ -286,7 +286,7 @@ function AuthForms(props: AuthFormsProps) {
                     required
                   />
                   <Show when={validationMessage && registerFormState().submissionAttempts > 0}>
-                    <Typography variant="body" class="pt-1 text-(--error)">{validationMessage}</Typography>
+                    <Typography variant="body" color="error" class="pt-1">{validationMessage}</Typography>
                   </Show>
                 </>
               )
@@ -294,10 +294,10 @@ function AuthForms(props: AuthFormsProps) {
           </registerForm.Field>
 
           <Show when={registerStatusMessage()}>
-            {(message) => <Typography variant="body" class="pt-1 text-(--main)">{message()}</Typography>}
+            {(message) => <Typography variant="body" color="main" class="pt-1">{message()}</Typography>}
           </Show>
           <Show when={registerErrorMessage()}>
-            {(message) => <Typography variant="body" class="pt-1 text-(--error)">{message()}</Typography>}
+            {(message) => <Typography variant="body" color="error" class="pt-1">{message()}</Typography>}
           </Show>
 
           <Button
@@ -317,7 +317,7 @@ function AuthForms(props: AuthFormsProps) {
             void loginForm.handleSubmit()
           }}
         >
-          <Typography variant="body" weight="semibold" class="mb-1 text-(--sub)">login</Typography>
+          <Typography variant="body" weight="semibold" color="sub" class="mb-1">login</Typography>
 
           <loginForm.Field name="email">
             {(field) => {
@@ -337,7 +337,7 @@ function AuthForms(props: AuthFormsProps) {
                     required
                   />
                   <Show when={validationMessage && loginFormState().submissionAttempts > 0}>
-                    <Typography variant="body" class="pt-1 text-(--error)">{validationMessage}</Typography>
+                    <Typography variant="body" color="error" class="pt-1">{validationMessage}</Typography>
                   </Show>
                 </>
               )
@@ -362,7 +362,7 @@ function AuthForms(props: AuthFormsProps) {
                     required
                   />
                   <Show when={validationMessage && loginFormState().submissionAttempts > 0}>
-                    <Typography variant="body" class="pt-1 text-(--error)">{validationMessage}</Typography>
+                    <Typography variant="body" color="error" class="pt-1">{validationMessage}</Typography>
                   </Show>
                 </>
               )
@@ -370,10 +370,10 @@ function AuthForms(props: AuthFormsProps) {
           </loginForm.Field>
 
           <Show when={loginStatusMessage()}>
-            {(message) => <Typography variant="body" class="pt-1 text-(--main)">{message()}</Typography>}
+            {(message) => <Typography variant="body" color="main" class="pt-1">{message()}</Typography>}
           </Show>
           <Show when={loginErrorMessage()}>
-            {(message) => <Typography variant="body" class="pt-1 text-(--error)">{message()}</Typography>}
+            {(message) => <Typography variant="body" color="error" class="pt-1">{message()}</Typography>}
           </Show>
 
           <Button

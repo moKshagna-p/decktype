@@ -1,5 +1,5 @@
 import { createEffect, createMemo, onMount, type ParentProps } from 'solid-js'
-import { Router, Route, useNavigate, useLocation } from '@solidjs/router'
+import { Router, Route, useNavigate, useSearchParams } from '@solidjs/router'
 import ToastRegion from '@/app/components/toast-region'
 import Commandline from '@/features/commandline/components/commandline'
 import { games } from '@/features/games/registry'
@@ -9,11 +9,6 @@ import LeaderboardPage from '@/pages/leaderboard-page'
 import ProfilePage from '@/pages/profile-page'
 import type { GameId } from '@/features/games/types'
 import type { WordBankId } from '@/features/content/word-banks/types'
-import {
-  buildHomePath,
-  getSelectedGameId,
-  getSelectedWordBankId,
-} from './routes'
 import { themeManager } from '@/features/content/themes/manager'
 import { Navbar } from './components/navbar'
 import { Footer } from './components/footer'
@@ -47,9 +42,9 @@ function App() {
         path="/"
         component={() => {
           const navigate = useNavigate()
-          const location = useLocation()
-          const selectedGameId = createMemo(() => getSelectedGameId(location.search) as GameId | null)
-          const selectedWordBankId = createMemo(() => getSelectedWordBankId(location.search) as WordBankId | null)
+          const [searchParams] = useSearchParams()
+          const selectedGameId = createMemo(() => searchParams.game as GameId | null)
+          const selectedWordBankId = createMemo(() => (searchParams.wordBank || 'english/core-1k') as WordBankId)
 
           createEffect(() => {
             const gameId = selectedGameId()
@@ -62,7 +57,7 @@ function App() {
             <HomePage
               selectedGameId={selectedGameId()}
               selectedWordBankId={selectedWordBankId()}
-              onSelectGame={(gameId) => navigate(buildHomePath(gameId, selectedWordBankId()))}
+              onSelectGame={(gameId) => navigate(gameId ? `/?game=${gameId}&wordBank=${selectedWordBankId()}` : '/')}
             />
           )
         }}

@@ -1,8 +1,13 @@
 import { createMemo } from 'solid-js'
 import { A } from '@solidjs/router'
+import { User } from 'lucide-solid'
 import { Typography } from './ui/typography'
-import { primaryRoutes } from '../routes'
 import { authClient } from '@/lib/auth-client'
+
+const routes = [
+  { label: 'Leaderboard', path: '/leaderboard' },
+  { label: 'About', path: '/about' },
+]
 
 export function Navbar() {
   const session = authClient.useSession()
@@ -15,13 +20,13 @@ export function Navbar() {
           href="/"
           class="flex items-center group"
         >
-          <Typography variant="title" weight="bold" class="tracking-tight text-(--text)">
+          <Typography variant="title" tracking="tight">
             decktype
           </Typography>
         </A>
 
         <nav class="flex items-center gap-8">
-          {primaryRoutes.map((route) => {
+          {routes.map((route) => {
             return (
               <A
                 href={route.path}
@@ -43,11 +48,8 @@ export function Navbar() {
           inactiveClass="hover:text-(--text)"
           class="flex items-center gap-2 transition"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-          <Typography variant="caption" weight="bold" class="max-w-32 truncate uppercase tracking-widest">
+          <User size={18} strokeWidth={2} />
+          <Typography variant="caption" weight="bold" uppercase tracking="widest" truncate class="max-w-32">
             {currentUserLabel().toLowerCase()}
           </Typography>
         </A>

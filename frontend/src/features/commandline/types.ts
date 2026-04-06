@@ -7,7 +7,3 @@ export type CommandlineItem = {
   active?: boolean
   onSelect: () => void
 }
-
-export type CommandlineProps = {
-  // Now independent of theme props as it uses themeManager
-}

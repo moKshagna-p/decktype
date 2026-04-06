@@ -3,11 +3,11 @@ import { createEffect, createMemo, createSignal, onCleanup, onMount, Show } from
 import CommandlineInput from '@/features/commandline/components/commandline-input'
 import CommandlineList from '@/features/commandline/components/commandline-list'
 import { createCommandlineRegistry } from '@/features/commandline/registry'
-import type { CommandlineItem, CommandlineProps, CommandlineScope } from '@/features/commandline/types'
+import type { CommandlineItem, CommandlineScope } from '@/features/commandline/types'
 import { filterCommands, getScopeLabel } from '@/features/commandline/utils'
 import { themeManager } from '@/features/content/themes/manager'
 
-function Commandline(props: CommandlineProps) {
+function Commandline() {
   let searchInputRef: HTMLInputElement | undefined
   const [isOpen, setIsOpen] = createSignal(false)
   const [query, setQuery] = createSignal('')
@@ -15,7 +15,7 @@ function Commandline(props: CommandlineProps) {
   const [scope, setScope] = createSignal<CommandlineScope>('root')
 
   const registry = createMemo(() =>
-    createCommandlineRegistry({ ...props, isOpen: isOpen(), onClose: () => setIsOpen(false) } as any, setScope),
+    createCommandlineRegistry(setScope),
   )
 
   const itemsForScope = createMemo(() => registry()[scope()])

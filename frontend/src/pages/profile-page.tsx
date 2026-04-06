@@ -71,13 +71,13 @@ function ProfilePage(props: ProfilePageProps) {
             <section class="rounded-xl bg-(--sub-alt)/32 p-5">
               <div class="flex flex-wrap items-start justify-between gap-5">
               <div>
-                <Typography variant="label" weight="semibold" class="uppercase tracking-[0.16em] text-(--sub)">
+                <Typography variant="label">
                   profile
                 </Typography>
-                <Typography variant="metric" class="mt-2 text-(--text)">
+                <Typography variant="metric" class="mt-2">
                   {session().data?.user.name}
                 </Typography>
-                <Typography variant="body" class="mt-2 text-(--sub)">{session().data?.user.email}</Typography>
+                <Typography variant="body" color="sub" class="mt-2">{session().data?.user.email}</Typography>
               </div>
 
               <div class="flex flex-wrap items-center gap-3">
@@ -108,13 +108,13 @@ function ProfilePage(props: ProfilePageProps) {
 
             <Show when={statusMessage()}>
               {(message) => (
-                <Typography variant="body" class="text-(--main)">{message()}</Typography>
+                <Typography variant="body" color="main">{message()}</Typography>
               )}
             </Show>
 
             <Show when={errorMessage()}>
               {(message) => (
-                <Typography variant="body" class="text-(--error)">{message()}</Typography>
+                <Typography variant="body" color="error">{message()}</Typography>
               )}
             </Show>
           </div>

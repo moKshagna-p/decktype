@@ -1,11 +1,14 @@
+import { Globe, Keyboard } from 'lucide-solid'
 import type { GameViewProps } from '@/features/games/types'
 import { useCreateResultMutation } from '@/features/results/api/hooks'
 import { authClient } from '@/lib/auth-client'
-import DifficultySelector from './components/difficulty-selector'
+import { DifficultySelector } from '../components/difficulty-selector'
 import FallingWordsField from './components/falling-words-field'
 import GameHud from './components/game-hud'
 import { useFallingWordsGame } from './use-falling-words-game'
 import { fallingWordsGameMeta } from './meta'
+import { difficultyOptions } from './difficulty'
+import { Typography } from '@/app/components/ui/typography'
 
 function FallingWordsView(props: GameViewProps) {
   const authSession = authClient.useSession()
@@ -39,29 +42,23 @@ function FallingWordsView(props: GameViewProps) {
     <div class="flex flex-col gap-8">
       <div class="flex flex-col items-center gap-6">
         <DifficultySelector
+          options={difficultyOptions}
           activeDifficulty={session.difficulty()}
           onChange={session.handleDifficultyChange}
         />
 
         <div class="flex items-center gap-6 text-(--sub)">
           <div class="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="opacity-50">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M2 12h20" />
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-            </svg>
-            <span class="t-label font-bold uppercase tracking-widest">
+            <Globe size={14} strokeWidth={2.5} class="opacity-50" />
+            <Typography variant="label">
               {session.wordBank.label}
-            </span>
+            </Typography>
           </div>
           <div class="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="opacity-50">
-              <path d="M6 12h.01M9 9h.01M15 9h.01M18 12h.01M12 15h.01" />
-              <rect width="20" height="12" x="2" y="6" rx="2" />
-            </svg>
-            <span class="t-label font-bold uppercase tracking-widest">
+            <Keyboard size={14} strokeWidth={2.5} class="opacity-50" />
+            <Typography variant="label">
               {fallingWordsGameMeta.name.toLowerCase()}
-            </span>
+            </Typography>
           </div>
         </div>
       </div>

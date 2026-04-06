@@ -55,8 +55,8 @@ function LeaderboardPage() {
     <div class="w-full min-h-[72vh]">
       <div class="grid items-start gap-7 lg:grid-cols-[15rem_minmax(0,1fr)]">
         <aside class="space-y-4">
-          <Card class="bg-(--sub-alt)/55 p-3 rounded-xl">
-            <Typography variant="label" class="px-1 pb-2 font-semibold uppercase tracking-[0.16em] text-(--sub)">
+          <Card class="p-3">
+            <Typography variant="label" class="px-1 pb-2">
               game
             </Typography>
             <div class="space-y-1.5">
@@ -78,8 +78,8 @@ function LeaderboardPage() {
             </div>
           </Card>
 
-          <Card class="bg-(--sub-alt)/55 p-3 rounded-xl">
-            <Typography variant="label" class="px-1 pb-2 font-semibold uppercase tracking-[0.16em] text-(--sub)">
+          <Card class="p-3">
+            <Typography variant="label" class="px-1 pb-2">
               difficulty
             </Typography>
             <div class="space-y-1.5">
@@ -104,7 +104,7 @@ function LeaderboardPage() {
 
         <section class="min-w-0">
           <div class="mb-5 border-b border-(--sub)/25 pb-5">
-            <Typography variant="page-title" as="h1" class="leading-tight text-(--text)">
+            <Typography variant="page-title" as="h1" class="leading-tight">
               {toTitleCase(`${selectedGameName()} ${difficulty()} leaderboard`)}
             </Typography>
           </div>
@@ -134,13 +134,13 @@ function LeaderboardPage() {
               <For each={leaderboardQuery.data}>
                 {(entry) => (
                   <div class="t-body grid gap-2 border-b border-(--sub)/10 px-4 py-3.5 last:border-b-0 sm:grid-cols-[0.45fr_1.5fr_0.85fr_0.85fr_1fr] sm:items-center">
-                    <Typography variant="body" weight="semibold" class="text-(--main)">{entry.rank}</Typography>
+                    <Typography variant="body" weight="semibold" color="main">{entry.rank}</Typography>
                     <div>
-                      <Typography variant="body" class="truncate text-(--text)">{entry.displayName}</Typography>
+                      <Typography variant="body" truncate>{entry.displayName}</Typography>
                     </div>
-                    <Typography variant="body" weight="semibold" class="text-(--text)">{entry.bestScore}</Typography>
-                    <Typography variant="body" class="text-(--sub)">{entry.difficulty}</Typography>
-                    <Typography variant="body" class="text-(--sub)">{formatBestResultAt(entry.bestResultAt)}</Typography>
+                    <Typography variant="body" weight="semibold">{entry.bestScore}</Typography>
+                    <Typography variant="body" color="sub">{entry.difficulty}</Typography>
+                    <Typography variant="body" color="sub">{formatBestResultAt(entry.bestResultAt)}</Typography>
                   </div>
                 )}
               </For>

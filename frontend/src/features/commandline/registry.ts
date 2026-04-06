@@ -1,35 +1,34 @@
-import { useNavigate, useLocation } from '@solidjs/router'
+import { useNavigate, useLocation, useSearchParams } from '@solidjs/router'
 import { themes } from '@/features/content/themes/registry'
 import { wordBanks } from '@/features/content/word-banks/registry'
 import type { WordBankId } from '@/features/content/word-banks/types'
 import { gameRegistry } from '@/features/games/registry'
 import type { ThemeName } from '@/features/content/themes/types'
-import type { CommandlineItem, CommandlineProps, CommandlineScope } from '@/features/commandline/types'
-import { buildHomePath, getSelectedGameId, getSelectedWordBankId } from '@/app/routes'
+import type { CommandlineItem, CommandlineScope } from '@/features/commandline/types'
 import type { GameId } from '@/features/games/types'
 import { themeManager } from '@/features/content/themes/manager'
 
 export function createCommandlineRegistry(
-  _props: CommandlineProps,
   setScope: (scope: CommandlineScope) => void,
 ): Record<CommandlineScope, CommandlineItem[]> {
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
 
   const currentPath = () => location.pathname
-  const selectedGameId = () => getSelectedGameId(location.search) as GameId | null
-  const selectedWordBankId = () => (getSelectedWordBankId(location.search) || 'english/core-1k') as WordBankId
+  const selectedGameId = () => searchParams.game as GameId | null
+  const selectedWordBankId = () => (searchParams.wordBank || 'english/core-1k') as WordBankId
 
   const handleNavigate = (path: string) => {
     navigate(path)
   }
 
   const handleSelectGame = (gameId: GameId | null) => {
-    navigate(buildHomePath(gameId, selectedWordBankId()))
+    navigate(gameId ? `/?game=${gameId}&wordBank=${selectedWordBankId()}` : '/')
   }
 
   const handleSelectWordBank = (wordBankId: WordBankId) => {
-    navigate(buildHomePath(selectedGameId(), wordBankId))
+    navigate(`/?game=${selectedGameId() || ''}&wordBank=${wordBankId}`)
   }
 
   return {
@@ -69,7 +68,7 @@ export function createCommandlineRegistry(
       },
       {
         id: 'route-leaderboard',
-        label: 'View Leaderboards',
+        label: 'View Leaderboard Page',
         keywords: ['leaderboard', 'scores', 'ranking'],
         active: currentPath() === '/leaderboard',
         onSelect: () => handleNavigate('/leaderboard'),
