@@ -69,7 +69,7 @@ export function createCommandlineRegistry(
     games: gameRegistry.map((game) => ({
       id: `game-${game.id}`,
       label: game.name,
-      keywords: [game.name, game.id, game.description, game.status],
+      keywords: [game.name, game.id, game.description],
       active: props.selectedGameId === game.id,
       onSelect: () => props.onSelectGame(game.id),
     })),

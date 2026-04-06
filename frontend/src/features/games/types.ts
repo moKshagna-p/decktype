@@ -7,13 +7,10 @@ export type GameViewProps = {
 
 export type GameId = 'falling-words'
 
-export type GameStatus = 'live' | 'coming-soon'
-
 export type GameModule = {
   id: GameId
   name: string
   description: string
-  status: GameStatus
   defaultWordBankId: WordBankId
   View: Component<GameViewProps>
 }
