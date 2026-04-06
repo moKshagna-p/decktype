@@ -1,7 +1,9 @@
 import { Show, createMemo, createSignal } from 'solid-js'
 
+import AuthForms from '@/features/auth/components/auth-forms'
 import { useMyResultsQuery } from '@/features/results/api/hooks'
 import ResultHistory from '@/features/results/components/result-history'
+import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
 
 type ProfilePageProps = {
@@ -10,15 +12,6 @@ type ProfilePageProps = {
 
 function ProfilePage(props: ProfilePageProps) {
   const session = authClient.useSession()
-  const [registerName, setRegisterName] = createSignal('')
-  const [registerEmail, setRegisterEmail] = createSignal('')
-  const [registerEmailConfirm, setRegisterEmailConfirm] = createSignal('')
-  const [registerPassword, setRegisterPassword] = createSignal('')
-  const [registerPasswordConfirm, setRegisterPasswordConfirm] = createSignal('')
-  const [loginEmail, setLoginEmail] = createSignal('')
-  const [loginPassword, setLoginPassword] = createSignal('')
-  const [isRegistering, setIsRegistering] = createSignal(false)
-  const [isSigningIn, setIsSigningIn] = createSignal(false)
   const [isSigningOut, setIsSigningOut] = createSignal(false)
   const [statusMessage, setStatusMessage] = createSignal<string | null>(null)
   const [errorMessage, setErrorMessage] = createSignal<string | null>(null)
@@ -78,80 +71,6 @@ function ProfilePage(props: ProfilePageProps) {
     setErrorMessage(null)
   }
 
-  const getErrorMessage = (error: unknown) => {
-    if (error instanceof Error) {
-      return error.message
-    }
-
-    return 'Something went wrong. Please try again.'
-  }
-
-  const handleRegister = async (event: SubmitEvent) => {
-    event.preventDefault()
-    resetMessages()
-
-    if (registerEmail().trim() !== registerEmailConfirm().trim()) {
-      setErrorMessage('Emails do not match.')
-      return
-    }
-
-    if (registerPassword() !== registerPasswordConfirm()) {
-      setErrorMessage('Passwords do not match.')
-      return
-    }
-
-    setIsRegistering(true)
-
-    try {
-      const result = await authClient.signUp.email({
-        name: registerName().trim(),
-        email: registerEmail().trim(),
-        password: registerPassword(),
-      })
-
-      if (result.error) {
-        setErrorMessage(result.error.message ?? 'Unable to create account.')
-        return
-      }
-
-      setStatusMessage('Account created.')
-      props.onNavigate('/')
-    }
-    catch (error) {
-      setErrorMessage(getErrorMessage(error))
-    }
-    finally {
-      setIsRegistering(false)
-    }
-  }
-
-  const handleLogin = async (event: SubmitEvent) => {
-    event.preventDefault()
-    resetMessages()
-    setIsSigningIn(true)
-
-    try {
-      const result = await authClient.signIn.email({
-        email: loginEmail().trim(),
-        password: loginPassword(),
-      })
-
-      if (result.error) {
-        setErrorMessage(result.error.message ?? 'Unable to sign in.')
-        return
-      }
-
-      setStatusMessage('Signed in.')
-      props.onNavigate('/')
-    }
-    catch (error) {
-      setErrorMessage(getErrorMessage(error))
-    }
-    finally {
-      setIsSigningIn(false)
-    }
-  }
-
   const handleSignOut = async () => {
     resetMessages()
     setIsSigningOut(true)
@@ -167,7 +86,7 @@ function ProfilePage(props: ProfilePageProps) {
       setStatusMessage('Signed out.')
     }
     catch (error) {
-      setErrorMessage(getErrorMessage(error))
+      setErrorMessage(getErrorMessage(error, 'Unable to sign out.'))
     }
     finally {
       setIsSigningOut(false)
@@ -191,119 +110,7 @@ function ProfilePage(props: ProfilePageProps) {
         <Show
           when={isAuthenticated()}
         fallback={(
-          <div class="grid w-full items-start gap-6 lg:grid-cols-2">
-            <form
-              class="rounded-xl bg-[var(--sub-alt)]/38 p-5 ring-1 ring-[var(--sub)]/16"
-              onSubmit={handleRegister}
-            >
-              <div class="mb-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--sub)]">
-                register
-              </div>
-
-              <div class="flex flex-col gap-3">
-                <input
-                  class="rounded-lg bg-[var(--sub-alt)] px-4 py-3 text-base text-[var(--text)] outline-none placeholder:text-[var(--sub)] focus:bg-[color:color-mix(in_srgb,var(--sub-alt)_80%,var(--bg))]"
-                  value={registerName()}
-                  onInput={(event) => setRegisterName(event.currentTarget.value)}
-                  placeholder="username"
-                  required
-                />
-                <input
-                  type="email"
-                  class="rounded-lg bg-[var(--sub-alt)] px-4 py-3 text-base text-[var(--text)] outline-none placeholder:text-[var(--sub)] focus:bg-[color:color-mix(in_srgb,var(--sub-alt)_80%,var(--bg))]"
-                  value={registerEmail()}
-                  onInput={(event) => setRegisterEmail(event.currentTarget.value)}
-                  placeholder="email"
-                  required
-                />
-                <input
-                  type="email"
-                  class="rounded-lg bg-[var(--sub-alt)] px-4 py-3 text-base text-[var(--text)] outline-none placeholder:text-[var(--sub)] focus:bg-[color:color-mix(in_srgb,var(--sub-alt)_80%,var(--bg))]"
-                  value={registerEmailConfirm()}
-                  onInput={(event) => setRegisterEmailConfirm(event.currentTarget.value)}
-                  placeholder="verify email"
-                  required
-                />
-                <input
-                  type="password"
-                  class="rounded-lg bg-[var(--sub-alt)] px-4 py-3 text-base text-[var(--text)] outline-none placeholder:text-[var(--sub)] focus:bg-[color:color-mix(in_srgb,var(--sub-alt)_80%,var(--bg))]"
-                  value={registerPassword()}
-                  onInput={(event) => setRegisterPassword(event.currentTarget.value)}
-                  placeholder="password"
-                  required
-                />
-                <input
-                  type="password"
-                  class="rounded-lg bg-[var(--sub-alt)] px-4 py-3 text-base text-[var(--text)] outline-none placeholder:text-[var(--sub)] focus:bg-[color:color-mix(in_srgb,var(--sub-alt)_80%,var(--bg))]"
-                  value={registerPasswordConfirm()}
-                  onInput={(event) => setRegisterPasswordConfirm(event.currentTarget.value)}
-                  placeholder="verify password"
-                  required
-                />
-              </div>
-
-              <Show when={statusMessage()}>
-                {(message) => (
-                  <div class="pt-3 text-sm text-[var(--main)]">{message()}</div>
-                )}
-              </Show>
-              <Show when={errorMessage()}>
-                {(message) => (
-                  <div class="pt-3 text-sm text-[var(--error)]">{message()}</div>
-                )}
-              </Show>
-
-              <button
-                type="submit"
-                class="mt-4 rounded-lg bg-[color:color-mix(in_srgb,var(--sub-alt)_90%,var(--bg))] px-4 py-3 text-base font-semibold text-[var(--sub)] transition hover:text-[var(--text)] disabled:cursor-not-allowed disabled:opacity-60"
-                disabled={isRegistering() || isSigningIn()}
-              >
-                {isRegistering() ? 'creating account...' : 'sign up'}
-              </button>
-            </form>
-
-            <form
-              class="rounded-xl bg-[var(--sub-alt)]/38 p-5 ring-1 ring-[var(--sub)]/16"
-              onSubmit={handleLogin}
-            >
-              <div class="mb-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--sub)]">
-                login
-              </div>
-
-              <div class="flex flex-col gap-3">
-                <input
-                  type="email"
-                  class="rounded-lg bg-[var(--sub-alt)] px-4 py-3 text-base text-[var(--text)] outline-none placeholder:text-[var(--sub)] focus:bg-[color:color-mix(in_srgb,var(--sub-alt)_80%,var(--bg))]"
-                  value={loginEmail()}
-                  onInput={(event) => setLoginEmail(event.currentTarget.value)}
-                  placeholder="email"
-                  required
-                />
-                <input
-                  type="password"
-                  class="rounded-lg bg-[var(--sub-alt)] px-4 py-3 text-base text-[var(--text)] outline-none placeholder:text-[var(--sub)] focus:bg-[color:color-mix(in_srgb,var(--sub-alt)_80%,var(--bg))]"
-                  value={loginPassword()}
-                  onInput={(event) => setLoginPassword(event.currentTarget.value)}
-                  placeholder="password"
-                  required
-                />
-              </div>
-
-              <Show when={!statusMessage() && errorMessage()}>
-                {(message) => (
-                  <div class="pt-3 text-sm text-[var(--error)]">{message()}</div>
-                )}
-              </Show>
-
-              <button
-                type="submit"
-                class="mt-4 rounded-lg bg-[color:color-mix(in_srgb,var(--sub-alt)_90%,var(--bg))] px-4 py-3 text-base font-semibold text-[var(--sub)] transition hover:text-[var(--text)] disabled:cursor-not-allowed disabled:opacity-60"
-                disabled={isSigningIn() || isRegistering()}
-              >
-                {isSigningIn() ? 'signing in...' : 'sign in'}
-              </button>
-            </form>
-          </div>
+          <AuthForms onSuccess={() => props.onNavigate('/')} />
         )}
         >
           <div class="w-full space-y-6">

@@ -80,15 +80,15 @@ function LeaderboardPage() {
             <div class="space-y-1.5">
               <For each={difficultyFilters}>
                 {(option) => (
-                  <button
-                    type="button"
-                    class={`block w-full rounded-md px-3 py-2 text-left text-xs font-semibold tracking-[0.08em] transition ${
-                      difficulty() === option.value
-                        ? 'bg-[var(--main)]/20 text-[var(--main)]'
-                        : 'text-[var(--text)]/90 hover:bg-[var(--sub)]/20'
-                    }`}
-                    onClick={() => setDifficulty(option.value)}
-                  >
+                    <button
+                      type="button"
+                      class={`block w-full rounded-md px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[0.05em] transition ${
+                        difficulty() === option.value
+                          ? 'bg-[var(--main)]/20 text-[var(--main)]'
+                          : 'text-[var(--text)]/90 hover:bg-[var(--sub)]/20'
+                      }`}
+                      onClick={() => setDifficulty(option.value)}
+                    >
                     {option.label}
                   </button>
                 )}
