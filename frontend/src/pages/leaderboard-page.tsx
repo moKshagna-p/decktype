@@ -117,7 +117,7 @@ function LeaderboardPage() {
           )}
 
           {leaderboardQuery.data && leaderboardQuery.data.length > 0 && (
-            <div class="overflow-hidden rounded-xl bg-(--sub-alt)/35 ring-1 ring-(--sub)/12">
+            <div class="overflow-hidden rounded-xl bg-(--sub-alt)/35">
               <div class="t-body hidden border-b border-(--sub)/20 px-4 py-3.5 text-(--sub) sm:grid sm:grid-cols-[0.45fr_1.5fr_0.85fr_0.85fr_1fr] sm:items-center">
                 <div>#</div>
                 <div>player</div>

@@ -21,7 +21,7 @@ function AboutPage() {
 
   return (
     <div class="w-full min-h-[72vh] space-y-6">
-      <section class="rounded-xl bg-(--sub-alt)/32 p-5 ring-1 ring-(--sub)/14">
+      <section class="rounded-xl bg-(--sub-alt)/32 p-5">
         <h1 class="t-page-title leading-tight text-(--text)">about decktype</h1>
         <p class="t-body mt-3 max-w-3xl text-(--sub)">
           decktype is inspired by monkeytype&apos;s speed-typing experience. the project takes
@@ -47,7 +47,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section class="rounded-xl bg-(--sub-alt)/32 p-5 ring-1 ring-(--sub)/14">
+      <section class="rounded-xl bg-(--sub-alt)/32 p-5">
         <div class="t-label font-semibold uppercase tracking-[0.16em] text-(--sub)">
           creator
         </div>
@@ -72,7 +72,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section class="rounded-xl bg-(--sub-alt)/32 p-5 ring-1 ring-(--sub)/14">
+      <section class="rounded-xl bg-(--sub-alt)/32 p-5">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div class="t-label font-semibold uppercase tracking-[0.16em] text-(--sub)">

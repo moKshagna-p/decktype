@@ -178,7 +178,7 @@ function App() {
         onPreviewTheme={previewTheme}
       />
       <ToastRegion />
-      <div class="mx-auto flex min-h-screen w-full flex-col px-24 py-8">
+      <div class="mx-auto flex min-h-screen w-full max-w-[1320px] flex-col px-5 py-8 sm:px-8 lg:px-10 xl:px-12">
         <header class="mb-8 flex items-center justify-between">
           <div class="flex items-baseline gap-10">
             <button

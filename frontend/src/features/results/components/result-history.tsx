@@ -45,7 +45,7 @@ function ResultHistory() {
         </Match>
 
         <Match when={resultsQuery.data?.length}>
-          <div class="overflow-hidden rounded-xl bg-(--sub-alt)/35 ring-1 ring-(--sub)/12">
+          <div class="overflow-hidden rounded-xl bg-(--sub-alt)/35">
             <div class="t-body hidden border-b border-(--sub)/20 px-4 py-3.5 text-(--sub) sm:grid sm:grid-cols-[1.2fr_0.7fr_0.8fr_1fr] sm:items-center">
               <div>game</div>
               <div>score</div>

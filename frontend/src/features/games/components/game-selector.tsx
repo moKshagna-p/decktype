@@ -10,16 +10,10 @@ function GameSelector(props: GameSelectorProps) {
   return (
     <div class="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {gameRegistry.map((game) => {
-        const isActive = props.activeGameId === game.id
-
         return (
           <button
             type="button"
-            class={`group relative flex flex-col items-start gap-6 rounded-3xl p-10 text-left transition-all ${
-              isActive
-                ? 'bg-(--sub-alt)/40 ring-1 ring-(--main)/30'
-                : 'bg-(--sub-alt)/20 hover:bg-(--sub-alt)/40'
-            } hover:-translate-y-1`}
+            class="group relative flex flex-col items-start gap-6 rounded-3xl bg-(--sub-alt)/55 p-10 text-left transition-all hover:-translate-y-1 hover:bg-(--sub-alt)/70"
             onClick={() => props.onSelectGame(game.id)}
           >
             <div class="flex flex-col gap-3">

@@ -46,14 +46,6 @@ body {
   background: var(--bg);
 }
 
-button {
-  cursor: pointer;
-  transition: all 0.125s;
-  font: inherit;
-  background: none;
-  border: none;
-}
-
 #root {
   min-height: 100%;
 }
