@@ -8,7 +8,7 @@ import GameHud from './components/game-hud'
 import { useFallingWordsGame } from './use-falling-words-game'
 import { fallingWordsGameMeta } from './meta'
 import { difficultyOptions } from './difficulty'
-import { Typography } from '@/app/components/ui/typography'
+import { Typography } from '@/components/ui/typography'
 
 function FallingWordsView(props: GameViewProps) {
   const authSession = authClient.useSession()

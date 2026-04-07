@@ -2,8 +2,8 @@ import { For, Show } from 'solid-js'
 
 import { useContributorsQuery } from '@/features/contributors/api/hooks'
 import { getErrorMessage } from '@/lib/api-client'
-import { Typography } from '@/app/components/ui/typography'
-import { Button } from '@/app/components/ui/button'
+import { Typography } from '@/components/ui/typography'
+import { Button } from '@/components/ui/button'
 
 function formatSyncedAt(value: string | null) {
   if (!value) {

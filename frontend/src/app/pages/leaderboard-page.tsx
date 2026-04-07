@@ -5,8 +5,8 @@ import { useLeaderboardQuery } from '@/features/leaderboard/api/hooks'
 import { gameRegistry } from '@/features/games/registry'
 import type { GameId } from '@/features/games/types'
 import { getErrorMessage } from '@/lib/api-client'
-import { Typography } from '@/app/components/ui/typography'
-import { Card } from '@/app/components/ui/card'
+import { Typography } from '@/components/ui/typography'
+import { Card } from '@/components/ui/card'
 
 const difficultyFilters: {
   value: LeaderboardDifficulty

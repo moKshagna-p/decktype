@@ -4,8 +4,8 @@ import AuthForms from '@/features/auth/components/auth-forms'
 import ResultHistory from '@/features/results/components/result-history'
 import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
-import { Typography } from '@/app/components/ui/typography'
-import { Button } from '@/app/components/ui/button'
+import { Typography } from '@/components/ui/typography'
+import { Button } from '@/components/ui/button'
 
 type ProfilePageProps = {
   onNavigate: (target: string) => void

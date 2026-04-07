@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-solid'
-import { Card } from '@/app/components/ui/card'
-import { Typography } from '@/app/components/ui/typography'
+import { Card } from '@/components/ui/card'
+import { Typography } from '@/components/ui/typography'
 import type { GameId } from '@/features/games/types'
 
 type GameCardProps = {

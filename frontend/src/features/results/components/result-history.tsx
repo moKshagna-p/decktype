@@ -4,7 +4,7 @@ import { games } from '@/features/games/registry'
 import { useMyResultsQuery } from '@/features/results/api/hooks'
 import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
-import { Typography } from '@/app/components/ui/typography'
+import { Typography } from '@/components/ui/typography'
 
 function formatPlayedAt(value: string) {
   return new Intl.DateTimeFormat(undefined, {
