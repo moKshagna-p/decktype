@@ -6,13 +6,13 @@ import { games } from '@/features/games/registry'
 import type { GameId } from '@/features/games/types'
 import type { WordBankId } from '@/features/content/word-banks/types'
 
-type HomePageProps = {
+type HomeProps = {
   selectedGameId: GameId | null
   selectedWordBankId: WordBankId | null
   onSelectGame: (gameId: GameId) => void
 }
 
-function HomePage(props: HomePageProps) {
+function HomePage(props: HomeProps) {
   const selectedGame = createMemo(() => (
     props.selectedGameId ? games[props.selectedGameId] ?? null : null
   ))

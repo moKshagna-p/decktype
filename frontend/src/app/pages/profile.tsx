@@ -1,17 +1,17 @@
 import { Show, createMemo, createSignal } from 'solid-js'
 
 import AuthForms from '@/features/auth/components/auth-forms'
-import ResultHistory from '@/features/results/components/result-history'
+import ResultsTable from '@/features/results/components/results-table'
 import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
 import { Typography } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
 
-type ProfilePageProps = {
+type ProfileProps = {
   onNavigate: (target: string) => void
 }
 
-function ProfilePage(props: ProfilePageProps) {
+function ProfilePage(props: ProfileProps) {
   const session = authClient.useSession()
   const [isSigningOut, setIsSigningOut] = createSignal(false)
   const [statusMessage, setStatusMessage] = createSignal<string | null>(null)
@@ -63,47 +63,52 @@ function ProfilePage(props: ProfilePageProps) {
       >
         <Show
           when={isAuthenticated()}
-        fallback={(
-          <AuthForms onSuccess={() => props.onNavigate('/')} />
-        )}
+          fallback={(
+            <AuthForms onSuccess={() => props.onNavigate('/')} />
+          )}
         >
           <div class="w-full space-y-6">
             <section class="rounded-xl bg-(--sub-alt)/32 p-5">
               <div class="flex flex-wrap items-start justify-between gap-5">
-              <div>
-                <Typography variant="label">
-                  profile
-                </Typography>
-                <Typography variant="metric" class="mt-2">
-                  {session().data?.user.name}
-                </Typography>
-                <Typography variant="body" color="sub" class="mt-2">{session().data?.user.email}</Typography>
-              </div>
+                <div>
+                  <Typography variant="label">
+                    profile
+                  </Typography>
+                  <Typography variant="metric" class="mt-2">
+                    {session().data?.user.name}
+                  </Typography>
+                  <Typography variant="body" color="sub" class="mt-2">{session().data?.user.email}</Typography>
+                </div>
 
-              <div class="flex flex-wrap items-center gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  class="px-3 py-1.5"
-                  onClick={() => props.onNavigate('/')}
-                >
-                  back home
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  class="px-3 py-1.5"
-                  onClick={handleSignOut}
-                  disabled={isSigningOut()}
-                >
-                  {isSigningOut() ? 'signing out...' : 'sign out'}
-                </Button>
-              </div>
+                <div class="flex flex-wrap items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    class="px-3 py-1.5"
+                    onClick={() => props.onNavigate('/')}
+                  >
+                    back home
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    class="px-3 py-1.5"
+                    onClick={handleSignOut}
+                    disabled={isSigningOut()}
+                  >
+                    {isSigningOut() ? 'signing out...' : 'sign out'}
+                  </Button>
+                </div>
               </div>
             </section>
 
             <section class="rounded-xl bg-(--sub-alt)/22 p-5">
-              <ResultHistory />
+              <div class="space-y-4">
+                <Typography variant="label">
+                  recent results
+                </Typography>
+                <ResultsTable />
+              </div>
             </section>
 
             <Show when={statusMessage()}>
