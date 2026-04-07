@@ -3,6 +3,7 @@ import { themes } from '@/features/content/themes/registry'
 import { wordBanks } from '@/features/content/word-banks/registry'
 import type { WordBankId } from '@/features/content/word-banks/types'
 import { gameRegistry } from '@/features/games/registry'
+import { getHomeGamePath } from '@/features/games/utils'
 import type { ThemeName } from '@/features/content/themes/types'
 import type { CommandlineItem, CommandlineScope } from '@/features/commandline/types'
 import type { GameId } from '@/features/games/types'
@@ -24,7 +25,7 @@ export function createCommandlineRegistry(
   }
 
   const handleSelectGame = (gameId: GameId | null) => {
-    navigate(gameId ? `/?game=${gameId}&wordBank=${selectedWordBankId()}` : '/')
+    navigate(getHomeGamePath(gameId, selectedWordBankId()))
   }
 
   const handleSelectWordBank = (wordBankId: WordBankId) => {

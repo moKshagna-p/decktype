@@ -1,6 +1,5 @@
 import { ArrowRight } from 'lucide-solid'
-import { Card } from '@/components/ui/card'
-import { Typography } from '@/components/ui/typography'
+import { Text } from '@/components/ui/text'
 import type { GameId } from '@/features/games/types'
 
 type GameCardProps = {
@@ -12,32 +11,21 @@ type GameCardProps = {
 
 export function GameCard(props: GameCardProps) {
   return (
-    <Card
-      as="button"
+    <button
       type="button"
-      class="group relative flex flex-col items-start gap-6 p-10 text-left transition-all"
+      class="group relative flex flex-col items-start gap-6 rounded-2xl bg-(--sub-alt) p-10 text-left transition-all"
       onClick={props.onClick}
     >
       <div class="flex flex-col gap-3">
-        <Typography
-          variant="title"
-          tracking="tight"
-          class="group-hover:text-(--main) transition-colors"
-        >
-          {props.name.toLowerCase()}
-        </Typography>
-        <Typography
-          variant="body"
-          color="sub"
-          class="leading-relaxed"
-        >
-          {props.description.toLowerCase()}
-        </Typography>
+        <div class="transition-colors group-hover:text-(--main)">
+          <Text variant="title">{props.name.toLowerCase()}</Text>
+        </div>
+        <Text variant="body">{props.description.toLowerCase()}</Text>
       </div>
 
       <div class="absolute bottom-10 right-10 translate-x-4 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100">
         <ArrowRight size={20} strokeWidth={3} class="text-(--main)" />
       </div>
-    </Card>
+    </button>
   )
 }

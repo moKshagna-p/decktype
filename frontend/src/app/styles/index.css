@@ -19,16 +19,6 @@
   --error-extra: #791717;
   --colorful-error: #ca4754;
   --colorful-error-extra: #791717;
-
-  --fs-label: 0.6875rem;
-  --fs-caption: 0.75rem;
-  --fs-body: 0.875rem;
-  --fs-emphasis: 1rem;
-  --fs-title: 1.5rem;
-  --fs-page-title: 2rem;
-  --fs-metric: 2.125rem;
-  --fs-display: 4rem;
-  --fs-word: 1.5rem;
 }
 
 html, body {
@@ -86,63 +76,4 @@ body {
 
 .toast-enter {
   animation: toast-in 180ms ease-out;
-}
-
-.t-label {
-  font-size: var(--fs-label);
-  line-height: 1.1;
-}
-
-.t-caption {
-  font-size: var(--fs-caption);
-  line-height: 1.25;
-}
-
-.t-body {
-  font-size: var(--fs-body);
-  line-height: 1.4;
-}
-
-.t-emphasis {
-  font-size: var(--fs-emphasis);
-  line-height: 1.4;
-}
-
-.t-title {
-  font-size: var(--fs-title);
-  line-height: 1.2;
-}
-
-.t-page-title {
-  font-size: var(--fs-page-title);
-  line-height: 1.2;
-}
-
-.t-metric {
-  font-size: var(--fs-metric);
-  line-height: 1;
-}
-
-.t-display {
-  font-size: var(--fs-display);
-  line-height: 1;
-}
-
-.t-word {
-  font-size: var(--fs-word);
-  line-height: 1.2;
-}
-
-@media (min-width: 640px) {
-  .t-page-title {
-    font-size: 2.25rem;
-  }
-
-  .t-display {
-    font-size: 6rem;
-  }
-
-  .t-metric {
-    font-size: 2.25rem;
-  }
 }

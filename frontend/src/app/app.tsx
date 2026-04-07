@@ -1,39 +1,14 @@
-import { createEffect, createMemo, onMount, type ParentProps } from 'solid-js'
+import { createEffect, createMemo } from 'solid-js'
 import { Router, Route, useNavigate, useSearchParams } from '@solidjs/router'
-import ToastRegion from '@/components/toast-region'
-import Commandline from '@/features/commandline/components/commandline'
 import { games } from '@/features/games/registry'
+import { getHomeGamePath } from '@/features/games/utils'
 import AboutPage from '@/app/pages/about'
 import HomePage from '@/app/pages/home'
+import Layout from '@/app/layout'
 import LeaderboardPage from '@/app/pages/leaderboard'
 import ProfilePage from '@/app/pages/profile'
 import type { GameId } from '@/features/games/types'
 import type { WordBankId } from '@/features/content/word-banks/types'
-import { themeManager } from '@/features/content/themes/manager'
-import { Navbar } from '../components/navbar'
-import { Footer } from '../components/footer'
-
-function Layout(props: ParentProps) {
-  onMount(() => {
-    themeManager.init()
-  })
-
-  return (
-    <div class="relative min-h-screen bg-(--bg) font-mono text-(--text)">
-      <Commandline />
-      <ToastRegion />
-      <div class="mx-auto flex min-h-screen w-full max-w-[1320px] flex-col px-5 py-8 sm:px-8 lg:px-10 xl:px-12">
-        <Navbar />
-
-        <main class="flex-1 flex flex-col justify-center py-8">
-          {props.children}
-        </main>
-
-        <Footer />
-      </div>
-    </div>
-  )
-}
 
 function App() {
   return (
@@ -57,7 +32,7 @@ function App() {
             <HomePage
               selectedGameId={selectedGameId()}
               selectedWordBankId={selectedWordBankId()}
-              onSelectGame={(gameId) => navigate(gameId ? `/?game=${gameId}&wordBank=${selectedWordBankId()}` : '/')}
+              onSelectGame={(gameId) => navigate(getHomeGamePath(gameId, selectedWordBankId()))}
             />
           )
         }}

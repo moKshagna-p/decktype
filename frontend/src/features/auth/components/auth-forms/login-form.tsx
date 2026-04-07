@@ -3,7 +3,7 @@ import { Show, createSignal } from 'solid-js'
 
 import Button from '@/components/ui/button'
 import Input from '@/components/ui/input'
-import { Typography } from '@/components/ui/typography'
+import { Text } from '@/components/ui/text'
 import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
 
@@ -69,9 +69,7 @@ export function LoginForm(props: LoginFormProps) {
         void form.handleSubmit()
       }}
     >
-      <Typography variant="body" weight="semibold" color="sub" class="mb-1">
-        login
-      </Typography>
+      <Text variant="label" upper>login</Text>
 
       <form.Field name="email">
         {(field) => {
@@ -91,9 +89,9 @@ export function LoginForm(props: LoginFormProps) {
                 required
               />
               <Show when={validationMessage && formState().submissionAttempts > 0}>
-                <Typography variant="body" color="error" class="pt-1">
-                  {validationMessage}
-                </Typography>
+                <div class="pt-1 text-(--error)">
+                  <Text variant="body">{validationMessage}</Text>
+                </div>
               </Show>
             </>
           )
@@ -118,9 +116,9 @@ export function LoginForm(props: LoginFormProps) {
                 required
               />
               <Show when={validationMessage && formState().submissionAttempts > 0}>
-                <Typography variant="body" color="error" class="pt-1">
-                  {validationMessage}
-                </Typography>
+                <div class="pt-1 text-(--error)">
+                  <Text variant="body">{validationMessage}</Text>
+                </div>
               </Show>
             </>
           )
@@ -129,16 +127,16 @@ export function LoginForm(props: LoginFormProps) {
 
       <Show when={statusMessage()}>
         {(message) => (
-          <Typography variant="body" color="main" class="pt-1">
-            {message()}
-          </Typography>
+          <div class="pt-1 text-(--main)">
+            <Text variant="body">{message()}</Text>
+          </div>
         )}
       </Show>
       <Show when={errorMessage()}>
         {(message) => (
-          <Typography variant="body" color="error" class="pt-1">
-            {message()}
-          </Typography>
+          <div class="pt-1 text-(--error)">
+            <Text variant="body">{message()}</Text>
+          </div>
         )}
       </Show>
 

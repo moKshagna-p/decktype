@@ -5,7 +5,7 @@ import { Match, Switch } from 'solid-js'
 import { useLeaderboardQuery } from '@/features/leaderboard/api/hooks'
 import { getErrorMessage } from '@/lib/api-client'
 import { formatDateTime } from '@/lib/utils'
-import { Typography } from '@/components/ui/typography'
+import { Text } from '@/components/ui/text'
 
 import type { LeaderboardDifficulty, LeaderboardEntry } from '../api/contract'
 
@@ -52,15 +52,15 @@ export function LeaderboardTable(props: LeaderboardTableProps) {
   return (
     <Switch>
       <Match when={leaderboardQuery.isPending}>
-        <Typography variant="body" color="sub" class="rounded-lg bg-(--sub-alt) px-4 py-4">
-          loading leaderboard...
-        </Typography>
+        <div class="rounded-lg bg-(--sub-alt) px-4 py-4">
+          <Text variant="body">loading leaderboard...</Text>
+        </div>
       </Match>
 
       <Match when={leaderboardQuery.error}>
-        <Typography variant="body" color="error" class="rounded-lg bg-(--sub-alt) px-4 py-4">
-          {getErrorMessage(leaderboardQuery.error, 'Unable to load leaderboard.')}
-        </Typography>
+        <div class="rounded-lg bg-(--sub-alt) px-4 py-4 text-(--error)">
+          <Text variant="body">{getErrorMessage(leaderboardQuery.error, 'Unable to load leaderboard.')}</Text>
+        </div>
       </Match>
 
       <Match when={leaderboardQuery.data && leaderboardQuery.data.length > 0}>
@@ -71,9 +71,9 @@ export function LeaderboardTable(props: LeaderboardTableProps) {
       </Match>
 
       <Match when>
-        <Typography variant="body" color="sub" class="rounded-lg bg-(--sub-alt) px-4 py-4">
-          no scores yet
-        </Typography>
+        <div class="rounded-lg bg-(--sub-alt) px-4 py-4">
+          <Text variant="body">no scores yet</Text>
+        </div>
       </Match>
     </Switch>
   )

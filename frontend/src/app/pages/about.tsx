@@ -2,8 +2,8 @@ import { For, Show } from 'solid-js'
 
 import { useContributorsQuery } from '@/features/contributors/api/hooks'
 import { getErrorMessage } from '@/lib/api-client'
-import { Typography } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
+import { Text } from '@/components/ui/text'
 
 function formatSyncedAt(value: string | null) {
   if (!value) {
@@ -24,11 +24,13 @@ function AboutPage() {
   return (
     <div class="w-full min-h-[72vh] space-y-6">
       <section class="rounded-xl bg-(--sub-alt)/32 p-5">
-        <Typography variant="page-title" as="h1" class="leading-tight text-(--text)">about decktype</Typography>
-        <Typography variant="body" class="mt-3 max-w-3xl text-(--sub)">
-          decktype is inspired by monkeytype&apos;s speed-typing experience. the project takes
-          inspiration from the flow and focus of monkeytype while building its own direction.
-        </Typography>
+        <div class="space-y-3">
+          <Text variant="title">about decktype</Text>
+          <Text variant="body">
+            decktype is inspired by monkeytype&apos;s speed-typing experience. the project takes
+            inspiration from the flow and focus of monkeytype while building its own direction.
+          </Text>
+        </div>
         <div class="mt-4 flex flex-wrap gap-3">
           <Button
             as="a"
@@ -56,10 +58,12 @@ function AboutPage() {
       </section>
 
       <section class="rounded-xl bg-(--sub-alt)/32 p-5">
-        <Typography variant="label" weight="semibold" class="uppercase tracking-[0.16em] text-(--sub)">
+        <Text variant="label" upper>
           creator
-        </Typography>
-        <Typography variant="title" class="mt-2 text-(--text)">d1rshan</Typography>
+        </Text>
+        <div class="mt-2">
+          <Text variant="title">d1rshan</Text>
+        </div>
         <div class="mt-3 flex flex-wrap gap-3">
           <Button
             as="a"
@@ -89,12 +93,14 @@ function AboutPage() {
       <section class="rounded-xl bg-(--sub-alt)/32 p-5">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <Typography variant="label" weight="semibold" class="uppercase tracking-[0.16em] text-(--sub)">
+            <Text variant="label" upper>
               contributors
-            </Typography>
-            <Typography variant="body" class="mt-1 text-(--sub)">
-              synced: {formatSyncedAt(contributorsQuery.data?.syncedAt ?? null)}
-            </Typography>
+            </Text>
+            <div class="mt-1">
+              <Text variant="body">
+                synced: {formatSyncedAt(contributorsQuery.data?.syncedAt ?? null)}
+              </Text>
+            </div>
           </div>
           <Button
             as="a"
@@ -110,14 +116,14 @@ function AboutPage() {
         </div>
 
         <Show when={contributorsQuery.isPending}>
-          <div class="t-body mt-4 rounded-lg bg-(--sub-alt) px-4 py-4 text-(--sub)">
-            loading contributors...
+          <div class="mt-4 rounded-lg bg-(--sub-alt) px-4 py-4">
+            <Text variant="body">loading contributors...</Text>
           </div>
         </Show>
 
         <Show when={contributorsQuery.error}>
-          <div class="t-body mt-4 rounded-lg bg-(--sub-alt) px-4 py-4 text-(--error)">
-            {getErrorMessage(contributorsQuery.error, 'Unable to load contributors.')}
+          <div class="mt-4 rounded-lg bg-(--sub-alt) px-4 py-4 text-(--error)">
+            <Text variant="body">{getErrorMessage(contributorsQuery.error, 'Unable to load contributors.')}</Text>
           </div>
         </Show>
 
@@ -140,12 +146,12 @@ function AboutPage() {
                     />
                   </div>
                   <div class="min-w-0">
-                    <Typography variant="body" class="truncate text-(--text)">
-                      {contributor.displayName ?? contributor.login}
-                    </Typography>
-                    <Typography variant="caption" class="truncate text-(--sub)">
-                      @{contributor.login} • {contributor.contributions} contributions
-                    </Typography>
+                    <div class="truncate">
+                      <Text variant="body">{contributor.displayName ?? contributor.login}</Text>
+                    </div>
+                    <div class="truncate">
+                      <Text variant="caption">@{contributor.login} • {contributor.contributions} contributions</Text>
+                    </div>
                   </div>
                 </a>
               )}
@@ -154,15 +160,13 @@ function AboutPage() {
         </Show>
 
         <Show when={contributorsQuery.data && contributorsQuery.data.contributors.length === 0}>
-          <div class="t-body mt-4 rounded-lg bg-(--sub-alt) px-4 py-4 text-(--sub)">
-            no contributors found yet
+          <div class="mt-4 rounded-lg bg-(--sub-alt) px-4 py-4">
+            <Text variant="body">no contributors found yet</Text>
           </div>
         </Show>
       </section>
 
-      <Typography variant="caption" class="text-(--sub)">
-        thank you to everyone who contributed code, feedback, and ideas.
-      </Typography>
+      <Text variant="caption">thank you to everyone who contributed code, feedback, and ideas.</Text>
     </div>
   )
 }

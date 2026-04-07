@@ -2,10 +2,11 @@ import { Table, type TableColumn } from '@/components/table'
 import { Match, Switch } from 'solid-js'
 
 import { useMyResultsQuery } from '@/features/results/api/hooks'
-import { Typography } from '@/components/ui/typography'
+import { getGameName } from '@/features/games/utils'
 import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
-import { formatDateTime, getGameName } from '@/lib/utils'
+import { formatDateTime } from '@/lib/utils'
+import { Text } from '@/components/ui/text'
 
 type ResultsTableRow = NonNullable<ReturnType<typeof useMyResultsQuery>['data']>[number]
 
@@ -42,15 +43,15 @@ function ResultsTable() {
   return (
     <Switch>
       <Match when={resultsQuery.isPending}>
-        <Typography variant="body" color="sub" class="rounded-lg bg-(--sub-alt) px-4 py-4">
-          loading results...
-        </Typography>
+        <div class="rounded-lg bg-(--sub-alt) px-4 py-4">
+          <Text variant="body">loading results...</Text>
+        </div>
       </Match>
 
       <Match when={resultsQuery.error}>
-        <Typography variant="body" color="error" class="rounded-lg bg-(--sub-alt) px-4 py-4">
-          {getErrorMessage(resultsQuery.error, 'Unable to load results.')}
-        </Typography>
+        <div class="rounded-lg bg-(--sub-alt) px-4 py-4 text-(--error)">
+          <Text variant="body">{getErrorMessage(resultsQuery.error, 'Unable to load results.')}</Text>
+        </div>
       </Match>
 
       <Match when={resultsQuery.data && resultsQuery.data.length > 0}>
@@ -61,9 +62,9 @@ function ResultsTable() {
       </Match>
 
       <Match when>
-        <Typography variant="body" color="sub" class="rounded-lg bg-(--sub-alt) px-4 py-4">
-          no results yet
-        </Typography>
+        <div class="rounded-lg bg-(--sub-alt) px-4 py-4">
+          <Text variant="body">no results yet</Text>
+        </div>
       </Match>
     </Switch>
   )

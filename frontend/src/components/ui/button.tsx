@@ -24,9 +24,9 @@ const variantClassMap: Record<ButtonVariant, string> = {
 }
 
 const sizeClassMap: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 t-caption rounded-md',
-  md: 'px-4 py-2 t-emphasis rounded-lg',
-  lg: 'px-6 py-3 t-emphasis rounded-xl',
+  sm: 'px-3 py-1.5 text-[0.75rem] leading-[1.25] rounded-md',
+  md: 'px-4 py-2 text-[1rem] leading-[1.4] rounded-lg',
+  lg: 'px-6 py-3 text-[1rem] leading-[1.4] rounded-xl',
   icon: 'p-2 rounded-lg',
 }
 

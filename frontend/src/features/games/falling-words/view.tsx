@@ -8,7 +8,7 @@ import GameHud from './components/game-hud'
 import { useFallingWordsGame } from './use-falling-words-game'
 import { fallingWordsGameMeta } from './meta'
 import { difficultyOptions } from './difficulty'
-import { Typography } from '@/components/ui/typography'
+import { Text } from '@/components/ui/text'
 
 function FallingWordsView(props: GameViewProps) {
   const authSession = authClient.useSession()
@@ -50,15 +50,11 @@ function FallingWordsView(props: GameViewProps) {
         <div class="flex items-center gap-6 text-(--sub)">
           <div class="flex items-center gap-2">
             <Globe size={14} strokeWidth={2.5} class="opacity-50" />
-            <Typography variant="label">
-              {session.wordBank.label}
-            </Typography>
+            <Text variant="label" upper>{session.wordBank.label}</Text>
           </div>
           <div class="flex items-center gap-2">
             <Keyboard size={14} strokeWidth={2.5} class="opacity-50" />
-            <Typography variant="label">
-              {fallingWordsGameMeta.name.toLowerCase()}
-            </Typography>
+            <Text variant="label" upper>{fallingWordsGameMeta.name.toLowerCase()}</Text>
           </div>
         </div>
       </div>

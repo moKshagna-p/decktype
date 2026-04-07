@@ -1,5 +1,6 @@
 import { For } from 'solid-js'
 
+import { Text } from '@/components/ui/text'
 import { useToasts } from '@/lib/toast'
 
 const variantUi = {
@@ -34,11 +35,11 @@ function ToastRegion() {
             class={`toast-enter pointer-events-auto rounded-xl border px-3 py-2.5 backdrop-blur-sm ${variantUi[item.variant].frameClass}`}
           >
             <div class="min-w-0">
-              <div class={`t-body leading-none font-semibold ${variantUi[item.variant].titleClass}`}>
-                  {variantUi[item.variant].label}
+              <div class={variantUi[item.variant].titleClass}>
+                <Text variant="body">{variantUi[item.variant].label}</Text>
               </div>
-              <div class="t-body mt-1 leading-5 font-medium">
-                {item.title}
+              <div class="mt-1">
+                <Text variant="body">{item.title}</Text>
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { createMemo } from 'solid-js'
 import { A } from '@solidjs/router'
 import { User } from 'lucide-solid'
-import { Typography } from './ui/typography'
+import { Text } from './ui/text'
 import { authClient } from '@/lib/auth-client'
 
 const routes = [
@@ -20,9 +20,7 @@ export function Navbar() {
           href="/"
           class="flex items-center group"
         >
-          <Typography variant="title" tracking="tight">
-            decktype
-          </Typography>
+          <Text variant="title">decktype</Text>
         </A>
 
         <nav class="flex items-center gap-8">
@@ -32,9 +30,9 @@ export function Navbar() {
                 href={route.path}
                 activeClass="text-(--main)"
                 inactiveClass="text-(--sub) hover:text-(--text)"
-                class="t-body transition"
+                class="transition"
               >
-                {route.label.toLowerCase()}
+                <Text variant="body">{route.label.toLowerCase()}</Text>
               </A>
             )
           })}
@@ -49,9 +47,9 @@ export function Navbar() {
           class="flex items-center gap-2 transition"
         >
           <User size={18} strokeWidth={2} />
-          <Typography variant="caption" weight="bold" uppercase tracking="widest" truncate class="max-w-32">
-            {currentUserLabel().toLowerCase()}
-          </Typography>
+          <div class="max-w-32 truncate">
+            <Text variant="caption" upper>{currentUserLabel().toLowerCase()}</Text>
+          </div>
         </A>
       </div>
     </header>

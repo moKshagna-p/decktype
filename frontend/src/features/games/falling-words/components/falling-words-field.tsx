@@ -1,3 +1,5 @@
+import { Text } from '@/components/ui/text'
+
 import type { FallingWord, GamePhase } from '../types'
 
 type FallingWordsFieldProps = {
@@ -30,9 +32,9 @@ function FallingWordsField(props: FallingWordsFieldProps) {
     >
       {props.phase === 'idle' && (
         <div class="absolute inset-0 flex items-center justify-center p-6 text-center">
-          <div class="t-body flex items-center gap-2 text-(--sub)">
-            <span class="t-caption rounded bg-(--sub-alt) px-2 py-1">enter</span>
-            <span>to start</span>
+          <div class="flex items-center gap-2">
+            <span class="rounded bg-(--sub-alt) px-2 py-1 text-[0.75rem] leading-[1.25] text-(--sub)">enter</span>
+            <Text variant="body">to start</Text>
           </div>
         </div>
       )}
@@ -40,20 +42,14 @@ function FallingWordsField(props: FallingWordsFieldProps) {
       {props.phase === 'game-over' && (
         <div class="absolute inset-0 z-20 flex items-center justify-center bg-(--bg)/90 backdrop-blur-sm">
           <div class="text-center">
-            <p class="t-label font-bold tracking-[0.5em] text-(--sub) uppercase">
-              final score
-            </p>
-            <p class="t-display mt-4 font-bold tracking-tighter text-(--main)">
-              {props.score}
-            </p>
+            <p class="text-[0.6875rem] leading-[1.1] font-bold uppercase tracking-[0.5em] text-(--sub)">final score</p>
+            <p class="mt-4 text-[4rem] leading-none font-bold tracking-tighter text-(--main) sm:text-[6rem]">{props.score}</p>
             <div class="mt-12 flex flex-col items-center gap-4">
-              <div class="t-body flex items-center gap-2 text-(--sub)">
-                <span class="t-caption rounded bg-(--sub-alt) px-2 py-1">enter</span>
-                <span>to restart</span>
+              <div class="flex items-center gap-2">
+                <span class="rounded bg-(--sub-alt) px-2 py-1 text-[0.75rem] leading-[1.25] text-(--sub)">enter</span>
+                <Text variant="body">to restart</Text>
               </div>
-              <p class="t-label tracking-widest text-(--sub) uppercase opacity-50">
-                esc to reset
-              </p>
+              <p class="text-[0.6875rem] leading-[1.1] uppercase tracking-widest text-(--sub) opacity-50">esc to reset</p>
             </div>
           </div>
         </div>
@@ -62,15 +58,11 @@ function FallingWordsField(props: FallingWordsFieldProps) {
       {props.phase === 'paused' && (
         <div class="absolute inset-0 z-20 flex items-center justify-center bg-(--bg)/30 backdrop-blur-[2px]">
           <div class="text-center">
-            <p class="t-label font-bold tracking-[0.5em] text-(--sub) uppercase">
-              paused
-            </p>
-            <p class="t-display mt-4 font-bold tracking-tighter text-(--main)">
-              {props.score}
-            </p>
-            <div class="t-body mt-10 flex items-center justify-center gap-2 text-(--sub)">
-              <span class="t-caption rounded bg-(--sub-alt) px-2 py-1">enter</span>
-              <span>to resume</span>
+            <p class="text-[0.6875rem] leading-[1.1] font-bold uppercase tracking-[0.5em] text-(--sub)">paused</p>
+            <p class="mt-4 text-[4rem] leading-none font-bold tracking-tighter text-(--main) sm:text-[6rem]">{props.score}</p>
+            <div class="mt-10 flex items-center justify-center gap-2">
+              <span class="rounded bg-(--sub-alt) px-2 py-1 text-[0.75rem] leading-[1.25] text-(--sub)">enter</span>
+              <Text variant="body">to resume</Text>
             </div>
           </div>
         </div>
@@ -87,7 +79,7 @@ function FallingWordsField(props: FallingWordsFieldProps) {
 
         return (
           <div
-            class={`t-word absolute font-mono tracking-tight transition-all duration-150 ${
+            class={`absolute font-mono text-[1.5rem] leading-[1.2] tracking-tight transition-all duration-150 ${
               isExactMatch
                 ? 'text-(--main)'
                 : isFocused
