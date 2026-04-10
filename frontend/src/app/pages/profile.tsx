@@ -71,7 +71,7 @@ function ProfilePage(props: ProfileProps) {
             <AuthForms onSuccess={() => props.onNavigate('/')} />
           )}
         >
-          <div class="mx-auto flex w-full max-w-6xl flex-col gap-8">
+          <div class="flex w-full flex-col gap-8">
             <section class="space-y-5">
               <div class="flex flex-wrap items-center justify-between gap-3">
                 <Text variant="title" class="capitalize">profile</Text>

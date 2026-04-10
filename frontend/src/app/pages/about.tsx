@@ -23,7 +23,7 @@ function AboutPage() {
 
   return (
     <div class="w-full min-h-[72vh]">
-      <div class="mx-auto flex w-full max-w-6xl flex-col gap-10">
+      <div class="flex w-full flex-col gap-10">
         <section class="space-y-5">
           <div class="space-y-3">
             <Text variant="title" class="capitalize">about decktype</Text>
