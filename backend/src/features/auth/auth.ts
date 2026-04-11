@@ -8,6 +8,14 @@ export const auth = betterAuth({
   secret: env.betterAuthSecret,
   baseURL: env.betterAuthUrl,
   trustedOrigins: [env.frontendOrigin],
+  advanced: {
+    useSecureCookies: true,
+    defaultCookieAttributes: {
+      secure: true,
+      sameSite: 'none',
+      httpOnly: true,
+    },
+  },
   database: mongodbAdapter(db, {
     client: mongoClient,
     transaction: false,
