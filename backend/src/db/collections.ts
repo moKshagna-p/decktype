@@ -32,6 +32,15 @@ export type ContributorDocument = {
   updatedAt: Date
 }
 
+export type FeedbackDocument = {
+  content: string
+  userId: string
+  userDisplayName: string
+  upvotedBy: string[]
+  downvotedBy: string[]
+  createdAt: Date
+}
+
 export const resultsCollection: Collection<ResultDocument> =
   db.collection<ResultDocument>('results')
 
@@ -40,3 +49,6 @@ export const leaderboardCollection: Collection<LeaderboardDocument> =
 
 export const contributorsCollection: Collection<ContributorDocument> =
   db.collection<ContributorDocument>('contributors')
+
+export const feedbackCollection: Collection<FeedbackDocument> =
+  db.collection<FeedbackDocument>('feedback')

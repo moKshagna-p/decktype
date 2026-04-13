@@ -1,5 +1,6 @@
 import {
   contributorsCollection,
+  feedbackCollection,
   leaderboardCollection,
   resultsCollection,
 } from './collections'
@@ -45,8 +46,18 @@ const ensureContributorsIndexes = async () => {
   ])
 }
 
+const ensureFeedbackIndexes = async () => {
+  await feedbackCollection.createIndexes([
+    {
+      key: { createdAt: -1 },
+      name: 'feedback_createdAt_desc',
+    },
+  ])
+}
+
 export const ensureDatabaseIndexes = async () => {
   await ensureResultsIndexes()
   await ensureLeaderboardIndexes()
   await ensureContributorsIndexes()
+  await ensureFeedbackIndexes()
 }
