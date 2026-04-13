@@ -39,7 +39,6 @@ function AboutPage() {
               href="https://monkeytype.com"
               target="_blank"
               rel="noreferrer"
-              class="h-8 px-3"
             >
               monkeytype website
             </Button>
@@ -47,7 +46,6 @@ function AboutPage() {
               href="https://github.com/monkeytypegame/monkeytype"
               target="_blank"
               rel="noreferrer"
-              class="h-8 px-3"
             >
               monkeytype github
             </Button>
@@ -65,7 +63,6 @@ function AboutPage() {
                 href="https://github.com/d1rshan/decktype/graphs/contributors"
                 target="_blank"
                 rel="noreferrer"
-                class="h-8 px-3"
               >
                 view on github
               </Button>

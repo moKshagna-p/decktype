@@ -1,3 +1,4 @@
+import { Kbd } from '@/components/ui/kbd'
 import type { FallingWord, GamePhase } from '../types'
 
 type FallingWordsFieldProps = {
@@ -31,7 +32,7 @@ function FallingWordsField(props: FallingWordsFieldProps) {
       {props.phase === 'idle' && (
         <div class="absolute inset-0 flex items-center justify-center p-6 text-center">
           <div class="flex items-center gap-2">
-            <span class="rounded bg-(--sub-alt) px-2 py-1 text-xs leading-tight text-(--sub)">enter</span>
+            <Kbd>enter</Kbd>
             <p class="text-base leading-normal">to start</p>
           </div>
         </div>
@@ -44,10 +45,10 @@ function FallingWordsField(props: FallingWordsFieldProps) {
             <p class="mt-4 text-6xl leading-none font-bold tracking-tighter text-(--main) sm:text-8xl">{props.score}</p>
             <div class="mt-12 flex flex-col items-center gap-4">
               <div class="flex items-center gap-2">
-                <span class="rounded bg-(--sub-alt) px-2 py-1 text-xs leading-tight text-(--sub)">enter</span>
+                <Kbd>enter</Kbd>
                 <p class="text-base leading-normal">to restart</p>
               </div>
-              <p class="text-xs leading-none uppercase tracking-widest text-(--sub) opacity-50">esc to reset</p>
+              <p class="text-xs leading-none uppercase tracking-widest text-(--sub) opacity-50"><Kbd class="text-inherit opacity-100">esc</Kbd> to reset</p>
             </div>
           </div>
         </div>
@@ -59,7 +60,7 @@ function FallingWordsField(props: FallingWordsFieldProps) {
             <p class="text-xs leading-none font-bold uppercase tracking-widest text-(--sub)">paused</p>
             <p class="mt-4 text-6xl leading-none font-bold tracking-tighter text-(--main) sm:text-8xl">{props.score}</p>
             <div class="mt-10 flex items-center justify-center gap-2">
-              <span class="rounded bg-(--sub-alt) px-2 py-1 text-xs leading-tight text-(--sub)">enter</span>
+              <Kbd>enter</Kbd>
               <p class="text-base leading-normal">to resume</p>
             </div>
           </div>
