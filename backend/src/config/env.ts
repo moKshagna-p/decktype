@@ -52,6 +52,5 @@ export const env = {
   githubOwner: Bun.env.GITHUB_OWNER ?? 'd1rshan',
   githubRepo: Bun.env.GITHUB_REPO ?? 'decktype',
   githubToken: readOptionalEnv('GITHUB_TOKEN'),
-  contributorsSyncSecret: readOptionalEnv('CONTRIBUTORS_SYNC_SECRET'),
   adminEmails: readCsvEnv('ADMIN_EMAILS'),
 }

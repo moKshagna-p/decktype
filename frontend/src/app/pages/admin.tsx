@@ -5,6 +5,7 @@ import { authClient } from '@/lib/auth-client'
 import { ApiClientError, getErrorMessage } from '@/lib/api-client'
 import { formatDateTime } from '@/lib/utils'
 import { useFeedbackQuery } from '@/features/feedback/api/hooks'
+import { useSyncContributorsMutation } from '@/features/contributors/api/hooks'
 import {
   useAdminDeleteFeedbackMutation,
   useAdminUsersCountQuery,
@@ -17,7 +18,12 @@ function AdminPage() {
   const usersCountQuery = useAdminUsersCountQuery()
   const usersListQuery = useAdminUsersListQuery()
   const feedbackQuery = useFeedbackQuery()
+  const syncContributorsMutation = useSyncContributorsMutation()
   const deleteFeedbackMutation = useAdminDeleteFeedbackMutation()
+
+  const isAdminDataLoading = createMemo(() =>
+    usersCountQuery.isPending || usersListQuery.isPending,
+  )
 
   const isForbiddenError = (error: unknown) =>
     error instanceof ApiClientError
@@ -57,14 +63,23 @@ function AdminPage() {
             <section class="space-y-4">
               <div class="flex items-baseline justify-between gap-3">
                 <h2 class="text-2xl leading-tight font-bold capitalize">users</h2>
-                <Show
-                  when={!usersCountQuery.isPending}
-                  fallback={<p class="text-sm leading-normal text-(--sub)">loading count...</p>}
-                >
-                  <p class="text-sm leading-normal text-(--sub)">
-                    total: <span class="text-(--text)">{usersCountQuery.data?.count ?? 0}</span>
-                  </p>
-                </Show>
+                <div class="flex items-center gap-3">
+                  <Button
+                    class="h-7 px-3 text-xs"
+                    onClick={() => syncContributorsMutation.mutate()}
+                    disabled={syncContributorsMutation.isPending || isAdminDataLoading()}
+                  >
+                    {syncContributorsMutation.isPending ? 'syncing...' : 'trigger sync'}
+                  </Button>
+                  <Show
+                    when={!usersCountQuery.isPending}
+                    fallback={<p class="text-sm leading-normal text-(--sub)">loading count...</p>}
+                  >
+                    <p class="text-sm leading-normal text-(--sub)">
+                      total: <span class="text-(--text)">{usersCountQuery.data?.count ?? 0}</span>
+                    </p>
+                  </Show>
+                </div>
               </div>
 
               <Show when={usersCountQuery.error || usersListQuery.error}>

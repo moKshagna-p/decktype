@@ -16,3 +16,7 @@ export const contributorsQueryOptions = (limit = 100) => ({
       }),
     ),
 })
+
+export const syncContributorsMutationOptions = () => ({
+  mutationFn: () => request(api.admin.contributors.sync.post()),
+})

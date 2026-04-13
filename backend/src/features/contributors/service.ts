@@ -125,23 +125,7 @@ export const getContributors = async (limit: number): Promise<ContributorsRespon
   }
 }
 
-export const syncContributors = async (secret: string) => {
-  if (!env.contributorsSyncSecret) {
-    throw new ApiError({
-      status: 503,
-      code: errorCodes.internalServerError,
-      message: 'Contributor sync is not configured on this server.',
-    })
-  }
-
-  if (secret !== env.contributorsSyncSecret) {
-    throw new ApiError({
-      status: 401,
-      code: errorCodes.unauthorized,
-      message: 'Invalid sync secret.',
-    })
-  }
-
+export const syncContributors = async () => {
   const fetchedContributors = await fetchAllGitHubContributors()
   const syncedAt = new Date()
   const contributors = fetchedContributors.map((contributor) => ({

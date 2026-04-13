@@ -1,4 +1,4 @@
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
 
 import {
   contributorsQuerySchema,
@@ -6,6 +6,7 @@ import {
   syncContributorsResponseSchema,
 } from './schema'
 import { getContributors, syncContributors } from './service'
+import { requireAdminSession } from '../auth/session'
 
 export const contributorRoutes = new Elysia()
   .get(
@@ -19,12 +20,12 @@ export const contributorRoutes = new Elysia()
   )
   .post(
     '/api/admin/contributors/sync',
-    async ({ headers }) =>
-      syncContributors(headers['x-sync-secret']),
+    async ({ request: { headers } }) => {
+      await requireAdminSession(headers)
+
+      return syncContributors()
+    },
     {
-      headers: t.Object({
-        'x-sync-secret': t.String({ minLength: 1 }),
-      }),
       response: syncContributorsResponseSchema,
     },
   )
