@@ -15,12 +15,13 @@ type TableProps<T> = {
 
 export function Table<T>(props: TableProps<T>) {
   const templateColumns = `repeat(${props.columns.length}, minmax(0, 1fr))`
+  const minTableWidth = Math.max(props.columns.length * 110, 520)
 
   return (
-    <div class="overflow-hidden rounded-xl bg-(--sub-alt)">
+    <div class="overflow-x-auto rounded-xl bg-(--sub-alt)">
       <div
-        class="hidden border-b border-(--sub)/20 px-4 py-3.5 sm:grid sm:items-center"
-        style={{ 'grid-template-columns': templateColumns }}
+        class="grid items-center border-b border-(--sub)/20 px-4 py-3.5"
+        style={{ 'grid-template-columns': templateColumns, 'min-width': `${minTableWidth}px` }}
       >
         <For each={props.columns}>
           {(column) => (
@@ -32,8 +33,8 @@ export function Table<T>(props: TableProps<T>) {
       <For each={props.rows}>
         {(row, index) => (
           <div
-            class="grid gap-2 border-b border-(--sub)/10 px-4 py-3.5 last:border-b-0 sm:grid sm:items-center"
-            style={{ 'grid-template-columns': templateColumns }}
+            class="grid items-center gap-2 border-b border-(--sub)/10 px-4 py-3.5 last:border-b-0"
+            style={{ 'grid-template-columns': templateColumns, 'min-width': `${minTableWidth}px` }}
           >
             <For each={props.columns}>
               {(column) => (

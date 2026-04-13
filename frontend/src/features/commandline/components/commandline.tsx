@@ -1,4 +1,5 @@
 import { createEffect, createMemo, createSignal, onCleanup, onMount, Show } from 'solid-js'
+import { Command } from 'lucide-solid'
 
 import CommandlineInput from '@/features/commandline/components/commandline-input'
 import CommandlineList from '@/features/commandline/components/commandline-list'
@@ -187,43 +188,56 @@ function Commandline() {
   })
 
   return (
-    <Show when={isOpen()}>
-      <div
-        class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-(--bg)/90 px-5"
-        onClick={() => setIsOpen(false)}
-      >
-        <div class="w-full max-w-[450px]">
-          <div
-            class="overflow-hidden rounded-lg bg-(--sub-alt)"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <CommandlineInput
-              inputRef={(element) => {
-                searchInputRef = element
-              }}
-              value={query()}
-              placeholder={inputPlaceholder()}
-              onInput={(value) => {
-                setQuery(value)
-                setSelectedIndex(0)
-              }}
-            />
+    <>
+      <Show when={!isOpen()}>
+        <button
+          type="button"
+          class="fixed right-5 bottom-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-(--main) text-(--bg) shadow-lg transition hover:opacity-90 sm:hidden"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open command line"
+        >
+          <Command size={20} strokeWidth={2.4} />
+        </button>
+      </Show>
 
-            <CommandlineList
-              items={visibleItems()}
-              selectedIndex={selectedIndex()}
-              scope={scope()}
-              interactionType={interactionType()}
-              onHoverItem={(index) => {
-                setSelectedIndex(index)
-                setInteractionType('mouse')
-              }}
-              onSelectItem={handleSelectItem}
-            />
+      <Show when={isOpen()}>
+        <div
+          class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-(--bg)/90 px-5"
+          onClick={() => setIsOpen(false)}
+        >
+          <div class="w-full max-w-[450px]">
+            <div
+              class="overflow-hidden rounded-lg bg-(--sub-alt)"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <CommandlineInput
+                inputRef={(element) => {
+                  searchInputRef = element
+                }}
+                value={query()}
+                placeholder={inputPlaceholder()}
+                onInput={(value) => {
+                  setQuery(value)
+                  setSelectedIndex(0)
+                }}
+              />
+
+              <CommandlineList
+                items={visibleItems()}
+                selectedIndex={selectedIndex()}
+                scope={scope()}
+                interactionType={interactionType()}
+                onHoverItem={(index) => {
+                  setSelectedIndex(index)
+                  setInteractionType('mouse')
+                }}
+                onSelectItem={handleSelectItem}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </Show>
+      </Show>
+    </>
   )
 }
 

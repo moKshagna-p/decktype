@@ -14,15 +14,15 @@ export function Navbar() {
 
   return (
     <header class="mb-8 flex items-center justify-between">
-      <div class="flex items-baseline gap-10">
+      <div class="flex items-baseline gap-4 sm:gap-10">
         <A
           href="/"
           class="flex items-center group"
         >
-          <h2 class="text-2xl leading-tight font-bold">decktype</h2>
+          <h2 class="text-xl leading-tight font-bold sm:text-2xl">decktype</h2>
         </A>
 
-        <nav class="flex items-center gap-8">
+        <nav class="flex items-center gap-3 sm:gap-8">
           {routes.map((route) => {
             return (
               <A
@@ -31,7 +31,7 @@ export function Navbar() {
                 inactiveClass="text-(--sub) hover:text-(--text)"
                 class="transition"
               >
-                <p class="text-base leading-normal">{route.label.toLowerCase()}</p>
+                <p class="text-sm leading-normal sm:text-base">{route.label.toLowerCase()}</p>
               </A>
             )
           })}
@@ -43,11 +43,12 @@ export function Navbar() {
           href="/profile"
           activeClass="text-(--text)"
           inactiveClass="hover:text-(--text)"
-          class="flex items-center gap-2 transition"
+          class="flex items-center gap-1 sm:gap-2 transition"
+          aria-label={`Profile: ${currentUserLabel().toLowerCase()}`}
         >
           <User size={18} strokeWidth={2} />
-          <div class="max-w-32 truncate">
-            <p class="text-base leading-normal">{currentUserLabel().toLowerCase()}</p>
+          <div class="hidden max-w-32 truncate sm:block">
+            <p class="text-sm leading-normal sm:text-base">{currentUserLabel().toLowerCase()}</p>
           </div>
         </A>
       </div>
