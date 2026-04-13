@@ -8,7 +8,6 @@ import GameHud from './components/game-hud'
 import { useFallingWordsGame } from './use-falling-words-game'
 import { fallingWordsGameMeta } from './meta'
 import { difficultyKeys } from './difficulty'
-import { Text } from '@/components/ui/text'
 
 function FallingWordsView(props: GameViewProps) {
   const authSession = authClient.useSession()
@@ -50,11 +49,11 @@ function FallingWordsView(props: GameViewProps) {
         <div class="flex items-center gap-6 text-(--sub)">
           <div class="flex items-center gap-2">
             <Globe size={14} strokeWidth={2.5} class="opacity-50" />
-            <Text variant="label" upper>{session.wordBank.label}</Text>
+            <span class="text-xs leading-none font-semibold tracking-widest uppercase">{session.wordBank.label}</span>
           </div>
           <div class="flex items-center gap-2">
             <Keyboard size={14} strokeWidth={2.5} class="opacity-50" />
-            <Text variant="label" upper>{fallingWordsGameMeta.name.toLowerCase()}</Text>
+            <span class="text-xs leading-none font-semibold tracking-widest uppercase">{fallingWordsGameMeta.name.toLowerCase()}</span>
           </div>
         </div>
       </div>

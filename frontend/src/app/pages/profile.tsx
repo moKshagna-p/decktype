@@ -7,7 +7,6 @@ import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
 import { formatDateTime } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Text } from '@/components/ui/text'
 
 type ProfileProps = {
   onNavigate: (target: string) => void
@@ -74,16 +73,16 @@ function ProfilePage(props: ProfileProps) {
           <div class="flex w-full flex-col gap-8">
             <section class="space-y-5">
               <div class="flex flex-wrap items-center justify-between gap-3">
-                <Text variant="title" class="capitalize">profile</Text>
+                <h2 class="text-2xl leading-tight font-bold capitalize">profile</h2>
                 <div class="flex flex-wrap gap-3">
                   <Button
-                    size="sm"
+                    class="h-8 px-3 text-xs"
                     onClick={() => props.onNavigate('/')}
                   >
                     back home
                   </Button>
                   <Button
-                    size="sm"
+                    class="h-8 px-3 text-xs"
                     onClick={handleSignOut}
                     disabled={isSigningOut()}
                   >
@@ -109,12 +108,12 @@ function ProfilePage(props: ProfileProps) {
                     </Show>
                   </div>
                   <div class="space-y-1">
-                    <Text variant="title">{currentUser()?.name}</Text>
+                    <h2 class="text-2xl leading-tight font-bold">{currentUser()?.name}</h2>
                     <Show when={joinedAt()}>
                       {(value) => (
-                        <Text variant="body" tone="sub">
+                        <p class="text-base leading-normal text-(--sub)">
                           joined {formatDateTime(value())}
-                        </Text>
+                        </p>
                       )}
                     </Show>
                   </div>
@@ -123,14 +122,14 @@ function ProfilePage(props: ProfileProps) {
             </section>
 
             <section class="space-y-4">
-              <Text variant="title" class="capitalize">recent results</Text>
+              <h2 class="text-2xl leading-tight font-bold capitalize">recent results</h2>
               <ResultsTable />
             </section>
 
             <Show when={statusMessage()}>
               {(message) => (
                 <div>
-                  <Text variant="body" tone="main">{message()}</Text>
+                  <p class="text-base leading-normal text-(--main)">{message()}</p>
                 </div>
               )}
             </Show>
@@ -138,7 +137,7 @@ function ProfilePage(props: ProfileProps) {
             <Show when={errorMessage()}>
               {(message) => (
                 <div>
-                  <Text variant="body" tone="error">{message()}</Text>
+                  <p class="text-base leading-normal text-(--error)">{message()}</p>
                 </div>
               )}
             </Show>

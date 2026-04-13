@@ -3,7 +3,6 @@ import { For, Show } from 'solid-js'
 import { useContributorsQuery } from '@/features/contributors/api/hooks'
 import { getErrorMessage } from '@/lib/api-client'
 import { Button } from '@/components/ui/button'
-import { Text } from '@/components/ui/text'
 
 function formatSyncedAt(value: string | null) {
   if (!value) {
@@ -26,31 +25,29 @@ function AboutPage() {
       <div class="flex w-full flex-col gap-10">
         <section class="space-y-5">
           <div class="space-y-3">
-            <Text variant="title" class="capitalize">about decktype</Text>
-            <Text variant="body" tone="sub" class="leading-[1.75]">
+            <h2 class="text-2xl leading-tight font-bold capitalize">about decktype</h2>
+            <p class="text-base leading-relaxed text-(--sub)">
               decktype is a typing project built around focus, rhythm, and keeping the interface
               out of the way. it takes inspiration from the speed and clarity of monkeytype, then
               pushes that feeling toward something a little more playful, game-like, and personal.
               the goal is simple: make typing feel smooth, fast, and good enough that you want to
               stay for another round.
-            </Text>
+            </p>
           </div>
           <div class="flex flex-wrap gap-3">
             <Button
-              as="a"
               href="https://monkeytype.com"
               target="_blank"
               rel="noreferrer"
-              size="sm"
+              class="h-8 px-3"
             >
               monkeytype website
             </Button>
             <Button
-              as="a"
               href="https://github.com/monkeytypegame/monkeytype"
               target="_blank"
               rel="noreferrer"
-              size="sm"
+              class="h-8 px-3"
             >
               monkeytype github
             </Button>
@@ -59,17 +56,16 @@ function AboutPage() {
 
         <section class="space-y-5">
           <div class="space-y-2">
-            <Text variant="title" class="capitalize">contributors</Text>
-            <Text variant="body" tone="sub">
+            <h2 class="text-2xl leading-tight font-bold capitalize">contributors</h2>
+            <p class="text-base leading-normal text-(--sub)">
               synced: {formatSyncedAt(contributorsQuery.data?.syncedAt ?? null)}
-            </Text>
+            </p>
             <div class="pt-1">
               <Button
-                as="a"
                 href="https://github.com/d1rshan/decktype/graphs/contributors"
                 target="_blank"
                 rel="noreferrer"
-                size="sm"
+                class="h-8 px-3"
               >
                 view on github
               </Button>
@@ -88,7 +84,7 @@ function AboutPage() {
 
           <Show when={contributorsQuery.error}>
             <div class="text-(--error)">
-              <Text variant="body">{getErrorMessage(contributorsQuery.error, 'Unable to load contributors.')}</Text>
+              <p class="text-base leading-normal">{getErrorMessage(contributorsQuery.error, 'Unable to load contributors.')}</p>
             </div>
           </Show>
 
@@ -112,14 +108,14 @@ function AboutPage() {
                     </div>
                     <div class="min-w-0 flex-1">
                       <div class="truncate">
-                        <Text variant="body" class="transition-colors group-hover:text-(--main)">
+                        <p class="text-base leading-normal transition-colors group-hover:text-(--main)">
                           {contributor.displayName ?? contributor.login}
-                        </Text>
+                        </p>
                       </div>
                       <div class="truncate">
-                        <Text variant="caption" tone="sub">
+                        <span class="text-xs leading-tight text-(--sub)">
                           @{contributor.login} • {contributor.contributions} contributions
-                        </Text>
+                        </span>
                       </div>
                     </div>
                   </a>
@@ -130,7 +126,7 @@ function AboutPage() {
 
           <Show when={contributorsQuery.data && contributorsQuery.data.contributors.length === 0}>
             <div>
-              <Text variant="body" tone="sub">no contributors found yet</Text>
+              <p class="text-base leading-normal text-(--sub)">no contributors found yet</p>
             </div>
           </Show>
         </section>

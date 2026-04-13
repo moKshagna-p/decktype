@@ -1,5 +1,4 @@
 import { cn } from '@/lib/cn'
-import { Text } from '@/components/ui/text'
 
 type DifficultySelectorProps<T extends string> = {
   options: readonly T[]
@@ -21,7 +20,7 @@ export function DifficultySelector<T extends string>(props: DifficultySelectorPr
           )}
           onClick={() => props.onChange(difficulty)}
         >
-          <Text variant="label" upper>{difficulty}</Text>
+          <span class="text-xs leading-none font-semibold tracking-widest uppercase">{difficulty}</span>
         </button>
       ))}
     </div>

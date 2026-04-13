@@ -1,15 +1,14 @@
-import { Text } from '@/components/ui/text'
 
 export function Footer() {
   return (
-    <footer class="mt-8 flex items-center justify-between text-(--sub)">
-      <div class="flex items-center gap-4">
-        <a href="#" class="hover:text-(--text)"><Text variant="caption">contact</Text></a>
-        <a href="#" class="hover:text-(--text)"><Text variant="caption">support</Text></a>
-        <a href="#" class="hover:text-(--text)"><Text variant="caption">github</Text></a>
-        <a href="#" class="hover:text-(--text)"><Text variant="caption">discord</Text></a>
+    <footer class="flex h-12 w-full items-center justify-between px-6 text-(--sub)">
+      <div class="flex items-center gap-6">
+        <a href="#" class="hover:text-(--text)"><span class="text-xs leading-tight">contact</span></a>
+        <a href="#" class="hover:text-(--text)"><span class="text-xs leading-tight">support</span></a>
+        <a href="#" class="hover:text-(--text)"><span class="text-xs leading-tight">github</span></a>
+        <a href="#" class="hover:text-(--text)"><span class="text-xs leading-tight">discord</span></a>
       </div>
-      <Text variant="caption">v1.0.0</Text>
+      <span class="text-xs leading-tight">v1.0.0</span>
     </footer>
   )
 }

@@ -3,7 +3,6 @@ import { Show, createSignal } from 'solid-js'
 
 import Button from '@/components/ui/button'
 import Input from '@/components/ui/input'
-import { Text } from '@/components/ui/text'
 import { getErrorMessage } from '@/lib/api-client'
 import { authClient } from '@/lib/auth-client'
 
@@ -69,7 +68,7 @@ export function LoginForm(props: LoginFormProps) {
         void form.handleSubmit()
       }}
     >
-      <Text variant="label" upper>login</Text>
+      <span class="text-xs leading-none font-semibold tracking-widest uppercase">login</span>
 
       <form.Field name="email">
         {(field) => {
@@ -90,7 +89,7 @@ export function LoginForm(props: LoginFormProps) {
               />
               <Show when={validationMessage && formState().submissionAttempts > 0}>
                 <div class="pt-1 text-(--error)">
-                  <Text variant="body">{validationMessage}</Text>
+                  <p class="text-base leading-normal">{validationMessage}</p>
                 </div>
               </Show>
             </>
@@ -117,7 +116,7 @@ export function LoginForm(props: LoginFormProps) {
               />
               <Show when={validationMessage && formState().submissionAttempts > 0}>
                 <div class="pt-1 text-(--error)">
-                  <Text variant="body">{validationMessage}</Text>
+                  <p class="text-base leading-normal">{validationMessage}</p>
                 </div>
               </Show>
             </>
@@ -128,21 +127,21 @@ export function LoginForm(props: LoginFormProps) {
       <Show when={statusMessage()}>
         {(message) => (
           <div class="pt-1 text-(--main)">
-            <Text variant="body">{message()}</Text>
+            <p class="text-base leading-normal">{message()}</p>
           </div>
         )}
       </Show>
       <Show when={errorMessage()}>
         {(message) => (
           <div class="pt-1 text-(--error)">
-            <Text variant="body">{message()}</Text>
+            <p class="text-base leading-normal">{message()}</p>
           </div>
         )}
       </Show>
 
       <Button
         type="submit"
-        size="lg"
+        class="h-12 w-full"
         disabled={props.disabled || formState().isSubmitting}
       >
         {formState().isSubmitting ? 'signing in...' : 'sign in'}

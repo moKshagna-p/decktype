@@ -5,7 +5,6 @@ import { themes } from '@/features/content/themes/registry'
 import type { ThemeName } from '@/features/content/themes/types'
 import { cn } from '@/lib/cn'
 import type { CommandlineItem as CommandlineItemType, CommandlineScope } from '@/features/commandline/types'
-import { Text } from '@/components/ui/text'
 
 type CommandlineItemProps = {
   item: CommandlineItemType
@@ -58,7 +57,7 @@ function CommandlineItem(props: CommandlineItemProps) {
       </div>
       <div class="min-w-0 flex-1">
         <div class="truncate">
-          <Text variant="body">{props.item.label}</Text>
+          <p class="text-base leading-normal">{props.item.label}</p>
         </div>
       </div>
       <Show when={props.scope === 'themes'}>

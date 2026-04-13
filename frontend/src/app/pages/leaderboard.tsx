@@ -5,7 +5,6 @@ import { LeaderboardTable } from '@/features/leaderboard/components/leaderboard-
 import { gameRegistry } from '@/features/games/registry'
 import { getGameName } from '@/features/games/utils'
 import type { GameId } from '@/features/games/types'
-import { Text } from '@/components/ui/text'
 
 const difficulties: LeaderboardDifficulty[] = ['easy', 'medium', 'hard']
 
@@ -22,14 +21,14 @@ function LeaderboardPage() {
         <aside class="space-y-4">
           <div class="rounded-2xl bg-(--sub-alt) p-3">
             <div class="px-1 pb-2">
-              <Text variant="label" tone='sub' upper>game</Text>
+              <span class="text-xs leading-none font-semibold tracking-widest text-(--sub) uppercase">game</span>
             </div>
             <div class="space-y-1.5">
               <For each={gameRegistry}>
                 {(game) => (
                   <button
                     type="button"
-                    class={`block w-full rounded-md px-3 py-2 text-left text-[0.875rem] leading-[1.4] transition ${gameId() === game.id
+                    class={`block w-full rounded-md px-3 py-2 text-left text-sm leading-normal transition ${gameId() === game.id
                       ? 'bg-(--main)/20 text-(--main)'
                       : 'text-(--text)/90 hover:bg-(--sub)/20'
                       }`}
@@ -44,14 +43,14 @@ function LeaderboardPage() {
 
           <div class="rounded-2xl bg-(--sub-alt) p-3">
             <div class="px-1 pb-2">
-              <Text variant="label" tone='sub' upper>difficulty</Text>
+              <span class="text-xs leading-none font-semibold tracking-widest text-(--sub) uppercase">difficulty</span>
             </div>
             <div class="space-y-1.5">
               <For each={difficulties}>
                 {(level) => (
                   <button
                     type="button"
-                    class={`block w-full rounded-md px-3 py-2 text-left text-[0.875rem] leading-[1.4] tracking-[0.05em] transition ${difficulty() === level
+                    class={`block w-full rounded-md px-3 py-2 text-left text-sm leading-normal tracking-wider transition ${difficulty() === level
                       ? 'bg-(--main)/20 text-(--main)'
                       : 'text-(--text)/90 hover:bg-(--sub)/20'
                       }`}
@@ -68,7 +67,7 @@ function LeaderboardPage() {
         <section class="min-w-0">
           <div class="mb-5 border-b border-(--sub)/25 pb-5">
             <div class="capitalize">
-              <Text variant="title">{getGameName(gameId())} {difficulty()} leaderboard</Text>
+              <h2 class="text-2xl leading-tight font-bold">{getGameName(gameId())} {difficulty()} leaderboard</h2>
             </div>
           </div>
 

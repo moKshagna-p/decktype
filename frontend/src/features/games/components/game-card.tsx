@@ -1,5 +1,4 @@
 import { ArrowRight } from 'lucide-solid'
-import { Text } from '@/components/ui/text'
 import type { GameId } from '@/features/games/types'
 
 type GameCardProps = {
@@ -17,12 +16,12 @@ export function GameCard(props: GameCardProps) {
       onClick={props.onClick}
     >
       <div class="flex flex-col gap-3">
-        <Text variant="title" class="transition-colors group-hover:text-(--main)">
+        <h2 class="text-2xl leading-tight font-bold transition-colors group-hover:text-(--main)">
           {props.name.toLowerCase()}
-        </Text>
-        <Text variant="body" tone="sub">
+        </h2>
+        <p class="text-base leading-normal text-(--sub)">
           {props.description.toLowerCase()}
-        </Text>
+        </p>
       </div>
 
       <div class="absolute bottom-10 right-10 translate-x-4 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100">

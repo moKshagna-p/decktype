@@ -1,7 +1,5 @@
 import { For, type JSX } from 'solid-js'
 
-import { Text } from '@/components/ui/text'
-
 type TableCellValue = JSX.Element | string | number
 
 export type TableColumn<T> = {
@@ -26,7 +24,7 @@ export function Table<T>(props: TableProps<T>) {
       >
         <For each={props.columns}>
           {(column) => (
-            <Text variant="label" tone='sub' upper>{column.label}</Text>
+            <span class="text-xs leading-none font-semibold tracking-widest text-(--sub) uppercase">{column.label}</span>
           )}
         </For>
       </div>
@@ -39,7 +37,7 @@ export function Table<T>(props: TableProps<T>) {
           >
             <For each={props.columns}>
               {(column) => (
-                <Text variant="body">{column.value(row, index())}</Text>
+                <p class="text-base leading-normal">{column.value(row, index())}</p>
               )}
             </For>
           </div>

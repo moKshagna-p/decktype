@@ -5,7 +5,6 @@ import { Match, Switch } from 'solid-js'
 import { useLeaderboardQuery } from '@/features/leaderboard/api/hooks'
 import { getErrorMessage } from '@/lib/api-client'
 import { formatDateTime } from '@/lib/utils'
-import { Text } from '@/components/ui/text'
 
 import type { LeaderboardDifficulty, LeaderboardEntry } from '../api/contract'
 
@@ -63,7 +62,7 @@ export function LeaderboardTable(props: LeaderboardTableProps) {
 
       <Match when={leaderboardQuery.error}>
         <div class="rounded-lg bg-(--sub-alt) px-4 py-4 text-(--error)">
-          <Text variant="body">{getErrorMessage(leaderboardQuery.error, 'Unable to load leaderboard.')}</Text>
+          <p class="text-base leading-normal">{getErrorMessage(leaderboardQuery.error, 'Unable to load leaderboard.')}</p>
         </div>
       </Match>
 
@@ -76,7 +75,7 @@ export function LeaderboardTable(props: LeaderboardTableProps) {
 
       <Match when>
         <div class="rounded-lg bg-(--sub-alt) px-4 py-4">
-          <Text variant="body">no scores yet</Text>
+          <p class="text-base leading-normal">no scores yet</p>
         </div>
       </Match>
     </Switch>

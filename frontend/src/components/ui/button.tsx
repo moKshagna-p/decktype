@@ -2,33 +2,21 @@ import { splitProps, type JSX } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
 import { cn } from '@/lib/cn'
 
-type ButtonSize = 'sm' | 'md' | 'lg' | 'icon'
-
-type ButtonProps = {
-  size?: ButtonSize
-  as?: keyof JSX.IntrinsicElements | any
-  class?: string
-  children?: any
-  [key: string]: any
-}
-
-const sizeClassMap: Record<ButtonSize, string> = {
-  sm: 'min-h-9 px-4 text-[0.75rem] leading-none',
-  md: 'min-h-11 px-5 text-[0.875rem] leading-none',
-  lg: 'min-h-12 px-6 text-[0.95rem] leading-none',
-  icon: 'h-11 w-11 p-0',
-}
+type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> &
+  JSX.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    href?: string
+  }
 
 export function Button(props: ButtonProps) {
-  const [local, rest] = splitProps(props, ['class', 'size', 'as', 'children'])
+  const [local, rest] = splitProps(props, ['class', 'children', 'href'])
 
   return (
     <Dynamic
-      component={local.as ?? 'button'}
-      {...rest}
+      component={local.href ? 'a' : 'button'}
+      href={local.href}
+      {...(rest as any)}
       class={cn(
-        'inline-flex cursor-pointer items-center justify-center rounded-lg bg-(--sub-alt) font-medium tracking-[0.08em] text-(--text) transition-[background-color,color,transform,opacity] duration-150 ease-out hover:bg-(--main) hover:text-(--bg) active:translate-y-px disabled:pointer-events-none disabled:bg-(--sub-alt)/55 disabled:text-(--sub)',
-        sizeClassMap[local.size ?? 'md'],
+        'inline-flex items-center justify-center rounded-lg bg-(--sub-alt) px-4 py-3 text-sm font-medium text-(--text) transition-colors hover:bg-(--main) hover:text-(--bg) disabled:opacity-50',
         local.class,
       )}
     >
