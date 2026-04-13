@@ -15,12 +15,12 @@ export function applyTheme(theme: Theme) {
 }
 
 const getInitialTheme = (): ThemeName => {
-  if (typeof localStorage === 'undefined') return 'carbon'
+  if (typeof localStorage === 'undefined') return 'serika_dark'
   const saved = localStorage.getItem(THEME_STORAGE_KEY) as ThemeName
   if (saved && themes[saved]) {
     return saved
   }
-  return 'carbon'
+  return 'serika_dark'
 }
 
 const [currentThemeName, setCurrentThemeName] = createSignal<ThemeName>(getInitialTheme())
