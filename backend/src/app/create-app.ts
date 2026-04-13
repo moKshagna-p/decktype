@@ -1,5 +1,6 @@
 import { Elysia } from 'elysia'
 
+import { adminRoutes } from '../features/admin/routes'
 import { authRoutes } from '../features/auth/routes'
 import { authPlugin } from '../features/auth/plugin'
 import { contributorRoutes } from '../features/contributors/routes'
@@ -21,6 +22,7 @@ export const app = new Elysia()
     ok: true,
   }))
   .use(authRoutes)
+  .use(adminRoutes)
   .use(contributorRoutes)
   .use(leaderboardRoutes)
   .use(resultRoutes)

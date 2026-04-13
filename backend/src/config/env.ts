@@ -29,6 +29,19 @@ const readPort = () => {
   return port
 }
 
+const readCsvEnv = (name: string) => {
+  const value = Bun.env[name]
+
+  if (!value) {
+    return []
+  }
+
+  return value
+    .split(',')
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean)
+}
+
 export const env = {
   port: readPort(),
   mongoUri: readRequiredEnv('MONGODB_URI'),
@@ -40,4 +53,5 @@ export const env = {
   githubRepo: Bun.env.GITHUB_REPO ?? 'decktype',
   githubToken: readOptionalEnv('GITHUB_TOKEN'),
   contributorsSyncSecret: readOptionalEnv('CONTRIBUTORS_SYNC_SECRET'),
+  adminEmails: readCsvEnv('ADMIN_EMAILS'),
 }

@@ -3,6 +3,7 @@ import { Router, Route, useNavigate, useSearchParams } from '@solidjs/router'
 import { games } from '@/features/games/registry'
 import { getHomeGamePath } from '@/features/games/utils'
 import AboutPage from '@/app/pages/about'
+import AdminPage from '@/app/pages/admin'
 import HomePage from '@/app/pages/home'
 import Layout from '@/app/layout'
 import LeaderboardPage from '@/app/pages/leaderboard'
@@ -38,6 +39,7 @@ function App() {
         }}
       />
       <Route path="/leaderboard" component={LeaderboardPage} />
+      <Route path="/admin" component={AdminPage} />
       <Route path="/profile" component={() => {
         const navigate = useNavigate()
         return <ProfilePage onNavigate={navigate} />
