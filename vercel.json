@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://preparation-saying-resumes-take.trycloudflare.com/api/:path*"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
