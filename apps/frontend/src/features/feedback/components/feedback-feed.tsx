@@ -1,32 +1,32 @@
-import { createSignal, For, Show } from 'solid-js'
-import { ArrowBigDown, ArrowBigUp, SendHorizontal } from 'lucide-solid'
-import { Textarea } from '@/components/ui/textarea'
-import { authClient } from '@/lib/auth-client'
-import { QueryState } from '@/components/ui/query-state'
-import { 
-  useFeedbackQuery, 
-  useCreateFeedbackMutation, 
-  useUpvoteFeedbackMutation, 
-  useDownvoteFeedbackMutation 
-} from '../api'
+import { createSignal, For, Show } from "solid-js";
+import { ArrowBigDown, ArrowBigUp, SendHorizontal } from "lucide-solid";
+import { Textarea } from "@/components/ui/textarea";
+import { authClient } from "@/lib/auth-client";
+import { QueryState } from "@/components/ui/query-state";
+import {
+  useFeedbackQuery,
+  useCreateFeedbackMutation,
+  useUpvoteFeedbackMutation,
+  useDownvoteFeedbackMutation,
+} from "../api";
 
 type VoteControlProps = {
-  count: number
-  active: boolean
-  disabled: boolean
-  tone: 'up' | 'down'
-  onClick: () => void
-}
+  count: number;
+  active: boolean;
+  disabled: boolean;
+  tone: "up" | "down";
+  onClick: () => void;
+};
 
 function VoteControl(props: VoteControlProps) {
   const toneClass = () =>
-    props.tone === 'up'
+    props.tone === "up"
       ? props.active
-        ? 'text-(--main)'
-        : 'text-(--sub) hover:text-(--main)'
+        ? "text-(--main)"
+        : "text-(--sub) hover:text-(--main)"
       : props.active
-        ? 'text-(--error)'
-        : 'text-(--sub) hover:text-(--error)'
+        ? "text-(--error)"
+        : "text-(--sub) hover:text-(--error)";
 
   return (
     <button
@@ -35,50 +35,50 @@ function VoteControl(props: VoteControlProps) {
       disabled={props.disabled}
     >
       <Show
-        when={props.tone === 'up'}
+        when={props.tone === "up"}
         fallback={
           <ArrowBigDown
-            class={`h-4 w-4 ${props.active ? '[&_path]:fill-current' : ''}`}
+            class={`h-4 w-4 ${props.active ? "[&_path]:fill-current" : ""}`}
             stroke-width={2}
           />
         }
       >
         <ArrowBigUp
-          class={`h-4 w-4 ${props.active ? '[&_path]:fill-current' : ''}`}
+          class={`h-4 w-4 ${props.active ? "[&_path]:fill-current" : ""}`}
           stroke-width={2}
         />
       </Show>
       <span class="text-[11px] font-mono">{props.count}</span>
     </button>
-  )
+  );
 }
 
 export function FeedbackFeed() {
-  const session = authClient.useSession()
-  const currentUserId = () => session()?.data?.user?.id
-  const isSignedIn = () => !!currentUserId()
-  const [content, setContent] = createSignal('')
-  
-  const feedbackQuery = useFeedbackQuery()
-  
-  const createMutation = useCreateFeedbackMutation()
-  const upvoteMutation = useUpvoteFeedbackMutation(currentUserId)
-  const downvoteMutation = useDownvoteFeedbackMutation(currentUserId)
+  const session = authClient.useSession();
+  const currentUserId = () => session()?.data?.user?.id;
+  const isSignedIn = () => !!currentUserId();
+  const [content, setContent] = createSignal("");
+
+  const feedbackQuery = useFeedbackQuery();
+
+  const createMutation = useCreateFeedbackMutation();
+  const upvoteMutation = useUpvoteFeedbackMutation(currentUserId);
+  const downvoteMutation = useDownvoteFeedbackMutation(currentUserId);
 
   const handleSubmit = (e: Event) => {
-    e.preventDefault()
-    if (!isSignedIn()) return
-    if (!content().trim()) return
+    e.preventDefault();
+    if (!isSignedIn()) return;
+    if (!content().trim()) return;
 
     createMutation.mutate(
       { content: content().trim() },
       {
         onSuccess: () => {
-          setContent('')
+          setContent("");
         },
       },
-    )
-  }
+    );
+  };
 
   return (
     <section class="mt-12 w-full space-y-4 border-t border-(--sub)/10 pt-8">
@@ -104,7 +104,10 @@ export function FeedbackFeed() {
                         {item.userDisplayName}
                       </span>
                       <span class="text-[10px] text-(--sub)">
-                        {new Date(item.createdAt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                        {new Date(item.createdAt).toLocaleTimeString(
+                          undefined,
+                          { hour: "2-digit", minute: "2-digit" },
+                        )}
                       </span>
                     </div>
 
@@ -112,17 +115,27 @@ export function FeedbackFeed() {
                       <VoteControl
                         tone="up"
                         count={item.upvotedBy?.length ?? 0}
-                        active={(item.upvotedBy ?? []).some(id => id.toString() === (currentUserId() ?? ''))}
+                        active={(item.upvotedBy ?? []).some(
+                          (id) => id.toString() === (currentUserId() ?? ""),
+                        )}
                         disabled={upvoteMutation.isPending || !currentUserId()}
-                        onClick={() => upvoteMutation.mutate(item.id.toString())}
+                        onClick={() =>
+                          upvoteMutation.mutate(item.id.toString())
+                        }
                       />
 
                       <VoteControl
                         tone="down"
                         count={item.downvotedBy?.length ?? 0}
-                        active={(item.downvotedBy ?? []).some(id => id.toString() === (currentUserId() ?? ''))}
-                        disabled={downvoteMutation.isPending || !currentUserId()}
-                        onClick={() => downvoteMutation.mutate(item.id.toString())}
+                        active={(item.downvotedBy ?? []).some(
+                          (id) => id.toString() === (currentUserId() ?? ""),
+                        )}
+                        disabled={
+                          downvoteMutation.isPending || !currentUserId()
+                        }
+                        onClick={() =>
+                          downvoteMutation.mutate(item.id.toString())
+                        }
                       />
                     </div>
                   </div>
@@ -142,7 +155,11 @@ export function FeedbackFeed() {
           <Textarea
             value={content()}
             onInput={(e) => setContent(e.currentTarget.value)}
-            placeholder={isSignedIn() ? 'send a message...' : 'sign in to send a message...'}
+            placeholder={
+              isSignedIn()
+                ? "send a message..."
+                : "sign in to send a message..."
+            }
             disabled={createMutation.isPending}
             required
             class="min-h-[80px] pr-12"
@@ -151,7 +168,9 @@ export function FeedbackFeed() {
             type="submit"
             aria-label="send message"
             class="absolute right-2.5 bottom-2.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-(--main) text-(--bg) transition disabled:cursor-not-allowed disabled:opacity-40"
-            disabled={createMutation.isPending || !content().trim() || !isSignedIn()}
+            disabled={
+              createMutation.isPending || !content().trim() || !isSignedIn()
+            }
           >
             <SendHorizontal class="h-3.5 w-3.5" stroke-width={2.25} />
           </button>
@@ -161,12 +180,12 @@ export function FeedbackFeed() {
             <p class="text-center text-sm text-(--sub)">
               <a href="/profile" class="underline underline-offset-2">
                 sign in
-              </a>{' '}
+              </a>{" "}
               to send messages, join leaderboard and more
             </p>
           </Show>
         </div>
       </form>
     </section>
-  )
+  );
 }

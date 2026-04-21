@@ -1,5 +1,5 @@
-import type { WithId } from 'mongodb'
-import type { UserDocument } from '../../db/collections'
+import type { WithId } from "mongodb";
+import type { UserDocument } from "../../db/collections";
 
 export const serializeUser = (doc: WithId<UserDocument>) => {
   return {
@@ -7,5 +7,5 @@ export const serializeUser = (doc: WithId<UserDocument>) => {
     name: doc.name,
     email: doc.email,
     createdAt: doc.createdAt,
-  }
-}
+  };
+};

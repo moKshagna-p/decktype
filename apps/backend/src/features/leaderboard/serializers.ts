@@ -1,5 +1,5 @@
-import type { WithId } from 'mongodb'
-import type { LeaderboardDocument } from '../../db/collections'
+import type { WithId } from "mongodb";
+import type { LeaderboardDocument } from "../../db/collections";
 
 export const serializeLeaderboardEntry = (doc: WithId<LeaderboardDocument>) => {
   return {
@@ -10,5 +10,5 @@ export const serializeLeaderboardEntry = (doc: WithId<LeaderboardDocument>) => {
     difficulty: doc.difficulty,
     bestScore: doc.bestScore,
     createdAt: doc.createdAt,
-  }
-}
+  };
+};

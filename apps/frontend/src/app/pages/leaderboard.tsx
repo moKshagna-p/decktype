@@ -1,19 +1,18 @@
-import { For, createSignal } from 'solid-js'
+import { For, createSignal } from "solid-js";
 
-import type { LeaderboardDifficulty } from '@/features/leaderboard/api/contract'
-import { LeaderboardTable } from '@/features/leaderboard/components/leaderboard-table'
-import { gameRegistry } from '@/features/games/registry'
-import { getGameName } from '@/features/games/utils'
-import type { GameId } from '@/features/games/types'
+import type { LeaderboardDifficulty } from "@/features/leaderboard/api/contract";
+import { LeaderboardTable } from "@/features/leaderboard/components/leaderboard-table";
+import { gameRegistry } from "@/features/games/registry";
+import { getGameName } from "@/features/games/utils";
+import type { GameId } from "@/features/games/types";
 
-const difficulties: LeaderboardDifficulty[] = ['easy', 'medium', 'hard']
+const difficulties: LeaderboardDifficulty[] = ["easy", "medium", "hard"];
 
 function LeaderboardPage() {
-  const [gameId, setGameId] = createSignal<GameId>(
-    gameRegistry[0].id,
-  )
+  const [gameId, setGameId] = createSignal<GameId>(gameRegistry[0].id);
 
-  const [difficulty, setDifficulty] = createSignal<LeaderboardDifficulty>('easy')
+  const [difficulty, setDifficulty] =
+    createSignal<LeaderboardDifficulty>("easy");
 
   return (
     <div class="w-full min-h-[72vh]">
@@ -25,10 +24,11 @@ function LeaderboardPage() {
                 {(game) => (
                   <button
                     type="button"
-                    class={`block w-full rounded-lg px-3 py-2 text-left text-sm leading-normal transition ${gameId() === game.id
-                      ? 'bg-(--main) text-(--sub-alt)'
-                      : 'text-(--text) hover:bg-(--sub)/20'
-                      }`}
+                    class={`block w-full rounded-lg px-3 py-2 text-left text-sm leading-normal transition ${
+                      gameId() === game.id
+                        ? "bg-(--main) text-(--sub-alt)"
+                        : "text-(--text) hover:bg-(--sub)/20"
+                    }`}
                     onClick={() => setGameId(game.id)}
                   >
                     {game.name.toLowerCase()}
@@ -44,10 +44,11 @@ function LeaderboardPage() {
                 {(level) => (
                   <button
                     type="button"
-                    class={`block w-full rounded-lg px-3 py-2 text-left text-sm leading-normal tracking-wider transition ${difficulty() === level
-                      ? 'bg-(--main) text-(--sub-alt)'
-                      : 'text-(--text) hover:bg-(--sub)/20'
-                      }`}
+                    class={`block w-full rounded-lg px-3 py-2 text-left text-sm leading-normal tracking-wider transition ${
+                      difficulty() === level
+                        ? "bg-(--main) text-(--sub-alt)"
+                        : "text-(--text) hover:bg-(--sub)/20"
+                    }`}
                     onClick={() => setDifficulty(level)}
                   >
                     {level}
@@ -61,7 +62,9 @@ function LeaderboardPage() {
         <section class="min-w-0">
           <div class="mb-5 border-b border-(--sub)/25 pb-5">
             <div class="capitalize">
-              <h2 class="text-2xl leading-tight font-bold">{getGameName(gameId())} {difficulty()} leaderboard</h2>
+              <h2 class="text-2xl leading-tight font-bold">
+                {getGameName(gameId())} {difficulty()} leaderboard
+              </h2>
             </div>
           </div>
 
@@ -69,7 +72,7 @@ function LeaderboardPage() {
         </section>
       </div>
     </div>
-  )
+  );
 }
 
-export default LeaderboardPage
+export default LeaderboardPage;

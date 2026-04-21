@@ -1,52 +1,52 @@
-import type { Collection } from 'mongodb'
-import { ObjectId } from 'mongodb'
+import type { Collection } from "mongodb";
+import { ObjectId } from "mongodb";
 
-import { db } from './client'
+import { db } from "./client";
 
 export type ResultDocument = {
-  userId: ObjectId
-  gameId: ObjectId
-  score: number
-  difficulty: string
-  createdAt: Date
-}
+  userId: ObjectId;
+  gameId: ObjectId;
+  score: number;
+  difficulty: string;
+  createdAt: Date;
+};
 
 export type LeaderboardDocument = {
-  userId: ObjectId
-  displayName: string
-  gameId: ObjectId
-  difficulty: string
-  bestScore: number
-  createdAt: Date
-}
+  userId: ObjectId;
+  displayName: string;
+  gameId: ObjectId;
+  difficulty: string;
+  bestScore: number;
+  createdAt: Date;
+};
 
 export type FeedbackDocument = {
-  content: string
-  userId: ObjectId
-  userDisplayName: string
-  upvotedBy: ObjectId[]
-  downvotedBy: ObjectId[]
-  createdAt: Date
-}
+  content: string;
+  userId: ObjectId;
+  userDisplayName: string;
+  upvotedBy: ObjectId[];
+  downvotedBy: ObjectId[];
+  createdAt: Date;
+};
 
 // Better Auth owns the `user` collection shape. We keep this here so feature
 // repositories can import one centralized collection registry.
 export type UserDocument = {
-  name: string
-  email: string
-  emailVerified: boolean
-  createdAt: Date
-  updatedAt: Date
-}
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export const resultsCollection: Collection<ResultDocument> =
-  db.collection<ResultDocument>('results')
+  db.collection<ResultDocument>("results");
 
 export const leaderboardCollection: Collection<LeaderboardDocument> =
-  db.collection<LeaderboardDocument>('leaderboard')
+  db.collection<LeaderboardDocument>("leaderboard");
 
 export const feedbackCollection: Collection<FeedbackDocument> =
-  db.collection<FeedbackDocument>('feedback')
+  db.collection<FeedbackDocument>("feedback");
 
 export const usersCollection: Collection<UserDocument> =
-  db.collection<UserDocument>('user')
+  db.collection<UserDocument>("user");

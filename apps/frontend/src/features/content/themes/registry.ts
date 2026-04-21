@@ -1,4 +1,4 @@
-import type { Theme, ThemeName } from '@/features/content/themes/types'
+import type { Theme, ThemeName } from "@/features/content/themes/types";
 
 export const themes: Record<ThemeName, Theme> = {
   "8008": {
@@ -2245,4 +2245,4 @@ export const themes: Record<ThemeName, Theme> = {
     colorfulError: "#b29a91",
     colorfulErrorExtra: "#b29a91",
   },
-}
+};

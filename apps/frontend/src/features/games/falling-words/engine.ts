@@ -1,11 +1,11 @@
-import type { DifficultyConfig, FallingWord } from './types'
+import type { DifficultyConfig, FallingWord } from "./types";
 
 function randomBetween(min: number, max: number) {
-  return Math.random() * (max - min) + min
+  return Math.random() * (max - min) + min;
 }
 
 function estimateWordWidth(text: string) {
-  return Math.max(96, text.length * 18)
+  return Math.max(96, text.length * 18);
 }
 
 export function createFallingWord(
@@ -14,10 +14,10 @@ export function createFallingWord(
   words: string[],
   difficulty: DifficultyConfig,
 ) {
-  const text = words[Math.floor(Math.random() * words.length)]
-  const estimatedWidth = estimateWordWidth(text)
-  const safeWidth = Math.max(width - estimatedWidth - 24, 24)
-  const x = randomBetween(24, safeWidth)
+  const text = words[Math.floor(Math.random() * words.length)];
+  const estimatedWidth = estimateWordWidth(text);
+  const safeWidth = Math.max(width - estimatedWidth - 24, 24);
+  const x = randomBetween(24, safeWidth);
 
   const word: FallingWord = {
     id,
@@ -28,7 +28,7 @@ export function createFallingWord(
     velocityY: difficulty.baseSpeed + randomBetween(0, difficulty.speedJitter),
     rotation: randomBetween(-10, 10),
     angularVelocity: randomBetween(-12, 12),
-  }
+  };
 
-  return word
+  return word;
 }

@@ -1,36 +1,35 @@
-import { createSignal } from 'solid-js'
+import { createSignal } from "solid-js";
 
-import { apiBaseUrl } from '@/lib/backend-url'
+import { apiBaseUrl } from "@/lib/backend-url";
 
-const healthUrl = `${apiBaseUrl}/health`
-const POLL_INTERVAL_MS = 20000
+const healthUrl = `${apiBaseUrl}/health`;
+const POLL_INTERVAL_MS = 20000;
 
-const [isBackendDown, setIsBackendDown] = createSignal(false)
+const [isBackendDown, setIsBackendDown] = createSignal(false);
 
 export async function checkBackendHealth() {
   try {
     const response = await fetch(healthUrl, {
-      method: 'GET',
-      credentials: 'include',
-    })
+      method: "GET",
+      credentials: "include",
+    });
 
-    setIsBackendDown(!response.ok)
-  }
-  catch {
-    setIsBackendDown(true)
+    setIsBackendDown(!response.ok);
+  } catch {
+    setIsBackendDown(true);
   }
 }
 
 export function startBackendHealthPolling() {
-  void checkBackendHealth()
+  void checkBackendHealth();
 
   const interval = window.setInterval(() => {
-    void checkBackendHealth()
-  }, POLL_INTERVAL_MS)
+    void checkBackendHealth();
+  }, POLL_INTERVAL_MS);
 
   return () => {
-    window.clearInterval(interval)
-  }
+    window.clearInterval(interval);
+  };
 }
 
-export { isBackendDown }
+export { isBackendDown };

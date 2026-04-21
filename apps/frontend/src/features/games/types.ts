@@ -1,16 +1,16 @@
-import type { Component } from 'solid-js'
-import type { WordBankId } from '@/features/content/word-banks/types'
+import type { Component } from "solid-js";
+import type { WordBankId } from "@/features/content/word-banks/types";
 
 export type GameViewProps = {
-  wordBankId?: WordBankId | null
-}
+  wordBankId?: WordBankId | null;
+};
 
-export type GameId = 'falling-words'
+export type GameId = "falling-words";
 
 export type GameModule = {
-  id: GameId
-  name: string
-  description: string
-  defaultWordBankId: WordBankId
-  View: Component<GameViewProps>
-}
+  id: GameId;
+  name: string;
+  description: string;
+  defaultWordBankId: WordBankId;
+  View: Component<GameViewProps>;
+};

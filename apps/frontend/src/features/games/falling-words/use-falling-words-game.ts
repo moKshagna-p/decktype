@@ -1,87 +1,93 @@
-import { createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
-import { getWordBank } from '@/features/content/word-banks/manager'
-import type { WordBankId } from '@/features/content/word-banks/types'
-import { getDifficulty } from './difficulty'
-import { createFallingWord } from './engine'
-import type { DifficultyKey, FallingWord, GamePhase } from './types'
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  onCleanup,
+  onMount,
+} from "solid-js";
+import { getWordBank } from "@/features/content/word-banks/manager";
+import type { WordBankId } from "@/features/content/word-banks/types";
+import { getDifficulty } from "./difficulty";
+import { createFallingWord } from "./engine";
+import type { DifficultyKey, FallingWord, GamePhase } from "./types";
 
 type CompletedGameResult = {
-  gameId: 'falling-words'
-  score: number
-  difficulty: DifficultyKey
-}
+  gameId: "falling-words";
+  score: number;
+  difficulty: DifficultyKey;
+};
 
 type UseFallingWordsGameOptions = {
-  onComplete?: (result: CompletedGameResult) => void | Promise<void>
-}
+  onComplete?: (result: CompletedGameResult) => void | Promise<void>;
+};
 
 function formatScore(elapsedMs: number) {
-  return Math.floor(elapsedMs / 1000)
+  return Math.floor(elapsedMs / 1000);
 }
 
 function findExactMatch(words: FallingWord[], value: string) {
   return words
     .filter((word) => word.text === value)
-    .sort((left, right) => right.y - left.y)[0]
+    .sort((left, right) => right.y - left.y)[0];
 }
 
 export function useFallingWordsGame(
   wordBankId: WordBankId,
   options: UseFallingWordsGameOptions = {},
 ) {
-  const wordBank = getWordBank(wordBankId)
+  const wordBank = getWordBank(wordBankId);
 
-  let inputRef: HTMLInputElement | undefined
-  let fieldRef: HTMLDivElement | undefined
-  let animationFrame = 0
-  let nextWordId = 1
-  let lastFrameTime = 0
-  let lastSpawnTime = 0
-  let runStartTime = 0
-  let elapsedBeforeRun = 0
+  let inputRef: HTMLInputElement | undefined;
+  let fieldRef: HTMLDivElement | undefined;
+  let animationFrame = 0;
+  let nextWordId = 1;
+  let lastFrameTime = 0;
+  let lastSpawnTime = 0;
+  let runStartTime = 0;
+  let elapsedBeforeRun = 0;
 
-  const [phase, setPhase] = createSignal<GamePhase>('idle')
-  const [difficulty, setDifficulty] = createSignal<DifficultyKey>('easy')
-  const [fieldWidth, setFieldWidth] = createSignal(0)
-  const [fieldHeight, setFieldHeight] = createSignal(0)
-  const [activeWords, setActiveWords] = createSignal<FallingWord[]>([])
-  const [currentInput, setCurrentInput] = createSignal('')
-  const [elapsedMs, setElapsedMs] = createSignal(0)
-  const [isTabPressed, setIsTabPressed] = createSignal(false)
+  const [phase, setPhase] = createSignal<GamePhase>("idle");
+  const [difficulty, setDifficulty] = createSignal<DifficultyKey>("easy");
+  const [fieldWidth, setFieldWidth] = createSignal(0);
+  const [fieldHeight, setFieldHeight] = createSignal(0);
+  const [activeWords, setActiveWords] = createSignal<FallingWord[]>([]);
+  const [currentInput, setCurrentInput] = createSignal("");
+  const [elapsedMs, setElapsedMs] = createSignal(0);
+  const [isTabPressed, setIsTabPressed] = createSignal(false);
 
-  const selectedDifficulty = createMemo(() => getDifficulty(difficulty()))
-  const score = createMemo(() => formatScore(elapsedMs()))
+  const selectedDifficulty = createMemo(() => getDifficulty(difficulty()));
+  const score = createMemo(() => formatScore(elapsedMs()));
 
   const getElapsedMsNow = () => {
-    if (phase() === 'running' && runStartTime > 0) {
-      return elapsedBeforeRun + (performance.now() - runStartTime)
+    if (phase() === "running" && runStartTime > 0) {
+      return elapsedBeforeRun + (performance.now() - runStartTime);
     }
 
-    return elapsedBeforeRun
-  }
+    return elapsedBeforeRun;
+  };
 
   const stopLoop = () => {
     if (animationFrame) {
-      window.cancelAnimationFrame(animationFrame)
-      animationFrame = 0
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
     }
-  }
+  };
 
   const updateFieldSize = () => {
     if (fieldRef) {
-      const rect = fieldRef.getBoundingClientRect()
-      setFieldWidth(rect.width)
-      setFieldHeight(rect.height)
+      const rect = fieldRef.getBoundingClientRect();
+      setFieldWidth(rect.width);
+      setFieldHeight(rect.height);
     }
-  }
+  };
 
   const focusInput = () => {
-    inputRef?.focus()
-  }
+    inputRef?.focus();
+  };
 
   const spawnWord = () => {
     if (!wordBank || wordBank.words.length === 0) {
-      return
+      return;
     }
 
     const nextWord = createFallingWord(
@@ -89,218 +95,224 @@ export function useFallingWordsGame(
       fieldWidth(),
       wordBank.words,
       selectedDifficulty(),
-    )
-    nextWordId += 1
-    setActiveWords((current) => [...current, nextWord])
-  }
+    );
+    nextWordId += 1;
+    setActiveWords((current) => [...current, nextWord]);
+  };
 
   const resetGame = (nextDifficulty = difficulty()) => {
-    stopLoop()
-    setDifficulty(nextDifficulty)
-    setPhase('idle')
-    setActiveWords([])
-    setCurrentInput('')
+    stopLoop();
+    setDifficulty(nextDifficulty);
+    setPhase("idle");
+    setActiveWords([]);
+    setCurrentInput("");
     if (inputRef) {
-      inputRef.value = ''
+      inputRef.value = "";
     }
-    focusInput()
-    setElapsedMs(0)
-    lastFrameTime = 0
-    lastSpawnTime = 0
-    runStartTime = 0
-    elapsedBeforeRun = 0
-    setIsTabPressed(false)
-  }
+    focusInput();
+    setElapsedMs(0);
+    lastFrameTime = 0;
+    lastSpawnTime = 0;
+    runStartTime = 0;
+    elapsedBeforeRun = 0;
+    setIsTabPressed(false);
+  };
 
   const startGame = () => {
-    updateFieldSize()
-    resetGame(difficulty())
-    setPhase('running')
-    runStartTime = performance.now()
-    elapsedBeforeRun = 0
-    lastFrameTime = runStartTime
-    lastSpawnTime = runStartTime
-    spawnWord()
-  }
+    updateFieldSize();
+    resetGame(difficulty());
+    setPhase("running");
+    runStartTime = performance.now();
+    elapsedBeforeRun = 0;
+    lastFrameTime = runStartTime;
+    lastSpawnTime = runStartTime;
+    spawnWord();
+  };
 
   const pauseGame = () => {
-    if (phase() !== 'running') {
-      return
+    if (phase() !== "running") {
+      return;
     }
 
-    elapsedBeforeRun = getElapsedMsNow()
-    setElapsedMs(elapsedBeforeRun)
-    stopLoop()
-    setPhase('paused')
-    setIsTabPressed(false)
-  }
+    elapsedBeforeRun = getElapsedMsNow();
+    setElapsedMs(elapsedBeforeRun);
+    stopLoop();
+    setPhase("paused");
+    setIsTabPressed(false);
+  };
 
   const resumeGame = () => {
-    if (phase() !== 'paused') {
-      return
+    if (phase() !== "paused") {
+      return;
     }
 
-    runStartTime = performance.now()
-    lastFrameTime = runStartTime
-    lastSpawnTime = runStartTime
-    setPhase('running')
-    focusInput()
-  }
+    runStartTime = performance.now();
+    lastFrameTime = runStartTime;
+    lastSpawnTime = runStartTime;
+    setPhase("running");
+    focusInput();
+  };
 
   const endGame = () => {
-    const finalElapsedMs = getElapsedMsNow()
-    const finalScore = formatScore(finalElapsedMs)
-    setPhase('game-over')
-    stopLoop()
-    setElapsedMs(finalElapsedMs)
+    const finalElapsedMs = getElapsedMsNow();
+    const finalScore = formatScore(finalElapsedMs);
+    setPhase("game-over");
+    stopLoop();
+    setElapsedMs(finalElapsedMs);
     void options.onComplete?.({
-      gameId: 'falling-words',
+      gameId: "falling-words",
       score: finalScore,
       difficulty: difficulty(),
-    })
-  }
+    });
+  };
 
   const submitExactMatch = (value: string) => {
-    const targetWord = findExactMatch(activeWords(), value)
+    const targetWord = findExactMatch(activeWords(), value);
     if (!targetWord) {
-      return false
+      return false;
     }
 
-    setActiveWords((current) => current.filter((word) => word.id !== targetWord.id))
-    setCurrentInput('')
+    setActiveWords((current) =>
+      current.filter((word) => word.id !== targetWord.id),
+    );
+    setCurrentInput("");
     if (inputRef) {
-      inputRef.value = ''
+      inputRef.value = "";
     }
-    return true
-  }
+    return true;
+  };
 
   const handleDifficultyChange = (nextDifficulty: DifficultyKey) => {
-    if (phase() === 'running' || phase() === 'paused') {
-      resetGame(nextDifficulty)
-      return
+    if (phase() === "running" || phase() === "paused") {
+      resetGame(nextDifficulty);
+      return;
     }
 
-    setDifficulty(nextDifficulty)
-  }
+    setDifficulty(nextDifficulty);
+  };
 
-  const handleInput = (event: InputEvent & { currentTarget: HTMLInputElement }) => {
-    const sanitized = event.currentTarget.value.replace(/\s+/g, '')
+  const handleInput = (
+    event: InputEvent & { currentTarget: HTMLInputElement },
+  ) => {
+    const sanitized = event.currentTarget.value.replace(/\s+/g, "");
 
-    if (phase() === 'idle' && sanitized.length > 0) {
-      startGame()
-      setCurrentInput(sanitized)
-      submitExactMatch(sanitized)
-      return
+    if (phase() === "idle" && sanitized.length > 0) {
+      startGame();
+      setCurrentInput(sanitized);
+      submitExactMatch(sanitized);
+      return;
     }
 
-    if (phase() !== 'running') {
-      event.currentTarget.value = ''
-      return
+    if (phase() !== "running") {
+      event.currentTarget.value = "";
+      return;
     }
 
-    setCurrentInput(sanitized)
-    submitExactMatch(sanitized)
-  }
+    setCurrentInput(sanitized);
+    submitExactMatch(sanitized);
+  };
 
   const handleKeyDown = (
     event: KeyboardEvent & { currentTarget: HTMLInputElement },
   ) => {
-    if (event.key === 'Tab') {
-      event.preventDefault()
-      setIsTabPressed(true)
-      return
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setIsTabPressed(true);
+      return;
     }
 
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       if (isTabPressed()) {
-        event.preventDefault()
-        resetGame()
-        return
+        event.preventDefault();
+        resetGame();
+        return;
       }
 
-      if (phase() === 'idle' || phase() === 'game-over') {
-        event.preventDefault()
-        startGame()
-        return
+      if (phase() === "idle" || phase() === "game-over") {
+        event.preventDefault();
+        startGame();
+        return;
       }
 
-      if (phase() === 'paused') {
-        event.preventDefault()
-        resumeGame()
-        return
+      if (phase() === "paused") {
+        event.preventDefault();
+        resumeGame();
+        return;
       }
 
-      event.preventDefault()
-      submitExactMatch(currentInput())
+      event.preventDefault();
+      submitExactMatch(currentInput());
     }
 
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      resetGame()
-      return
+    if (event.key === "Escape") {
+      event.preventDefault();
+      resetGame();
+      return;
     }
 
-    if (event.key === ' ') {
-      event.preventDefault()
-      submitExactMatch(currentInput())
+    if (event.key === " ") {
+      event.preventDefault();
+      submitExactMatch(currentInput());
     }
-  }
+  };
 
   const handleKeyUp = (event: KeyboardEvent) => {
-    if (event.key === 'Tab') {
-      setIsTabPressed(false)
+    if (event.key === "Tab") {
+      setIsTabPressed(false);
     }
-  }
+  };
 
   const handleVisibilityChange = () => {
-    if (!document.hidden || phase() !== 'running') {
-      return
+    if (!document.hidden || phase() !== "running") {
+      return;
     }
 
-    pauseGame()
-  }
+    pauseGame();
+  };
 
   const handleWindowBlur = () => {
-    if (phase() !== 'running') {
-      return
+    if (phase() !== "running") {
+      return;
     }
 
-    pauseGame()
-  }
+    pauseGame();
+  };
 
   createEffect(() => {
-    if (phase() !== 'running') {
-      stopLoop()
-      return
+    if (phase() !== "running") {
+      stopLoop();
+      return;
     }
 
     const tick = (timestamp: number) => {
-      const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.032)
-      lastFrameTime = timestamp
-      setElapsedMs(elapsedBeforeRun + (timestamp - runStartTime))
+      const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.032);
+      lastFrameTime = timestamp;
+      setElapsedMs(elapsedBeforeRun + (timestamp - runStartTime));
 
-      const difficultyConfig = selectedDifficulty()
+      const difficultyConfig = selectedDifficulty();
 
       if (timestamp - lastSpawnTime >= difficultyConfig.spawnIntervalMs) {
-        spawnWord()
-        lastSpawnTime = timestamp
+        spawnWord();
+        lastSpawnTime = timestamp;
       }
 
-      let hitBottom = false
+      let hitBottom = false;
 
       setActiveWords((current) =>
         current.map((word) => {
-          const nextVelocityY = word.velocityY + difficultyConfig.gravity * deltaSeconds
-          const nextX = word.x + word.velocityX * deltaSeconds
-          const maxX = Math.max(fieldWidth() - word.text.length * 18 - 36, 24)
+          const nextVelocityY =
+            word.velocityY + difficultyConfig.gravity * deltaSeconds;
+          const nextX = word.x + word.velocityX * deltaSeconds;
+          const maxX = Math.max(fieldWidth() - word.text.length * 18 - 36, 24);
           const bouncedX =
-            nextX <= 20 || nextX >= maxX ? word.velocityX * -1 : word.velocityX
-          const clampedX = Math.min(Math.max(nextX, 20), maxX)
-          const nextY = word.y + nextVelocityY * deltaSeconds
-          const nextRotation = word.rotation + word.angularVelocity * deltaSeconds
+            nextX <= 20 || nextX >= maxX ? word.velocityX * -1 : word.velocityX;
+          const clampedX = Math.min(Math.max(nextX, 20), maxX);
+          const nextY = word.y + nextVelocityY * deltaSeconds;
+          const nextRotation =
+            word.rotation + word.angularVelocity * deltaSeconds;
 
           if (fieldHeight() > 0 && nextY >= fieldHeight() - 40) {
-            hitBottom = true
+            hitBottom = true;
           }
 
           return {
@@ -310,54 +322,54 @@ export function useFallingWordsGame(
             velocityX: bouncedX,
             velocityY: nextVelocityY,
             rotation: nextRotation,
-          }
+          };
         }),
-      )
+      );
 
       if (hitBottom) {
-        endGame()
-        return
+        endGame();
+        return;
       }
 
-      animationFrame = window.requestAnimationFrame(tick)
-    }
+      animationFrame = window.requestAnimationFrame(tick);
+    };
 
     animationFrame = window.requestAnimationFrame((timestamp) => {
-      lastFrameTime = timestamp
-      tick(timestamp)
-    })
+      lastFrameTime = timestamp;
+      tick(timestamp);
+    });
 
-    onCleanup(stopLoop)
-  })
+    onCleanup(stopLoop);
+  });
 
   onMount(() => {
-    updateFieldSize()
-    setTimeout(updateFieldSize, 100)
-    focusInput()
+    updateFieldSize();
+    setTimeout(updateFieldSize, 100);
+    focusInput();
 
     const observer = new ResizeObserver(() => {
-      updateFieldSize()
-    })
+      updateFieldSize();
+    });
 
     if (fieldRef) {
-      observer.observe(fieldRef)
+      observer.observe(fieldRef);
     }
 
-    window.addEventListener('keyup', handleKeyUp)
-    window.addEventListener('blur', handleWindowBlur)
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("blur", handleWindowBlur);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     onCleanup(() => {
-      observer.disconnect()
-      window.removeEventListener('keyup', handleKeyUp)
-      window.removeEventListener('blur', handleWindowBlur)
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    })
-  })
+      observer.disconnect();
+      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("blur", handleWindowBlur);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    });
+  });
 
   onCleanup(() => {
-    stopLoop()
-  })
+    stopLoop();
+  });
 
   return {
     activeWords,
@@ -369,12 +381,12 @@ export function useFallingWordsGame(
     phase,
     score,
     setInputRef: (element: HTMLInputElement) => {
-      inputRef = element
+      inputRef = element;
     },
     setFieldRef: (element: HTMLDivElement) => {
-      fieldRef = element
+      fieldRef = element;
     },
     focusInput,
     wordBank,
-  }
+  };
 }

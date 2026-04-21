@@ -1,14 +1,14 @@
 export const errorCodes = {
-  badRequest: 'BAD_REQUEST',
-  unauthorized: 'UNAUTHORIZED',
-  forbidden: 'FORBIDDEN',
-  notFound: 'NOT_FOUND',
-  conflict: 'CONFLICT',
-  internalServerError: 'INTERNAL_SERVER_ERROR',
-  validation: 'VALIDATION_ERROR',
-} as const
+  badRequest: "BAD_REQUEST",
+  unauthorized: "UNAUTHORIZED",
+  forbidden: "FORBIDDEN",
+  notFound: "NOT_FOUND",
+  conflict: "CONFLICT",
+  internalServerError: "INTERNAL_SERVER_ERROR",
+  validation: "VALIDATION_ERROR",
+} as const;
 
-export type ErrorCode = (typeof errorCodes)[keyof typeof errorCodes]
+export type ErrorCode = (typeof errorCodes)[keyof typeof errorCodes];
 
 const CodeToStatus: Record<ErrorCode, number> = {
   [errorCodes.badRequest]: 400,
@@ -18,49 +18,49 @@ const CodeToStatus: Record<ErrorCode, number> = {
   [errorCodes.conflict]: 409,
   [errorCodes.internalServerError]: 500,
   [errorCodes.validation]: 400,
-}
+};
 
 export class ApiError extends Error {
-  readonly status: number
-  readonly code: ErrorCode
+  readonly status: number;
+  readonly code: ErrorCode;
 
   constructor(code: ErrorCode, message: string, status?: number) {
-    super(message)
+    super(message);
 
-    this.name = 'ApiError'
-    this.code = code
-    this.status = status ?? CodeToStatus[code] ?? 500
+    this.name = "ApiError";
+    this.code = code;
+    this.status = status ?? CodeToStatus[code] ?? 500;
   }
 
   static badRequest(message: string) {
-    return new ApiError(errorCodes.badRequest, message)
+    return new ApiError(errorCodes.badRequest, message);
   }
 
   static unauthorized(message: string) {
-    return new ApiError(errorCodes.unauthorized, message)
+    return new ApiError(errorCodes.unauthorized, message);
   }
 
   static forbidden(message: string) {
-    return new ApiError(errorCodes.forbidden, message)
+    return new ApiError(errorCodes.forbidden, message);
   }
 
   static notFound(message: string) {
-    return new ApiError(errorCodes.notFound, message)
+    return new ApiError(errorCodes.notFound, message);
   }
 
   static conflict(message: string) {
-    return new ApiError(errorCodes.conflict, message)
+    return new ApiError(errorCodes.conflict, message);
   }
 
-  static internal(message = 'Something went wrong.') {
-    return new ApiError(errorCodes.internalServerError, message)
+  static internal(message = "Something went wrong.") {
+    return new ApiError(errorCodes.internalServerError, message);
   }
 }
 
 type ErrorResponse = {
-  code: string
-  message: string
-}
+  code: string;
+  message: string;
+};
 
 export const toErrorResponse = (
   error: unknown,
@@ -73,38 +73,38 @@ export const toErrorResponse = (
         code: error.code,
         message: error.message,
       },
-    }
+    };
   }
 
   // Handle Elysia built-in errors
-  if (elysiaCode === 'VALIDATION') {
+  if (elysiaCode === "VALIDATION") {
     return {
       status: 400,
       body: {
         code: errorCodes.validation,
-        message: (error as any)?.message || 'Request validation failed.',
+        message: (error as any)?.message || "Request validation failed.",
       },
-    }
+    };
   }
 
-  if (elysiaCode === 'NOT_FOUND') {
+  if (elysiaCode === "NOT_FOUND") {
     return {
       status: 404,
       body: {
         code: errorCodes.notFound,
-        message: 'Resource not found.',
+        message: "Resource not found.",
       },
-    }
+    };
   }
 
   // Log unexpected errors
-  console.error('[Unhandled Error]:', error)
+  console.error("[Unhandled Error]:", error);
 
   return {
     status: 500,
     body: {
       code: errorCodes.internalServerError,
-      message: 'Internal server error.',
+      message: "Internal server error.",
     },
-  }
-}
+  };
+};

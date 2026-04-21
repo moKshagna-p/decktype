@@ -1,191 +1,204 @@
-import { createEffect, createMemo, createSignal, onCleanup, onMount, Show } from 'solid-js'
-import { Command } from 'lucide-solid'
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  onCleanup,
+  onMount,
+  Show,
+} from "solid-js";
+import { Command } from "lucide-solid";
 
-import CommandlineInput from '@/features/commandline/components/commandline-input'
-import CommandlineList from '@/features/commandline/components/commandline-list'
-import { createCommandlineRegistry } from '@/features/commandline/registry'
-import type { CommandlineItem, CommandlineScope } from '@/features/commandline/types'
-import { filterCommands, getScopeLabel } from '@/features/commandline/utils'
-import { themeManager } from '@/features/content/themes/manager'
+import CommandlineInput from "@/features/commandline/components/commandline-input";
+import CommandlineList from "@/features/commandline/components/commandline-list";
+import { createCommandlineRegistry } from "@/features/commandline/registry";
+import type {
+  CommandlineItem,
+  CommandlineScope,
+} from "@/features/commandline/types";
+import { filterCommands, getScopeLabel } from "@/features/commandline/utils";
+import { themeManager } from "@/features/content/themes/manager";
 
 function Commandline() {
-  let searchInputRef: HTMLInputElement | undefined
-  const [isOpen, setIsOpen] = createSignal(false)
-  const [query, setQuery] = createSignal('')
-  const [selectedIndex, setSelectedIndex] = createSignal(0)
-  const [scope, setScope] = createSignal<CommandlineScope>('root')
-  const [interactionType, setInteractionType] = createSignal<'keyboard' | 'mouse'>('keyboard')
+  let searchInputRef: HTMLInputElement | undefined;
+  const [isOpen, setIsOpen] = createSignal(false);
+  const [query, setQuery] = createSignal("");
+  const [selectedIndex, setSelectedIndex] = createSignal(0);
+  const [scope, setScope] = createSignal<CommandlineScope>("root");
+  const [interactionType, setInteractionType] = createSignal<
+    "keyboard" | "mouse"
+  >("keyboard");
 
-  const registry = createMemo(() =>
-    createCommandlineRegistry(setScope),
-  )
+  const registry = createMemo(() => createCommandlineRegistry(setScope));
 
-  const itemsForScope = createMemo(() => registry()[scope()])
+  const itemsForScope = createMemo(() => registry()[scope()]);
 
   const visibleItems = createMemo(() =>
     filterCommands(itemsForScope(), query()),
-  )
+  );
 
-  const isNestedScope = createMemo(() => scope() !== 'root')
+  const isNestedScope = createMemo(() => scope() !== "root");
   const inputPlaceholder = createMemo(() =>
     isNestedScope()
-      ? `${getScopeLabel(scope() as Exclude<CommandlineScope, 'root'>).toLowerCase()}...`
-      : 'Search...',
-  )
+      ? `${getScopeLabel(scope() as Exclude<CommandlineScope, "root">).toLowerCase()}...`
+      : "Search...",
+  );
 
   const focusInput = () => {
-    queueMicrotask(() => searchInputRef?.focus())
-  }
+    queueMicrotask(() => searchInputRef?.focus());
+  };
 
   const resetInteractionState = () => {
-    setQuery('')
-    setSelectedIndex(0)
-  }
+    setQuery("");
+    setSelectedIndex(0);
+  };
 
   const stepBack = () => {
     if (query()) {
-      resetInteractionState()
-      return
+      resetInteractionState();
+      return;
     }
 
     if (isNestedScope()) {
-      setScope('root')
-      setSelectedIndex(0)
-      return
+      setScope("root");
+      setSelectedIndex(0);
+      return;
     }
 
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   const handleSelectItem = (item: CommandlineItem) => {
-    const previousScope = scope()
-    item.onSelect()
+    const previousScope = scope();
+    item.onSelect();
 
     if (previousScope === scope()) {
-      setIsOpen(false)
-      return
+      setIsOpen(false);
+      return;
     }
 
-    resetInteractionState()
-    focusInput()
-  }
+    resetInteractionState();
+    focusInput();
+  };
 
   createEffect(() => {
-    if (scope() === 'themes' && isOpen()) {
-      const item = visibleItems()[selectedIndex()]
+    if (scope() === "themes" && isOpen()) {
+      const item = visibleItems()[selectedIndex()];
 
-      if (item && item.id.startsWith('theme-')) {
-        themeManager.preview(item.id.replace('theme-', '') as any)
+      if (item && item.id.startsWith("theme-")) {
+        themeManager.preview(item.id.replace("theme-", "") as any);
       }
 
-      return
+      return;
     }
 
     if (isOpen()) {
-      themeManager.reset()
+      themeManager.reset();
     }
-  })
+  });
 
   createEffect(() => {
     if (!isOpen()) {
-      resetInteractionState()
-      setScope('root')
-      themeManager.reset()
-      return
+      resetInteractionState();
+      setScope("root");
+      themeManager.reset();
+      return;
     }
 
-    resetInteractionState()
-    setScope('root')
-    focusInput()
-  })
+    resetInteractionState();
+    setScope("root");
+    focusInput();
+  });
 
   createEffect(() => {
-    const maxIndex = visibleItems().length - 1
+    const maxIndex = visibleItems().length - 1;
 
     if (selectedIndex() > maxIndex) {
-      setSelectedIndex(Math.max(maxIndex, 0))
+      setSelectedIndex(Math.max(maxIndex, 0));
     }
-  })
+  });
 
   onMount(() => {
     const handleCommandlineShortcut = (event: KeyboardEvent) => {
-      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 'k') {
-        return
+      if (
+        !(event.ctrlKey || event.metaKey) ||
+        event.key.toLowerCase() !== "k"
+      ) {
+        return;
       }
 
-      event.preventDefault()
-      setIsOpen((current) => !current)
-    }
+      event.preventDefault();
+      setIsOpen((current) => !current);
+    };
 
-    window.addEventListener('keydown', handleCommandlineShortcut)
+    window.addEventListener("keydown", handleCommandlineShortcut);
 
     onCleanup(() => {
-      window.removeEventListener('keydown', handleCommandlineShortcut)
-    })
-  })
+      window.removeEventListener("keydown", handleCommandlineShortcut);
+    });
+  });
 
   createEffect(() => {
     if (!isOpen()) {
-      return
+      return;
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        stepBack()
-        return
+      if (event.key === "Escape") {
+        event.preventDefault();
+        stepBack();
+        return;
       }
 
-      if (event.key === 'Backspace' && query() === '' && isNestedScope()) {
-        event.preventDefault()
-        stepBack()
-        return
+      if (event.key === "Backspace" && query() === "" && isNestedScope()) {
+        event.preventDefault();
+        stepBack();
+        return;
       }
 
-      if (event.key === 'ArrowDown') {
-        event.preventDefault()
-        setInteractionType('keyboard')
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setInteractionType("keyboard");
         setSelectedIndex((current) => {
           if (visibleItems().length === 0) {
-            return 0
+            return 0;
           }
 
-          return (current + 1) % visibleItems().length
-        })
-        return
+          return (current + 1) % visibleItems().length;
+        });
+        return;
       }
 
-      if (event.key === 'ArrowUp') {
-        event.preventDefault()
-        setInteractionType('keyboard')
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setInteractionType("keyboard");
         setSelectedIndex((current) => {
           if (visibleItems().length === 0) {
-            return 0
+            return 0;
           }
 
-          return (current - 1 + visibleItems().length) % visibleItems().length
-        })
-        return
+          return (current - 1 + visibleItems().length) % visibleItems().length;
+        });
+        return;
       }
 
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        const item = visibleItems()[selectedIndex()]
+      if (event.key === "Enter") {
+        event.preventDefault();
+        const item = visibleItems()[selectedIndex()];
 
         if (!item) {
-          return
+          return;
         }
 
-        handleSelectItem(item)
+        handleSelectItem(item);
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown);
 
     onCleanup(() => {
-      window.removeEventListener('keydown', handleKeyDown)
-    })
-  })
+      window.removeEventListener("keydown", handleKeyDown);
+    });
+  });
 
   return (
     <>
@@ -212,13 +225,13 @@ function Commandline() {
             >
               <CommandlineInput
                 inputRef={(element) => {
-                  searchInputRef = element
+                  searchInputRef = element;
                 }}
                 value={query()}
                 placeholder={inputPlaceholder()}
                 onInput={(value) => {
-                  setQuery(value)
-                  setSelectedIndex(0)
+                  setQuery(value);
+                  setSelectedIndex(0);
                 }}
               />
 
@@ -228,8 +241,8 @@ function Commandline() {
                 scope={scope()}
                 interactionType={interactionType()}
                 onHoverItem={(index) => {
-                  setSelectedIndex(index)
-                  setInteractionType('mouse')
+                  setSelectedIndex(index);
+                  setInteractionType("mouse");
                 }}
                 onSelectItem={handleSelectItem}
               />
@@ -238,7 +251,7 @@ function Commandline() {
         </div>
       </Show>
     </>
-  )
+  );
 }
 
-export default Commandline
+export default Commandline;

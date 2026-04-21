@@ -5,7 +5,7 @@ export function LoadingSpinner() {
       aria-label="Loading"
       role="status"
     />
-  )
+  );
 }
 
-export default LoadingSpinner
+export default LoadingSpinner;

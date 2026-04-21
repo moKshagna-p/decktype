@@ -1,31 +1,31 @@
-import { treaty } from '@elysiajs/eden'
+import { treaty } from "@elysiajs/eden";
 
-import type { App } from '@decktype/api'
-import { backendUrl } from '@/lib/backend-url'
-import { toast } from '@/lib/toast'
+import type { App } from "@decktype/api";
+import { backendUrl } from "@/lib/backend-url";
+import { toast } from "@/lib/toast";
 
 export const { api } = treaty<App>(backendUrl, {
   fetch: {
-    credentials: 'include',
+    credentials: "include",
   },
-})
+});
 
-const DEFAULT_ERROR_MESSAGE = 'Something went wrong.'
+const DEFAULT_ERROR_MESSAGE = "Something went wrong.";
 
 export class ApiError extends Error {
-  readonly status?: number
-  readonly code?: string
+  readonly status?: number;
+  readonly code?: string;
 
   constructor(message: string, status?: number, code?: string) {
-    super(message)
-    this.name = 'ApiError'
-    this.status = status
-    this.code = code
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.code = code;
   }
 }
 
 const isNonEmptyString = (value: unknown): value is string =>
-  typeof value === 'string' && value.trim().length > 0
+  typeof value === "string" && value.trim().length > 0;
 
 // Eden response contract used by frontend:
 // - success: { data, error: null }
@@ -34,48 +34,51 @@ const isNonEmptyString = (value: unknown): value is string =>
 export const unwrap = async <T>(
   promise: Promise<{ data: T | null; error: any }>,
 ): Promise<T> => {
-  let response: { data: T | null; error: any }
+  let response: { data: T | null; error: any };
 
   try {
-    response = await promise
-  }
-  catch {
-    throw new ApiError('Unable to reach the server.')
+    response = await promise;
+  } catch {
+    throw new ApiError("Unable to reach the server.");
   }
 
-  const { data, error } = response
+  const { data, error } = response;
 
   if (error) {
-    const body = error.value
+    const body = error.value;
     const message =
-      (typeof body === 'object' && isNonEmptyString(body?.message) && body.message) ||
-      (typeof body === 'object' && isNonEmptyString(body?.error) && body.error) ||
-      (isNonEmptyString(body) ? body : DEFAULT_ERROR_MESSAGE)
+      (typeof body === "object" &&
+        isNonEmptyString(body?.message) &&
+        body.message) ||
+      (typeof body === "object" &&
+        isNonEmptyString(body?.error) &&
+        body.error) ||
+      (isNonEmptyString(body) ? body : DEFAULT_ERROR_MESSAGE);
 
-    throw new ApiError(String(message), error.status, body?.code)
+    throw new ApiError(String(message), error.status, body?.code);
   }
 
-  return data as T
-}
+  return data as T;
+};
 
 export const getErrorMessage = (error: unknown) => {
   if (error instanceof ApiError) {
-    return error.message
+    return error.message;
   }
 
   if (error instanceof Error && isNonEmptyString(error.message)) {
-    return error.message
+    return error.message;
   }
 
   if (isNonEmptyString(error)) {
-    return error
+    return error;
   }
 
-  return DEFAULT_ERROR_MESSAGE
-}
+  return DEFAULT_ERROR_MESSAGE;
+};
 
 export const toastApiError = (error: unknown) => {
-  const message = getErrorMessage(error)
-  toast.error(message)
-  return message
-}
+  const message = getErrorMessage(error);
+  toast.error(message);
+  return message;
+};

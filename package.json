@@ -8,10 +8,15 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"bun run --cwd apps/backend dev\" \"bun run --cwd apps/frontend dev\""
+    "dev": "concurrently \"bun run --cwd apps/backend dev\" \"bun run --cwd apps/frontend dev\"",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint ."
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "oxlint": "^1.15.0",
+    "oxfmt": "^0.5.0"
   },
   "peerDependencies": {
     "typescript": "^5"

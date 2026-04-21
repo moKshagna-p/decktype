@@ -1,29 +1,34 @@
-import { Elysia, t } from 'elysia'
+import { Elysia, t } from "elysia";
 
-import { createFeedbackBodySchema, feedbackResponseSchema } from './schema'
-import { submitFeedback, listFeedback, upvoteFeedback, downvoteFeedback } from './service'
-import { requireSession } from '../auth/session'
+import { createFeedbackBodySchema, feedbackResponseSchema } from "./schema";
+import {
+  submitFeedback,
+  listFeedback,
+  upvoteFeedback,
+  downvoteFeedback,
+} from "./service";
+import { requireSession } from "../auth/session";
 
-export const feedbackRoutes = new Elysia({ prefix: '/api/feedback' })
+export const feedbackRoutes = new Elysia({ prefix: "/api/feedback" })
   .get(
-    '/',
+    "/",
     async () => {
-      return listFeedback()
+      return listFeedback();
     },
     {
       response: t.Array(feedbackResponseSchema),
     },
   )
   .post(
-    '/',
+    "/",
     async ({ body, request: { headers } }) => {
-      const { user } = await requireSession(headers)
+      const { user } = await requireSession(headers);
 
       return submitFeedback({
         content: body.content,
         userId: user.id,
         userDisplayName: user.name,
-      })
+      });
     },
     {
       body: createFeedbackBodySchema,
@@ -31,24 +36,24 @@ export const feedbackRoutes = new Elysia({ prefix: '/api/feedback' })
     },
   )
   .post(
-    '/:id/upvote',
+    "/:id/upvote",
     async ({ params: { id }, request: { headers } }) => {
-      const { user } = await requireSession(headers)
+      const { user } = await requireSession(headers);
 
-      return upvoteFeedback({ feedbackId: id, userId: user.id })
+      return upvoteFeedback({ feedbackId: id, userId: user.id });
     },
     {
       response: feedbackResponseSchema,
     },
   )
   .post(
-    '/:id/downvote',
+    "/:id/downvote",
     async ({ params: { id }, request: { headers } }) => {
-      const { user } = await requireSession(headers)
+      const { user } = await requireSession(headers);
 
-      return downvoteFeedback({ feedbackId: id, userId: user.id })
+      return downvoteFeedback({ feedbackId: id, userId: user.id });
     },
     {
       response: feedbackResponseSchema,
     },
-  )
+  );
