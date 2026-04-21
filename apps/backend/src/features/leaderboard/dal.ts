@@ -1,10 +1,14 @@
-import { ObjectId } from 'mongodb'
-import { leaderboardCollection } from '../../db/collections'
-import type { LeaderboardDocument } from '../../db/collections'
+import { ObjectId } from "mongodb";
+import { leaderboardCollection } from "../../db/collections";
+import type { LeaderboardDocument } from "../../db/collections";
 
 export class LeaderboardDAL {
   async upsert(doc: LeaderboardDocument) {
-    const query = { userId: doc.userId, gameId: doc.gameId, difficulty: doc.difficulty }
+    const query = {
+      userId: doc.userId,
+      gameId: doc.gameId,
+      difficulty: doc.difficulty,
+    };
 
     const res = await leaderboardCollection.updateOne(
       {
@@ -20,37 +24,40 @@ export class LeaderboardDAL {
           createdAt: doc.createdAt,
           displayName: doc.displayName,
         },
-      }
-    )
+      },
+    );
 
-    if (res.modifiedCount > 0) return true
+    if (res.modifiedCount > 0) return true;
 
-    const existing = await leaderboardCollection.findOne(query)
+    const existing = await leaderboardCollection.findOne(query);
     if (!existing) {
       try {
-        await leaderboardCollection.insertOne(doc)
-        return true
+        await leaderboardCollection.insertOne(doc);
+        return true;
       } catch (e: any) {
-        if (e.code === 11000) return false
-        throw e
+        if (e.code === 11000) return false;
+        throw e;
       }
     }
 
-    return false
+    return false;
   }
 
   async find(filters: {
-    gameId: ObjectId
-    difficulty?: string
-    limit: number
+    gameId: ObjectId;
+    difficulty?: string;
+    limit: number;
   }) {
     return leaderboardCollection
       .find(
-        { gameId: filters.gameId, ...(filters.difficulty && { difficulty: filters.difficulty }) },
-        { sort: { bestScore: -1, createdAt: 1 }, limit: filters.limit }
+        {
+          gameId: filters.gameId,
+          ...(filters.difficulty && { difficulty: filters.difficulty }),
+        },
+        { sort: { bestScore: -1, createdAt: 1 }, limit: filters.limit },
       )
-      .toArray()
+      .toArray();
   }
 }
 
-export const leaderboardDAL = new LeaderboardDAL()
+export const leaderboardDAL = new LeaderboardDAL();

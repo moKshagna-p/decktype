@@ -1,11 +1,11 @@
-import { Search } from 'lucide-solid'
+import { Search } from "lucide-solid";
 
 type CommandlineInputProps = {
-  value: string
-  placeholder: string
-  inputRef: (element: HTMLInputElement) => void
-  onInput: (value: string) => void
-}
+  value: string;
+  placeholder: string;
+  inputRef: (element: HTMLInputElement) => void;
+  onInput: (value: string) => void;
+};
 
 function CommandlineInput(props: CommandlineInputProps) {
   return (
@@ -19,7 +19,7 @@ function CommandlineInput(props: CommandlineInputProps) {
         onInput={(event) => props.onInput(event.currentTarget.value)}
       />
     </div>
-  )
+  );
 }
 
-export default CommandlineInput
+export default CommandlineInput;

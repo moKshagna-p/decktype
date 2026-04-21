@@ -1,12 +1,12 @@
-import { For } from 'solid-js'
-import { gameRegistry } from '@/features/games/registry'
-import type { GameId } from '@/features/games/types'
-import { GameCard } from './game-card'
+import { For } from "solid-js";
+import { gameRegistry } from "@/features/games/registry";
+import type { GameId } from "@/features/games/types";
+import { GameCard } from "./game-card";
 
 type GameSelectorProps = {
-  activeGameId?: GameId | null
-  onSelectGame: (gameId: GameId) => void
-}
+  activeGameId?: GameId | null;
+  onSelectGame: (gameId: GameId) => void;
+};
 
 function GameSelector(props: GameSelectorProps) {
   return (
@@ -22,7 +22,7 @@ function GameSelector(props: GameSelectorProps) {
         )}
       </For>
     </div>
-  )
+  );
 }
 
-export default GameSelector
+export default GameSelector;

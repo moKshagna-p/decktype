@@ -1,12 +1,12 @@
-import { ArrowRight } from 'lucide-solid'
-import type { GameId } from '@/features/games/types'
+import { ArrowRight } from "lucide-solid";
+import type { GameId } from "@/features/games/types";
 
 type GameCardProps = {
-  name: string
-  description: string
-  id: GameId
-  onClick: () => void
-}
+  name: string;
+  description: string;
+  id: GameId;
+  onClick: () => void;
+};
 
 export function GameCard(props: GameCardProps) {
   return (
@@ -28,5 +28,5 @@ export function GameCard(props: GameCardProps) {
         <ArrowRight size={20} strokeWidth={3} class="text-(--main)" />
       </div>
     </button>
-  )
+  );
 }

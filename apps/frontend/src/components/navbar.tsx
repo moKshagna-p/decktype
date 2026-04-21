@@ -1,24 +1,23 @@
-import { createMemo } from 'solid-js'
-import { A } from '@solidjs/router'
-import { User } from 'lucide-solid'
-import { authClient } from '@/lib/auth-client'
+import { createMemo } from "solid-js";
+import { A } from "@solidjs/router";
+import { User } from "lucide-solid";
+import { authClient } from "@/lib/auth-client";
 
 const routes = [
-  { label: 'Leaderboard', path: '/leaderboard' },
-  { label: 'About', path: '/about' },
-]
+  { label: "Leaderboard", path: "/leaderboard" },
+  { label: "About", path: "/about" },
+];
 
 export function Navbar() {
-  const session = authClient.useSession()
-  const currentUserLabel = createMemo(() => session().data?.user.name ?? 'guest')
+  const session = authClient.useSession();
+  const currentUserLabel = createMemo(
+    () => session().data?.user.name ?? "guest",
+  );
 
   return (
     <header class="mb-8 flex items-center justify-between">
       <div class="flex items-baseline gap-4 sm:gap-10">
-        <A
-          href="/"
-          class="flex items-center group"
-        >
+        <A href="/" class="flex items-center group">
           <h2 class="text-xl leading-tight font-bold sm:text-2xl">decktype</h2>
         </A>
 
@@ -31,9 +30,11 @@ export function Navbar() {
                 inactiveClass="text-(--sub) hover:text-(--text)"
                 class="transition"
               >
-                <p class="text-sm leading-normal sm:text-base">{route.label.toLowerCase()}</p>
+                <p class="text-sm leading-normal sm:text-base">
+                  {route.label.toLowerCase()}
+                </p>
               </A>
-            )
+            );
           })}
         </nav>
       </div>
@@ -48,10 +49,12 @@ export function Navbar() {
         >
           <User size={18} strokeWidth={2} />
           <div class="hidden max-w-32 truncate sm:block">
-            <p class="text-sm leading-normal sm:text-base">{currentUserLabel().toLowerCase()}</p>
+            <p class="text-sm leading-normal sm:text-base">
+              {currentUserLabel().toLowerCase()}
+            </p>
           </div>
         </A>
       </div>
     </header>
-  )
+  );
 }

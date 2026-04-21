@@ -1,5 +1,5 @@
-import type { WithId } from 'mongodb'
-import type { ResultDocument } from '../../db/collections'
+import type { WithId } from "mongodb";
+import type { ResultDocument } from "../../db/collections";
 
 export const serializeResult = (doc: WithId<ResultDocument>) => {
   return {
@@ -9,5 +9,5 @@ export const serializeResult = (doc: WithId<ResultDocument>) => {
     score: doc.score,
     difficulty: doc.difficulty,
     createdAt: doc.createdAt,
-  }
-}
+  };
+};

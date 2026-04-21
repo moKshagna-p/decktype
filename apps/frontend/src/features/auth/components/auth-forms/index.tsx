@@ -1,9 +1,9 @@
-import { LoginForm } from './login-form'
-import { RegisterForm } from './register-form'
+import { LoginForm } from "./login-form";
+import { RegisterForm } from "./register-form";
 
 type AuthFormsProps = {
-  onSuccess?: () => void
-}
+  onSuccess?: () => void;
+};
 
 export function AuthForms(props: AuthFormsProps) {
   return (
@@ -13,7 +13,7 @@ export function AuthForms(props: AuthFormsProps) {
         <LoginForm onSuccess={props.onSuccess} />
       </div>
     </div>
-  )
+  );
 }
 
-export default AuthForms
+export default AuthForms;

@@ -1,14 +1,14 @@
-import { ObjectId } from 'mongodb'
-import { feedbackCollection } from '../../db/collections'
-import type { FeedbackDocument } from '../../db/collections'
+import { ObjectId } from "mongodb";
+import { feedbackCollection } from "../../db/collections";
+import type { FeedbackDocument } from "../../db/collections";
 
 export class FeedbackDAL {
   async create(data: FeedbackDocument) {
-    const res = await feedbackCollection.insertOne(data)
+    const res = await feedbackCollection.insertOne(data);
     return {
       _id: res.insertedId,
       ...data,
-    }
+    };
   }
 
   async findMany(limit = 50) {
@@ -16,13 +16,13 @@ export class FeedbackDAL {
       .find()
       .sort({ createdAt: -1 })
       .limit(limit)
-      .toArray()
+      .toArray();
   }
 
-  async updateVotes(id: string, userId: ObjectId, type: 'up' | 'down') {
-    const isUpvote = type === 'up'
-    const targetField = isUpvote ? 'upvotedBy' : 'downvotedBy'
-    const oppositeField = isUpvote ? 'downvotedBy' : 'upvotedBy'
+  async updateVotes(id: string, userId: ObjectId, type: "up" | "down") {
+    const isUpvote = type === "up";
+    const targetField = isUpvote ? "upvotedBy" : "downvotedBy";
+    const oppositeField = isUpvote ? "downvotedBy" : "upvotedBy";
 
     const res = await feedbackCollection.findOneAndUpdate(
       { _id: new ObjectId(id) },
@@ -36,20 +36,24 @@ export class FeedbackDAL {
                 { $concatArrays: [`$${targetField}`, [userId]] },
               ],
             },
-            [oppositeField]: { $setDifference: [`$${oppositeField}`, [userId]] },
+            [oppositeField]: {
+              $setDifference: [`$${oppositeField}`, [userId]],
+            },
           },
         },
       ] as any,
-      { returnDocument: 'after' }
-    )
+      { returnDocument: "after" },
+    );
 
-    return res
+    return res;
   }
 
   async delete(id: string) {
-    const result = await feedbackCollection.deleteOne({ _id: new ObjectId(id) })
-    return result.deletedCount > 0
+    const result = await feedbackCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+    return result.deletedCount > 0;
   }
 }
 
-export const feedbackDAL = new FeedbackDAL()
+export const feedbackDAL = new FeedbackDAL();

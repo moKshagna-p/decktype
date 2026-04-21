@@ -1,5 +1,5 @@
-import type { WithId } from 'mongodb'
-import type { FeedbackDocument } from '../../db/collections'
+import type { WithId } from "mongodb";
+import type { FeedbackDocument } from "../../db/collections";
 
 export const serializeFeedback = (doc: WithId<FeedbackDocument>) => {
   return {
@@ -10,5 +10,5 @@ export const serializeFeedback = (doc: WithId<FeedbackDocument>) => {
     upvotedBy: doc.upvotedBy.map((userId) => userId.toString()),
     downvotedBy: doc.downvotedBy.map((userId) => userId.toString()),
     createdAt: doc.createdAt,
-  }
-}
+  };
+};

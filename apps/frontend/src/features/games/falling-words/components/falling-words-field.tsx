@@ -1,27 +1,27 @@
-import { Kbd } from '@/components/ui/kbd'
-import type { FallingWord, GamePhase } from '../types'
+import { Kbd } from "@/components/ui/kbd";
+import type { FallingWord, GamePhase } from "../types";
 
 type FallingWordsFieldProps = {
-  ref?: (el: HTMLDivElement) => void
-  words: FallingWord[]
-  currentInput: string
-  phase: GamePhase
-  score: number
-  onFieldClick: () => void
-}
+  ref?: (el: HTMLDivElement) => void;
+  words: FallingWord[];
+  currentInput: string;
+  phase: GamePhase;
+  score: number;
+  onFieldClick: () => void;
+};
 
 function FallingWordsField(props: FallingWordsFieldProps) {
   const focusedWordId = () => {
     if (props.currentInput.length === 0) {
-      return null
+      return null;
     }
 
     const candidates = props.words
       .filter((word) => word.text.startsWith(props.currentInput))
-      .sort((left, right) => right.y - left.y)
+      .sort((left, right) => right.y - left.y);
 
-    return candidates[0]?.id ?? null
-  }
+    return candidates[0]?.id ?? null;
+  };
 
   return (
     <div
@@ -29,7 +29,7 @@ function FallingWordsField(props: FallingWordsFieldProps) {
       class="absolute inset-0 z-0 h-full w-full cursor-text overflow-hidden bg-(--bg)"
       onClick={props.onFieldClick}
     >
-      {props.phase === 'idle' && (
+      {props.phase === "idle" && (
         <div class="absolute inset-0 flex items-center justify-center p-6 text-center">
           <div class="flex items-center gap-2">
             <Kbd>enter</Kbd>
@@ -38,10 +38,12 @@ function FallingWordsField(props: FallingWordsFieldProps) {
         </div>
       )}
 
-      {props.phase === 'game-over' && (
+      {props.phase === "game-over" && (
         <div class="absolute inset-0 z-20 flex items-center justify-center bg-(--bg)/90 backdrop-blur-sm">
           <div class="text-center">
-            <p class="text-6xl leading-none font-bold tracking-tighter text-(--main) sm:text-8xl">{props.score}</p>
+            <p class="text-6xl leading-none font-bold tracking-tighter text-(--main) sm:text-8xl">
+              {props.score}
+            </p>
             <div class="mt-12 flex flex-col items-center gap-4">
               <div class="flex items-center gap-2">
                 <Kbd>enter</Kbd>
@@ -52,11 +54,15 @@ function FallingWordsField(props: FallingWordsFieldProps) {
         </div>
       )}
 
-      {props.phase === 'paused' && (
+      {props.phase === "paused" && (
         <div class="absolute inset-0 z-20 flex items-center justify-center bg-(--bg)/30 backdrop-blur-[2px]">
           <div class="text-center">
-            <p class="text-xs leading-none font-bold uppercase tracking-widest text-(--sub)">paused</p>
-            <p class="mt-4 text-6xl leading-none font-bold tracking-tighter text-(--main) sm:text-8xl">{props.score}</p>
+            <p class="text-xs leading-none font-bold uppercase tracking-widest text-(--sub)">
+              paused
+            </p>
+            <p class="mt-4 text-6xl leading-none font-bold tracking-tighter text-(--main) sm:text-8xl">
+              {props.score}
+            </p>
             <div class="mt-10 flex items-center justify-center gap-2">
               <Kbd>enter</Kbd>
               <p class="text-base leading-normal">to resume</p>
@@ -66,24 +72,25 @@ function FallingWordsField(props: FallingWordsFieldProps) {
       )}
 
       {props.words.map((word) => {
-        const isFocused = word.id === focusedWordId()
+        const isFocused = word.id === focusedWordId();
         const isPrefixMatch =
-          props.currentInput.length > 0 && word.text.startsWith(props.currentInput)
+          props.currentInput.length > 0 &&
+          word.text.startsWith(props.currentInput);
         const isExactMatch =
-          props.currentInput.length > 0 && word.text === props.currentInput
-        const typedLength = isFocused ? props.currentInput.length : 0
-        const characters = word.text.split('')
+          props.currentInput.length > 0 && word.text === props.currentInput;
+        const typedLength = isFocused ? props.currentInput.length : 0;
+        const characters = word.text.split("");
 
         return (
           <div
             class={`absolute font-mono text-2xl leading-tight tracking-tight transition-all duration-150 ${
               isExactMatch
-                ? 'text-(--main)'
+                ? "text-(--main)"
                 : isFocused
-                  ? 'text-(--text)'
+                  ? "text-(--text)"
                   : isPrefixMatch
-                    ? 'text-(--text) opacity-60'
-                    : 'text-(--sub) opacity-40'
+                    ? "text-(--text) opacity-60"
+                    : "text-(--sub) opacity-40"
             }`}
             style={{
               transform: `translate(${word.x}px, ${word.y}px) rotate(${word.rotation}deg)`,
@@ -91,17 +98,17 @@ function FallingWordsField(props: FallingWordsFieldProps) {
           >
             <span class="relative inline-flex items-center">
               {characters.map((character, index) => {
-                const isTyped = isFocused && index < typedLength
-                const isCaretSlot = isFocused && index === typedLength
+                const isTyped = isFocused && index < typedLength;
+                const isCaretSlot = isFocused && index === typedLength;
 
                 return (
                   <span
                     class={`relative transition-colors duration-200 ${
                       isTyped
-                        ? 'text-(--main)'
+                        ? "text-(--main)"
                         : isCaretSlot
-                          ? 'text-(--text)'
-                          : 'text-inherit'
+                          ? "text-(--text)"
+                          : "text-inherit"
                     }`}
                   >
                     {isCaretSlot && (
@@ -109,7 +116,7 @@ function FallingWordsField(props: FallingWordsFieldProps) {
                     )}
                     {character}
                   </span>
-                )
+                );
               })}
 
               {isFocused && typedLength === characters.length && (
@@ -117,10 +124,10 @@ function FallingWordsField(props: FallingWordsFieldProps) {
               )}
             </span>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
-export default FallingWordsField
+export default FallingWordsField;

@@ -1,1 +1,1 @@
-export type { App } from '@decktype/backend/app'
+export type { App } from "@decktype/backend/app";

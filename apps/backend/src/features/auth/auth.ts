@@ -1,10 +1,10 @@
-import { mongodbAdapter } from '@better-auth/mongo-adapter'
-import { betterAuth } from 'better-auth'
+import { mongodbAdapter } from "@better-auth/mongo-adapter";
+import { betterAuth } from "better-auth";
 
-import { env } from '../../config/env'
-import { db, mongoClient } from '../../db/client'
+import { env } from "../../config/env";
+import { db, mongoClient } from "../../db/client";
 
-const isProduction = env.nodeEnv === 'production'
+const isProduction = env.nodeEnv === "production";
 
 export const auth = betterAuth({
   secret: env.betterAuthSecret,
@@ -14,7 +14,7 @@ export const auth = betterAuth({
     useSecureCookies: isProduction,
     defaultCookieAttributes: {
       secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      sameSite: isProduction ? "none" : "lax",
       httpOnly: true,
     },
   },
@@ -25,6 +25,6 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-})
+});
 
 // TODO: maybe feature based is not the way to go

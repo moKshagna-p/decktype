@@ -1,40 +1,40 @@
-import { Globe, Keyboard } from 'lucide-solid'
-import type { GameViewProps } from '@/features/games/types'
-import { useCreateResultMutation } from '@/features/results/api'
-import { authClient } from '@/lib/auth-client'
-import { DifficultySelector } from '../components/difficulty-selector'
-import FallingWordsField from './components/falling-words-field'
-import GameHud from './components/game-hud'
-import { useFallingWordsGame } from './use-falling-words-game'
-import { fallingWordsGameMeta } from './meta'
-import { difficultyKeys } from './difficulty'
+import { Globe, Keyboard } from "lucide-solid";
+import type { GameViewProps } from "@/features/games/types";
+import { useCreateResultMutation } from "@/features/results/api";
+import { authClient } from "@/lib/auth-client";
+import { DifficultySelector } from "../components/difficulty-selector";
+import FallingWordsField from "./components/falling-words-field";
+import GameHud from "./components/game-hud";
+import { useFallingWordsGame } from "./use-falling-words-game";
+import { fallingWordsGameMeta } from "./meta";
+import { difficultyKeys } from "./difficulty";
 
 function FallingWordsView(props: GameViewProps) {
-  const authSession = authClient.useSession()
-  const createResultMutation = useCreateResultMutation()
+  const authSession = authClient.useSession();
+  const createResultMutation = useCreateResultMutation();
   const session = useFallingWordsGame(
     props.wordBankId ?? fallingWordsGameMeta.defaultWordBankId,
     {
       onComplete: (result) => {
         if (!authSession().data?.user) {
-          return
+          return;
         }
 
         createResultMutation.mutate({
           gameId: result.gameId,
           score: result.score,
           difficulty: result.difficulty,
-        })
+        });
       },
     },
-  )
+  );
 
   if (!session.wordBank) {
     return (
       <div class="rounded-[2rem] border border-(--sub-alt) bg-(--sub-alt)/40 p-8 text-(--sub) backdrop-blur-xl">
         Missing word bank for this game.
       </div>
-    )
+    );
   }
 
   return (
@@ -49,11 +49,15 @@ function FallingWordsView(props: GameViewProps) {
         <div class="flex items-center gap-6 text-(--sub)">
           <div class="flex items-center gap-2">
             <Globe size={14} strokeWidth={2.5} class="opacity-50" />
-            <span class="text-xs leading-none font-semibold tracking-widest uppercase">{session.wordBank.label}</span>
+            <span class="text-xs leading-none font-semibold tracking-widest uppercase">
+              {session.wordBank.label}
+            </span>
           </div>
           <div class="flex items-center gap-2">
             <Keyboard size={14} strokeWidth={2.5} class="opacity-50" />
-            <span class="text-xs leading-none font-semibold tracking-widest uppercase">{fallingWordsGameMeta.name.toLowerCase()}</span>
+            <span class="text-xs leading-none font-semibold tracking-widest uppercase">
+              {fallingWordsGameMeta.name.toLowerCase()}
+            </span>
           </div>
         </div>
       </div>
@@ -89,7 +93,7 @@ function FallingWordsView(props: GameViewProps) {
         />
       </div>
     </div>
-  )
+  );
 }
 
-export default FallingWordsView
+export default FallingWordsView;

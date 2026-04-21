@@ -1,1 +1,1 @@
-export { fallingWordsGameMeta as default } from './meta'
+export { fallingWordsGameMeta as default } from "./meta";

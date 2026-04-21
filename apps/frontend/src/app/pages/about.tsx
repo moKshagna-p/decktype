@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 
 function AboutPage() {
   return (
@@ -6,14 +6,22 @@ function AboutPage() {
       <div class="flex w-full flex-col gap-10">
         <section class="space-y-8">
           <div class="space-y-3">
-            <h2 class="text-2xl leading-tight font-bold capitalize">about decktype</h2>
+            <h2 class="text-2xl leading-tight font-bold capitalize">
+              about decktype
+            </h2>
             <p class="text-base leading-relaxed text-(--sub)">
-              decktype is an open source typing playground. games, mini experiments, weird ideas, the stuff that felt too fun to not build.
+              decktype is an open source typing playground. games, mini
+              experiments, weird ideas, the stuff that felt too fun to not
+              build.
             </p>
             <p class="text-base leading-relaxed text-(--sub)">
-              themes are straight from monkeytype. honestly one of the best designed sites on the internet. decktype would not exist without it. not affiliated, just a massive fan.
+              themes are straight from monkeytype. honestly one of the best
+              designed sites on the internet. decktype would not exist without
+              it. not affiliated, just a massive fan.
             </p>
-            <p class="text-base leading-relaxed text-(--sub)">that's it. go type something.</p>
+            <p class="text-base leading-relaxed text-(--sub)">
+              that's it. go type something.
+            </p>
             <div class="flex flex-wrap gap-3 pt-1">
               <Button
                 href="https://github.com/d1rshan/decktype"
@@ -42,7 +50,9 @@ function AboutPage() {
 
         <section class="space-y-5">
           <div class="space-y-2">
-            <h2 class="text-2xl leading-tight font-bold capitalize">contributors</h2>
+            <h2 class="text-2xl leading-tight font-bold capitalize">
+              contributors
+            </h2>
             <p class="text-base leading-normal text-(--sub)">
               synced: not synced yet
             </p>
@@ -58,12 +68,14 @@ function AboutPage() {
           </div>
 
           <div>
-            <p class="text-base leading-normal text-(--sub)">no contributors found yet</p>
+            <p class="text-base leading-normal text-(--sub)">
+              no contributors found yet
+            </p>
           </div>
         </section>
       </div>
     </div>
-  )
+  );
 }
 
-export default AboutPage
+export default AboutPage;
