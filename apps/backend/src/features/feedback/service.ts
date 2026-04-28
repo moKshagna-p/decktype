@@ -1,17 +1,12 @@
 import { ApiError } from "../../lib/errors";
+
 import { feedbackDAL } from "./dal";
 import { serializeFeedback } from "./serializers";
 import type { CreateFeedbackInput, VoteFeedbackInput } from "./types";
 
-export const submitFeedback = async ({
-  content,
-  userId,
-  userDisplayName,
-}: CreateFeedbackInput) => {
+export const submitFeedback = async (data: CreateFeedbackInput) => {
   const doc = await feedbackDAL.create({
-    content,
-    userId,
-    userDisplayName,
+    ...data,
     upvotedBy: [],
     downvotedBy: [],
     createdAt: new Date(),

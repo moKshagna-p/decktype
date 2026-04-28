@@ -41,7 +41,7 @@ export class FeedbackDAL {
             },
           },
         },
-      ] as any,
+      ],
       { returnDocument: "after" },
     );
 

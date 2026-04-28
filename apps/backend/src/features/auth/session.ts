@@ -1,7 +1,6 @@
 import { ApiError } from "../../lib/errors";
 import { env } from "../../config/env";
 import { auth } from "./auth";
-import { ObjectId } from "mongodb";
 
 export const requireSession = async (headers: Headers) => {
   const currentSession = await auth.api.getSession({
@@ -12,13 +11,7 @@ export const requireSession = async (headers: Headers) => {
     throw ApiError.unauthorized("You must be signed in.");
   }
 
-  return {
-    ...currentSession,
-    user: {
-      ...currentSession.user,
-      id: new ObjectId(currentSession.user.id), // convert once here
-    },
-  };
+  return currentSession;
 };
 
 export const requireAdminSession = async (headers: Headers) => {

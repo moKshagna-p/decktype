@@ -1,4 +1,5 @@
-import { ObjectId } from "mongodb";
+import type { ObjectId } from "mongodb";
+
 import { leaderboardCollection } from "../../db/collections";
 import type { LeaderboardDocument } from "../../db/collections";
 

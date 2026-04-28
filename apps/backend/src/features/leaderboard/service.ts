@@ -1,21 +1,15 @@
-import type { ObjectId } from "mongodb";
 import { leaderboardDAL } from "./dal";
 import { serializeLeaderboardEntry } from "./serializers";
+import type {
+  GetLeaderboardInput,
+  RecordLeaderboardResultInput,
+} from "./types";
 
-export const recordLeaderboardResult = async (input: {
-  userId: ObjectId;
-  displayName: string;
-  gameId: ObjectId;
-  difficulty: string;
-  bestScore: number;
-  createdAt: Date;
-}) => leaderboardDAL.upsert(input);
+export const recordLeaderboardResult = async (
+  input: RecordLeaderboardResultInput,
+) => leaderboardDAL.upsert(input);
 
-export const getLeaderboard = async (filters: {
-  gameId: ObjectId;
-  difficulty?: string;
-  limit: number;
-}) => {
+export const getLeaderboard = async (filters: GetLeaderboardInput) => {
   const docs = await leaderboardDAL.find(filters);
 
   return docs.map((doc, index) => ({
