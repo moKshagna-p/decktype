@@ -1,4 +1,4 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 
 import { parseObjectId } from "../../lib/object-id";
 import { requireAdminSession } from "../auth/session";
@@ -32,7 +32,7 @@ export const adminRoutes = new Elysia({ prefix: "/api/admin" })
       return getUsersList();
     },
     {
-      response: t.Array(adminUserResponseSchema),
+      response: adminUserResponseSchema,
     },
   )
   .delete(
@@ -40,7 +40,7 @@ export const adminRoutes = new Elysia({ prefix: "/api/admin" })
     async ({ params, request: { headers } }) => {
       await requireAdminSession(headers);
 
-      return removeFeedback(parseObjectId(params.id, "feedback id"));
+      return removeFeedback(parseObjectId(params.id));
     },
     {
       params: deleteFeedbackParamsSchema,

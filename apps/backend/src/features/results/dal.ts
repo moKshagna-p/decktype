@@ -1,5 +1,6 @@
+import type { ObjectId } from "mongodb";
+
 import { resultsCollection } from "../../db/collections";
-import { ObjectId } from "mongodb";
 import type { ResultDocument } from "../../db/collections";
 
 export class ResultsDAL {

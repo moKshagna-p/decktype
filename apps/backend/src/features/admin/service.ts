@@ -9,5 +9,5 @@ export const getUsersCount = async () => {
 
 export const getUsersList = async () => {
   const docs = await adminDAL.listUsers(500);
-  return docs.map((doc) => serializeUser(doc));
+  return docs.map(serializeUser);
 };

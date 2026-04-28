@@ -11,7 +11,7 @@ export const leaderboardRoutes = new Elysia({ prefix: "/api/leaderboard" }).get(
   "/",
   async ({ query }) =>
     getLeaderboard({
-      gameId: parseObjectId(query.gameId, "gameId"),
+      gameId: parseObjectId(query.gameId),
       difficulty: query.difficulty,
       limit: query.limit ?? 20,
     }),

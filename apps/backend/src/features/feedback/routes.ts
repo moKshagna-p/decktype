@@ -31,7 +31,7 @@ export const feedbackRoutes = new Elysia({ prefix: "/api/feedback" })
 
       return submitFeedback({
         content: body.content,
-        userId: user.id,
+        userId: parseObjectId(user.id),
         userDisplayName: user.name,
       });
     },
@@ -46,8 +46,8 @@ export const feedbackRoutes = new Elysia({ prefix: "/api/feedback" })
       const { user } = await requireSession(headers);
 
       return upvoteFeedback({
-        feedbackId: parseObjectId(id, "feedback id"),
-        userId: user.id,
+        feedbackId: parseObjectId(id),
+        userId: parseObjectId(user.id),
       });
     },
     {
@@ -61,8 +61,8 @@ export const feedbackRoutes = new Elysia({ prefix: "/api/feedback" })
       const { user } = await requireSession(headers);
 
       return downvoteFeedback({
-        feedbackId: parseObjectId(id, "feedback id"),
-        userId: user.id,
+        feedbackId: parseObjectId(id),
+        userId: parseObjectId(user.id),
       });
     },
     {

@@ -1,16 +1,15 @@
-import type { ObjectId } from "mongodb";
 import { recordLeaderboardResult } from "../leaderboard/service";
 import { resultsDAL } from "./dal";
 import { serializeResult } from "./serializers";
+import type {
+  CreateResultContext,
+  CreateResultInput,
+  GetUserResultsInput,
+} from "./types";
 
 export const createResult = async (
-  input: {
-    userId: ObjectId;
-    gameId: ObjectId;
-    score: number;
-    difficulty: string;
-  },
-  { displayName }: { displayName: string },
+  input: CreateResultInput,
+  { displayName }: CreateResultContext,
 ) => {
   const doc = await resultsDAL.create({
     ...input,
@@ -32,11 +31,7 @@ export const createResult = async (
   };
 };
 
-export const getUserResults = async (filters: {
-  userId: ObjectId;
-  gameId?: ObjectId;
-  limit: number;
-}) => {
+export const getUserResults = async (filters: GetUserResultsInput) => {
   const docs = await resultsDAL.findByUser(filters);
   return docs.map(serializeResult);
 };
