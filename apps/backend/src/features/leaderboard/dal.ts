@@ -42,11 +42,7 @@ export class LeaderboardDAL {
     return false;
   }
 
-  async find(filters: {
-    gameId: string;
-    difficulty?: string;
-    limit: number;
-  }) {
+  async find(filters: { gameId: string; difficulty?: string; limit: number }) {
     return leaderboardCollection
       .find(
         {

@@ -38,3 +38,5 @@ apps/**/.wrangler/
 
 # Finder (MacOS) folder config
 .DS_Store
+.vercel
+.env*.local

@@ -14,15 +14,14 @@
     "cf:fe:deploy": "bun run cf:fe:build && wrangler pages deploy apps/frontend/dist --project-name decktype-frontend --branch main",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "typecheck": "bun run --cwd apps/backend typecheck && bun run --cwd apps/frontend typecheck"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
     "oxlint": "^1.15.0",
     "oxfmt": "^0.5.0",
+    "typescript": "~5.9.3",
     "wrangler": "^4.86.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
   }
 }

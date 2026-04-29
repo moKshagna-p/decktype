@@ -126,9 +126,7 @@ export function FeedbackFeed() {
                         active={(item.downvotedBy ?? []).some(
                           (id) => id === (auth.userId() ?? ""),
                         )}
-                        disabled={
-                          downvoteMutation.isPending || !auth.userId()
-                        }
+                        disabled={downvoteMutation.isPending || !auth.userId()}
                         onClick={() => downvoteMutation.mutate(item.id)}
                       />
                     </div>

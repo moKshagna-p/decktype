@@ -149,9 +149,7 @@ function AdminPage() {
                             <Button
                               class="h-7 px-3 text-xs"
                               onClick={() =>
-                                deleteFeedbackMutation.mutate(
-                                  item.id,
-                                )
+                                deleteFeedbackMutation.mutate(item.id)
                               }
                               disabled={deleteFeedbackMutation.isPending}
                             >

@@ -55,7 +55,9 @@ export function SocialAuthButtons() {
               onClick={() => void signInWithProvider(provider.id)}
             >
               <provider.Icon size={16} strokeWidth={2.2} />
-              {pendingProvider() === provider.id ? "opening..." : provider.label}
+              {pendingProvider() === provider.id
+                ? "opening..."
+                : provider.label}
             </Button>
           )}
         </For>
