@@ -9,9 +9,10 @@
   ],
   "scripts": {
     "dev": "concurrently \"bun run --cwd apps/backend dev\" \"bun run --cwd apps/frontend dev\"",
-    "cf:login": "wrangler login",
-    "cf:fe:build": "bun run --cwd apps/frontend build",
-    "cf:fe:deploy": "bun run cf:fe:build && wrangler pages deploy apps/frontend/dist --project-name decktype --branch main",
+    "build:fe": "bun run --cwd apps/frontend build",
+    "deploy:fe": "bun run build:fe && wrangler pages deploy apps/frontend/dist --project-name decktype --branch main",
+    "deploy:be": "vercel deploy --prod --cwd apps/backend",
+    "deploy:all": "bun run deploy:be && bun run deploy:fe",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "sync:contributors": "bun run scripts/fetch-contributors.js",
@@ -20,9 +21,10 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
-    "oxlint": "^1.15.0",
     "oxfmt": "^0.5.0",
+    "oxlint": "^1.15.0",
     "typescript": "~5.9.3",
+    "vercel": "^52.2.1",
     "wrangler": "^4.86.0"
   }
 }
