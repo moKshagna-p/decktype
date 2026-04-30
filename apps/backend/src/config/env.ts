@@ -49,9 +49,6 @@ export const env = {
   get isProduction() {
     return readAppEnv() === "production";
   },
-  get isVercel() {
-    return Bun.env.VERCEL === "1";
-  },
   get port() {
     return readPort();
   },
