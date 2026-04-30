@@ -3,5 +3,10 @@
     "login": "d1rshan",
     "avatar_url": "https://avatars.githubusercontent.com/u/167102590?v=4",
     "html_url": "https://github.com/d1rshan"
+  },
+  {
+    "login": "github-actions[bot]",
+    "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+    "html_url": "https://github.com/apps/github-actions"
   }
 ]
