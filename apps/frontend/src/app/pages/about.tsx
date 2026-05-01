@@ -5,26 +5,40 @@ import { urls } from "@/lib/urls";
 function AboutPage() {
   return (
     <div class="w-full min-h-[72vh]">
-      <div class="flex w-full flex-col gap-10">
-        <section class="space-y-8">
-          <div class="space-y-3">
-            <h2 class="text-2xl leading-tight font-bold capitalize">
-              about decktype
+      <div class="flex w-full flex-col gap-12">
+        <section class="max-w-3xl space-y-8">
+          <div class="space-y-6">
+            <h2 class="text-3xl leading-tight font-bold">
+              decktype — a typing playground, not a typing test
             </h2>
-            <p class="text-base leading-relaxed text-(--sub)">
-              decktype is an open source typing playground. games, mini
-              experiments, weird ideas, the stuff that felt too fun to not
-              build.
-            </p>
-            <p class="text-base leading-relaxed text-(--sub)">
-              themes are straight from monkeytype. honestly one of the best
-              designed sites on the internet. decktype would not exist without
-              it. not affiliated, just a massive fan.
-            </p>
-            <p class="text-base leading-relaxed text-(--sub)">
-              that's it. go type something.
-            </p>
-            <div class="flex flex-wrap gap-3 pt-1">
+
+            <div class="space-y-4 text-lg leading-relaxed text-(--sub)">
+              <p>
+                monkeytype nailed the typing test. decktype asks what comes
+                after that. what if the keyboard was a playground instead of a
+                benchmark?
+              </p>
+              <p>
+                decktype is an open source collection of typing games, mini
+                experiments, and weird ideas built around one belief: typing
+                should be fun to explore, not just fast to finish.
+              </p>
+              <p>
+                timed chaos modes, rhythm-based typing, mechanics you've
+                genuinely never seen on a typing site. if it felt too fun to not
+                build, it's probably in here.
+              </p>
+              <p>
+                open source. fork it, break it, ship your own strange idea into
+                it.
+              </p>
+              <p>
+                decktype isn't trying to replace monkeytype. it's the weird side
+                project that lives next door and stays up later.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-3 pt-4">
               <Button href={urls.github} target="_blank" rel="noreferrer">
                 decktype github
               </Button>
@@ -46,7 +60,7 @@ function AboutPage() {
           </div>
         </section>
 
-        <section class="space-y-6">
+        <section class="w-full pt-4">
           <ContributorList />
         </section>
       </div>
