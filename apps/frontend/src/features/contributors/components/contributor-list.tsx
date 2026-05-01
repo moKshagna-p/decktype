@@ -1,6 +1,5 @@
 import { For, Show } from "solid-js";
 import { User, ArrowUpRight } from "lucide-solid";
-import { urls } from "@/lib/urls";
 import _data from "../data/contributors.json";
 import type { Contributor } from "../types";
 
