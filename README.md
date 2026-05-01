@@ -4,11 +4,15 @@
 [![Made with Bun](https://img.shields.io/badge/Made%20with-Bun-fcf2d1?logo=bun)](https://bun.sh)
 [![Built with SolidJS](https://img.shields.io/badge/Built%20with-SolidJS-2c4f7c?logo=solid)](https://www.solidjs.com)
 
-Decktype is not a typing benchmark. It is a typing playground built for experimental ideas, rhythm based challenges, and unusual typing mechanics.
+Monkeytype nailed the typing test. Decktype asks what comes after that. What if the keyboard was a playground instead of a benchmark?
 
-Monkeytype mastered the typing test. Decktype is inspired by that and takes the idea in a more playful direction.
+Decktype is an open source collection of typing games, mini experiments, and weird ideas built around one belief: typing should be fun to explore, not just fast to finish.
 
-It is open source and meant for strange, creative, and experimental typing experiences.
+Timed chaos modes, rhythm-based typing, mechanics you've genuinely never seen on a typing site. If it felt too fun to not build, it's probably in here.
+
+Open source. Fork it, break it, ship your own strange idea into it.
+
+Decktype isn't trying to replace Monkeytype. It's the weird side project that lives next door and stays up later.
 
 ## License
 
