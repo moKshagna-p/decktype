@@ -8,7 +8,7 @@ const contributors = _data as Contributor[];
 
 export function ContributorList() {
   return (
-    <div class="space-y-6">
+    <div class="flex flex-col items-start space-y-6">
       <a
         href={`${urls.github}/graphs/contributors`}
         target="_blank"
@@ -33,14 +33,14 @@ export function ContributorList() {
           </p>
         }
       >
-        <div class="flex flex-wrap gap-4 pt-1">
+        <div class="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
           <For each={contributors}>
             {(contributor) => (
               <a
                 href={contributor.html_url}
                 target="_blank"
                 rel="noreferrer"
-                class="group flex w-full md:w-[240px] items-center gap-4 rounded-xl bg-(--sub-alt) px-5 py-3 text-(--text) transition-colors hover:bg-(--text) hover:text-(--sub-alt)"
+                class="group flex min-w-[200px] items-center gap-4 rounded-xl bg-(--sub-alt) px-8 py-3 text-(--text) transition-colors hover:bg-(--text) hover:text-(--sub-alt)"
               >
                 <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-(--sub) text-(--bg) transition-colors group-hover:bg-(--sub-alt) group-hover:text-(--text)">
                   <Show
@@ -54,7 +54,7 @@ export function ContributorList() {
                     />
                   </Show>
                 </div>
-                <span class="text-base font-medium leading-none">
+                <span class="truncate text-sm font-medium leading-tight sm:text-base">
                   {contributor.login}
                 </span>
               </a>
