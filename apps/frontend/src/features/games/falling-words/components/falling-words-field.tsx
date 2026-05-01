@@ -142,13 +142,11 @@ function FallingWordsField(props: FallingWordsFieldProps) {
                         ? props.currentInput.charAt(index) === character
                           ? "text-(--text)"
                           : "text-(--error)"
-                        : isCaretSlot
-                          ? "text-(--text)"
-                          : "text-inherit"
+                        : "text-inherit"
                     }`}
                   >
                     {isCaretSlot && (
-                      <span class="absolute bottom-[-2px] left-0 h-[2px] w-full bg-(--main) animate-pulse" />
+                      <span class="absolute bottom-[-2px] left-0 h-[2px] w-full bg-(--caret) animate-pulse" />
                     )}
                     {character}
                   </span>
@@ -164,12 +162,12 @@ function FallingWordsField(props: FallingWordsFieldProps) {
                       <span class="text-(--error) opacity-80">{char}</span>
                     )}
                   </For>
-                  <span class="ml-[1px] h-[1em] w-[2px] bg-(--main) animate-pulse" />
+                  <span class="ml-[1px] h-[2px] w-[0.6em] self-end bg-(--caret) animate-pulse mb-[2px]" />
                 </span>
               )}
 
               {isFocused && typedLength === characters.length && (
-                <span class="ml-[1px] h-[1em] w-[2px] bg-(--main) animate-pulse" />
+                <span class="ml-[1px] h-[2px] w-[0.6em] self-end bg-(--caret) animate-pulse mb-[2px]" />
               )}
             </span>
           </div>
