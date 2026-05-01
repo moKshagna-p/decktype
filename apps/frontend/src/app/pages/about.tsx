@@ -4,13 +4,11 @@ import { urls } from "@/lib/urls";
 
 function AboutPage() {
   return (
-    <div class="w-full">
+    <div class="w-full flex-1">
       <div class="flex w-full flex-col gap-10">
         <section class="w-full space-y-8">
           <div class="space-y-6">
-            <h2 class="text-xl sm:text-2xl md:text-3xl leading-tight font-bold">
-              About Decktype
-            </h2>
+            <h2 class="text-2xl leading-tight font-bold">About Decktype</h2>
 
             <div class="space-y-4 text-base sm:text-lg leading-relaxed text-(--sub)">
               <p>
