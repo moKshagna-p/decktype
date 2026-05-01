@@ -6,10 +6,10 @@ function AboutPage() {
   return (
     <div class="w-full">
       <div class="flex w-full flex-col gap-10">
-        <section class="max-w-4xl space-y-8">
+        <section class="w-full space-y-8">
           <div class="space-y-6">
             <h2 class="text-xl sm:text-2xl md:text-3xl leading-tight font-bold">
-              about decktype
+              About Decktype
             </h2>
 
             <div class="space-y-4 text-base sm:text-lg leading-relaxed text-(--sub)">
