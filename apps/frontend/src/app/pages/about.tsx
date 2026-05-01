@@ -4,15 +4,15 @@ import { urls } from "@/lib/urls";
 
 function AboutPage() {
   return (
-    <div class="w-full min-h-[72vh]">
-      <div class="flex w-full flex-col gap-12">
-        <section class="max-w-3xl space-y-8">
+    <div class="w-full">
+      <div class="flex w-full flex-col gap-10">
+        <section class="max-w-4xl space-y-8">
           <div class="space-y-6">
-            <h2 class="text-3xl leading-tight font-bold">
-              decktype — a typing playground, not a typing test
+            <h2 class="text-xl sm:text-2xl md:text-3xl leading-tight font-bold">
+              about decktype
             </h2>
 
-            <div class="space-y-4 text-lg leading-relaxed text-(--sub)">
+            <div class="space-y-4 text-base sm:text-lg leading-relaxed text-(--sub)">
               <p>
                 monkeytype nailed the typing test. decktype asks what comes
                 after that. what if the keyboard was a playground instead of a
