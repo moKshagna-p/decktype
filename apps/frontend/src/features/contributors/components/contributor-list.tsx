@@ -40,7 +40,7 @@ export function ContributorList() {
                 href={contributor.html_url}
                 target="_blank"
                 rel="noreferrer"
-                class="group flex min-w-0 md:min-w-[200px] items-center gap-2 md:gap-4 rounded-xl bg-(--sub-alt) px-4 md:px-8 py-2 md:py-3 text-(--text) transition-colors hover:bg-(--text) hover:text-(--sub-alt)"
+                class="group flex w-full md:w-[240px] items-center gap-4 rounded-xl bg-(--sub-alt) px-5 py-3 text-(--text) transition-colors hover:bg-(--text) hover:text-(--sub-alt)"
               >
                 <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-(--sub) text-(--bg) transition-colors group-hover:bg-(--sub-alt) group-hover:text-(--text)">
                   <Show
