@@ -1,12 +1,11 @@
+import type { ObjectId } from "mongodb";
+
 import { ApiError } from "../../lib/errors";
+import { getUsersLeaderboardEntries } from "../leaderboard/service";
 import { recordLeaderboardResult } from "../leaderboard/service";
-import { resultsDAL } from "./dal";
-import { serializeResult } from "./serializers";
-import type {
-  CreateResultContext,
-  CreateResultInput,
-  GetUserResultsInput,
-} from "./types";
+import { usersDAL } from "./dal";
+import { serializeResult, serializeUserPBs } from "./serializers";
+import type { CreateResultInput, GetUserResultsInput } from "./types";
 
 // TODO: Move rules and shared configs to a new package
 const FALLING_WORDS_MINIMUM_SCORES = {
@@ -38,7 +37,7 @@ const getResultValidationMessage = (
 
 export const createResult = async (
   input: CreateResultInput,
-  { displayName }: CreateResultContext,
+  { displayName }: { displayName: string },
 ) => {
   const validationMessage = getResultValidationMessage(
     input.gameId,
@@ -50,7 +49,7 @@ export const createResult = async (
     throw ApiError.badRequest(validationMessage);
   }
 
-  const doc = await resultsDAL.create({
+  const doc = await usersDAL.createResult({
     ...input,
     createdAt: new Date(),
   });
@@ -71,6 +70,15 @@ export const createResult = async (
 };
 
 export const getUserResults = async (filters: GetUserResultsInput) => {
-  const docs = await resultsDAL.findByUser(filters);
+  const docs = await usersDAL.findResultsByUser(filters);
   return docs.map(serializeResult);
 };
+
+export const getUserPBs = async (userId: ObjectId) => {
+  const docs = await getUsersLeaderboardEntries(userId);
+  return serializeUserPBs(docs);
+};
+
+// TODO: Make the result write and leaderboard update atomic.
+// usersDAL.createResult() persists the result before recordLeaderboardResult() runs.
+// If the leaderboard update fails, the API will error after the result has already been stored, and retries can create duplicate results or an inconsistent PB state.
