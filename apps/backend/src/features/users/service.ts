@@ -79,6 +79,84 @@ export const getUserPBs = async (userId: ObjectId) => {
   return serializeUserPBs(docs);
 };
 
+export const changeUsername = async (userId: ObjectId, newUsername: string) => {
+  const normalizedUsername = newUsername.toLowerCase();
+
+  // Check if username taken
+  const existingUser = await usersDAL.findUserByUsername(
+    normalizedUsername,
+    userId,
+  );
+
+  if (existingUser) {
+    throw ApiError.badRequest("Username is already taken.");
+  }
+
+  const now = new Date();
+  const cooldownCutoff = new Date(now);
+  cooldownCutoff.setDate(cooldownCutoff.getDate() - 7);
+
+  const user = await usersDAL.findUserById(userId);
+
+  if (!user) {
+    throw ApiError.notFound("User not found.");
+  }
+
+  if (user.displayUsername === newUsername) {
+    throw ApiError.badRequest("Please choose a different username.");
+  }
+
+  if (
+    user.usernameLastChangedAt &&
+    user.usernameLastChangedAt > cooldownCutoff
+  ) {
+    const nextAvailableDate = new Date(user.usernameLastChangedAt);
+    nextAvailableDate.setDate(nextAvailableDate.getDate() + 7);
+    throw ApiError.badRequest(
+      `You can only change your username once every 7 days. Next change available after ${nextAvailableDate.toLocaleDateString()}.`,
+    );
+  }
+
+  // Enforce the cooldown at write time to avoid concurrent rename bypasses.
+  const guardedUpdate = await usersDAL.changeUsernameIfEligible({
+    userId,
+    normalizedUsername,
+    displayUsername: newUsername,
+    cooldownCutoff,
+    now,
+  });
+
+  if (!guardedUpdate) {
+    const freshUser = await usersDAL.findUserById(userId);
+
+    if (!freshUser) {
+      throw ApiError.notFound("User not found.");
+    }
+
+    if (freshUser.displayUsername === newUsername) {
+      throw ApiError.badRequest("Please choose a different username.");
+    }
+
+    if (
+      freshUser.usernameLastChangedAt &&
+      freshUser.usernameLastChangedAt > cooldownCutoff
+    ) {
+      const nextAvailableDate = new Date(freshUser.usernameLastChangedAt);
+      nextAvailableDate.setDate(nextAvailableDate.getDate() + 7);
+      throw ApiError.badRequest(
+        `You can only change your username once every 7 days. Next change available after ${nextAvailableDate.toLocaleDateString()}.`,
+      );
+    }
+
+    throw ApiError.badRequest("Unable to update username right now.");
+  }
+
+  // Sync with other collections
+  await usersDAL.syncUsernameReferences(userId, newUsername);
+
+  return { success: true };
+};
+
 // TODO: Make the result write and leaderboard update atomic.
 // usersDAL.createResult() persists the result before recordLeaderboardResult() runs.
 // If the leaderboard update fails, the API will error after the result has already been stored, and retries can create duplicate results or an inconsistent PB state.

@@ -5,6 +5,7 @@ import AuthForms from "@/features/auth/components/auth-forms";
 import { useAuthSession } from "@/features/auth/hooks";
 import PersonalBests from "@/features/users/pbs/components/personal-bests";
 import ResultsTable from "@/features/users/results/components/results-table";
+import { ChangeUsernameModal } from "@/features/users/components/change-username-modal";
 import { getErrorMessage } from "@/lib/api-client";
 import { authClient } from "@/lib/auth-client";
 import { formatDateTime } from "@/lib/utils";
@@ -18,6 +19,7 @@ type ProfileProps = {
 function ProfilePage(props: ProfileProps) {
   const auth = useAuthSession();
   const [isSigningOut, setIsSigningOut] = createSignal(false);
+  const [isUsernameModalOpen, setIsUsernameModalOpen] = createSignal(false);
   const [statusMessage, setStatusMessage] = createSignal<string | null>(null);
   const [errorMessage, setErrorMessage] = createSignal<string | null>(null);
 
@@ -76,6 +78,12 @@ function ProfilePage(props: ProfileProps) {
                     onClick={() => props.onNavigate("/")}
                   >
                     back home
+                  </Button>
+                  <Button
+                    class="h-8 px-3 text-xs"
+                    onClick={() => setIsUsernameModalOpen(true)}
+                  >
+                    change username
                   </Button>
                   <Button
                     class="h-8 px-3 text-xs"
@@ -152,6 +160,11 @@ function ProfilePage(props: ProfileProps) {
                 </div>
               )}
             </Show>
+
+            <ChangeUsernameModal
+              isOpen={isUsernameModalOpen()}
+              onClose={() => setIsUsernameModalOpen(false)}
+            />
           </div>
         </Show>
       </Show>
