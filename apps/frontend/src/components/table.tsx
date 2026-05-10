@@ -63,7 +63,14 @@ export function Table<T>(props: TableProps<T>) {
           </For>
         </div>
 
-        <For each={props.rows}>
+        <For
+          each={props.rows}
+          fallback={
+            <div class="px-4 py-12 text-center text-sm text-(--sub) opacity-40">
+              no data found
+            </div>
+          }
+        >
           {(row, index) => (
             <div
               class="grid items-start gap-2 border-b border-(--sub)/10 px-4 py-3.5 last:border-b-0"
@@ -106,7 +113,14 @@ export function Table<T>(props: TableProps<T>) {
           </For>
         </div>
 
-        <For each={props.rows}>
+        <For
+          each={props.rows}
+          fallback={
+            <div class="px-2 py-8 text-center text-xs text-(--sub) opacity-40">
+              no data found
+            </div>
+          }
+        >
           {(row, index) => (
             <div
               class="grid items-start gap-1 border-b border-(--sub)/10 px-2 py-3 last:border-b-0"

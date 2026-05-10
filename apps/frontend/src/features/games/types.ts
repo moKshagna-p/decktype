@@ -12,5 +12,6 @@ export type GameModule = {
   name: string;
   description: string;
   defaultWordBankId: WordBankId;
+  difficulties: string[];
   View: Component<GameViewProps>;
 };
