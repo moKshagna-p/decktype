@@ -4,6 +4,7 @@ type InferredSession = typeof auth.$Infer.Session;
 
 type AppUser = Omit<InferredSession["user"], "displayUsername" | "username"> & {
   // omit username cause we don need that
+  admin?: boolean;
   displayUsername: string;
 };
 

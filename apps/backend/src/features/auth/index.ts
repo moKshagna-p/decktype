@@ -25,6 +25,10 @@ export const auth = betterAuth({
   baseURL: env.betterAuthUrl,
   user: {
     additionalFields: {
+      admin: {
+        type: "boolean",
+        required: false,
+      },
       usernameLastChangedAt: {
         type: "date",
         required: false,

@@ -35,6 +35,7 @@ export type UserDocument = {
   // name: string;
   email: string;
   emailVerified: boolean;
+  admin?: boolean;
   username: string; // Better Auth lookup field, always lowercase
   displayUsername: string;
   usernameLastChangedAt?: Date;
