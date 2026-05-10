@@ -65,7 +65,7 @@ function ProfilePage() {
       }
 
       setStatusMessage("Signed out.");
-      navigate("/profile", { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       setErrorMessage(getErrorMessage(error));
     } finally {
