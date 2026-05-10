@@ -10,7 +10,7 @@ function AboutPage() {
           <div class="space-y-6">
             <h2 class="text-2xl leading-tight font-bold">About Decktype</h2>
 
-            <div class="space-y-4 text-base sm:text-lg leading-relaxed text-(--sub)">
+            <div class="space-y-4 text-base leading-normal text-(--sub)">
               <p>
                 monkeytype nailed the typing test. decktype asks what comes
                 after that. what if the keyboard was a playground instead of a
