@@ -1,9 +1,5 @@
 import { Table, type TableColumn } from "@/components/table";
-import { useAuthSession } from "@/features/auth/hooks";
 import { getGameName } from "@/features/games/utils";
-import { QueryState } from "@/components/query-state";
-
-import { useMyResultsQuery } from "../api";
 import type { Result } from "../types";
 
 function formatResultsDateTime(value: string | Date) {
@@ -51,26 +47,14 @@ const columns: TableColumn<Result>[] = [
   },
 ];
 
-function ResultsTable() {
-  const auth = useAuthSession();
-  const resultsQuery = useMyResultsQuery({
-    enabled: auth.isAuthenticated,
-    limit: () => 12,
-  });
-
+export function ResultsTableUi(props: { results: Result[] }) {
   return (
-    <QueryState query={resultsQuery} emptyMessage="no results yet">
-      {(results) => (
-        <Table
-          columns={columns}
-          rows={results}
-          templateColumns="minmax(9rem, 1fr) 5rem 6.5rem 8.5rem"
-          minTableWidth={520}
-          mobileTemplateColumns="minmax(5rem, 1fr) 2.5rem 3.5rem 5rem"
-        />
-      )}
-    </QueryState>
+    <Table
+      columns={columns}
+      rows={props.results}
+      templateColumns="minmax(9rem, 1fr) 5rem 6.5rem 8.5rem"
+      minTableWidth={520}
+      mobileTemplateColumns="minmax(5rem, 1fr) 2.5rem 3.5rem 5rem"
+    />
   );
 }
-
-export default ResultsTable;

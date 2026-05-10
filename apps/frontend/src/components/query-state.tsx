@@ -11,21 +11,39 @@ interface QueryStateProps<T> {
   };
   children: (data: T) => JSX.Element;
   emptyMessage?: string;
+  loadingFallback?: JSX.Element;
+  errorFallback?: JSX.Element | ((error: unknown) => JSX.Element);
 }
 
 export function QueryState<T>(props: QueryStateProps<T>) {
   return (
     <Switch>
       <Match when={props.query.isPending}>
-        <div class="flex min-h-32 items-center justify-center">
-          <Spinner />
-        </div>
+        <Show
+          when={props.loadingFallback}
+          fallback={
+            <div class="flex min-h-32 items-center justify-center">
+              <Spinner />
+            </div>
+          }
+        >
+          {props.loadingFallback}
+        </Show>
       </Match>
 
       <Match when={props.query.isError}>
-        <div class="rounded-lg bg-(--sub-alt) p-4 text-(--error)">
-          <p class="text-base">{getErrorMessage(props.query.error)}</p>
-        </div>
+        <Show
+          when={props.errorFallback}
+          fallback={
+            <div class="rounded-lg bg-(--sub-alt) p-4 text-(--error)">
+              <p class="text-base">{getErrorMessage(props.query.error)}</p>
+            </div>
+          }
+        >
+          {typeof props.errorFallback === "function"
+            ? props.errorFallback(props.query.error)
+            : props.errorFallback}
+        </Show>
       </Match>
 
       <Match when={props.query.data !== undefined}>

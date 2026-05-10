@@ -1,4 +1,4 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 
 import { parseObjectId } from "../../lib/object-id";
 import { requireSession } from "../auth/session";
@@ -6,16 +6,10 @@ import {
   changeUsernameBodySchema,
   createResultBodySchema,
   createResultResponseSchema,
-  myResultsQuerySchema,
-  resultResponseSchema,
-  userPBsResponseSchema,
+  publicProfileParamsSchema,
+  publicProfileResponseSchema,
 } from "./schema";
-import {
-  changeUsername,
-  createResult,
-  getUserPBs,
-  getUserResults,
-} from "./service";
+import { changeUsername, createResult, getPublicProfile } from "./service";
 
 export const usersRoutes = new Elysia({ prefix: "/api/users" })
   .patch(
@@ -27,6 +21,16 @@ export const usersRoutes = new Elysia({ prefix: "/api/users" })
     },
     {
       body: changeUsernameBodySchema,
+    },
+  )
+  .get(
+    "/profile/:username",
+    async ({ params }) => {
+      return getPublicProfile(params.username);
+    },
+    {
+      params: publicProfileParamsSchema,
+      response: publicProfileResponseSchema,
     },
   )
   .post(
@@ -47,32 +51,5 @@ export const usersRoutes = new Elysia({ prefix: "/api/users" })
     {
       body: createResultBodySchema,
       response: createResultResponseSchema,
-    },
-  )
-  .get(
-    "/results",
-    async ({ request: { headers }, query }) => {
-      const { user } = await requireSession(headers);
-
-      return getUserResults({
-        userId: parseObjectId(user.id),
-        gameId: query.gameId,
-        limit: query.limit ?? 20,
-      });
-    },
-    {
-      query: myResultsQuerySchema,
-      response: t.Array(resultResponseSchema),
-    },
-  )
-  .get(
-    "/results/pbs",
-    async ({ request: { headers } }) => {
-      const { user } = await requireSession(headers);
-
-      return getUserPBs(parseObjectId(user.id));
-    },
-    {
-      response: userPBsResponseSchema,
     },
   );

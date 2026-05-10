@@ -1,15 +1,11 @@
 import { For } from "solid-js";
 
-import { useAuthSession } from "@/features/auth/hooks";
 import { getGameName } from "@/features/games/utils";
-import { QueryState } from "@/components/query-state";
 import { formatDateTime } from "@/lib/utils";
-
-import { usePersonalBestsQuery } from "../api";
 import type { UserPBs } from "../types";
 
-function PersonalBestsCards(pbs: UserPBs) {
-  const gameEntries = Object.entries(pbs);
+export function PersonalBestsCards(props: { pbs: UserPBs }) {
+  const gameEntries = Object.entries(props.pbs);
 
   return (
     <div class="flex flex-col gap-4">
@@ -42,18 +38,3 @@ function PersonalBestsCards(pbs: UserPBs) {
     </div>
   );
 }
-
-function PersonalBests() {
-  const auth = useAuthSession();
-  const pbsQuery = usePersonalBestsQuery({
-    enabled: auth.isAuthenticated,
-  });
-
-  return (
-    <QueryState query={pbsQuery} emptyMessage="no personal bests yet">
-      {(data) => PersonalBestsCards(data.pbs)}
-    </QueryState>
-  );
-}
-
-export default PersonalBests;
