@@ -7,7 +7,16 @@ export class AdminDAL {
 
   async listUsers(limit = 500) {
     return usersCollection
-      .find({}, { projection: { name: 1, email: 1, createdAt: 1 } })
+      .find(
+        {},
+        {
+          projection: {
+            email: 1,
+            displayUsername: 1,
+            createdAt: 1,
+          },
+        },
+      )
       .sort({ createdAt: -1 })
       .limit(limit)
       .toArray();
