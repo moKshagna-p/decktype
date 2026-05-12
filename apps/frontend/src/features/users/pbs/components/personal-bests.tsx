@@ -1,38 +1,74 @@
 import { For } from "solid-js";
 
-import { getGameName } from "@/features/games/utils";
+import { gameRegistry } from "@/features/games/registry";
 import { formatDateTime } from "@/lib/utils";
 import type { UserPBs } from "../types";
 
-export function PersonalBestsCards(props: { pbs: UserPBs }) {
-  const gameEntries = Object.entries(props.pbs);
+type PersonalBestCardProps = {
+  name: string;
+  difficulties: string[];
+  pbs: Record<string, { bestScore: number; createdAt: Date }>;
+};
 
+export function PersonalBestCard(props: PersonalBestCardProps) {
   return (
-    <div class="flex flex-col gap-4">
-      <For each={gameEntries}>
-        {([gameId, difficulties]) => (
-          <div class="space-y-2">
-            <h3 class="text-base font-semibold text-(--sub)">
-              {getGameName(gameId)}
-            </h3>
-            <div class="grid grid-cols-3 gap-2">
-              <For each={Object.entries(difficulties)}>
-                {([difficulty, pb]) => (
-                  <div class="rounded-lg bg-(--sub-alt) p-3">
-                    <div class="mb-1 text-xs font-medium uppercase tracking-wider text-(--sub)">
-                      {difficulty}
-                    </div>
-                    <div class="text-xl font-bold leading-none">
-                      {pb.bestScore}
-                    </div>
-                    <div class="mt-1 text-xs leading-normal text-(--sub)">
-                      {formatDateTime(pb.createdAt)}
-                    </div>
-                  </div>
-                )}
-              </For>
-            </div>
-          </div>
+    <div class="group relative rounded-xl bg-(--sub-alt) px-6 py-4 transition-colors sm:px-8 sm:py-5">
+      <div class="flex flex-col gap-4 sm:gap-5">
+        <h3 class="text-[10px] font-bold text-(--sub) opacity-60 sm:text-xs">
+          {props.name}
+        </h3>
+
+        <div
+          class="grid gap-y-6"
+          style={{
+            "grid-template-columns": `repeat(${props.difficulties.length}, minmax(0, 1fr))`,
+          }}
+        >
+          <For each={props.difficulties}>
+            {(difficulty) => (
+              <div class="flex flex-col items-center gap-1 text-center">
+                <div class="text-[10px] font-bold uppercase tracking-widest text-(--sub) opacity-60">
+                  {difficulty}
+                </div>
+                <div
+                  class={`text-2xl font-bold leading-none tracking-tighter sm:text-4xl ${
+                    !props.pbs[difficulty]
+                      ? "text-(--sub) opacity-15"
+                      : "text-(--text)"
+                  }`}
+                >
+                  {props.pbs[difficulty]
+                    ? props.pbs[difficulty].bestScore
+                    : "-"}
+                </div>
+                <div class="text-[10px] font-medium tracking-wider text-(--sub) opacity-50 sm:text-[11px]">
+                  {props.pbs[difficulty] ? (
+                    <span>
+                      {formatDateTime(props.pbs[difficulty].createdAt)}
+                    </span>
+                  ) : (
+                    "-"
+                  )}
+                </div>
+              </div>
+            )}
+          </For>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function PersonalBestsCards(props: { pbs: UserPBs }) {
+  return (
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <For each={gameRegistry}>
+        {(game) => (
+          <PersonalBestCard
+            name={game.name}
+            difficulties={game.difficulties}
+            pbs={props.pbs[game.id] || {}}
+          />
         )}
       </For>
     </div>
