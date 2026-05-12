@@ -1,48 +1,43 @@
-import { z } from "zod";
 import { X } from "lucide-solid";
-import { Show, createEffect, createSignal, onCleanup } from "solid-js";
+import { createEffect, onCleanup, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 
 import { useAuthSession } from "@/features/auth/hooks";
-import { getFirstValidationMessage } from "@/features/auth/components/auth-forms/utils";
+import { createFormState } from "@/lib/form";
 import { api, toastApiError, unwrap } from "@/lib/api-client";
-import { authClient } from "@/lib/auth-client";
 import { toast } from "@/lib/toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import FormError from "@/components/ui/form-error";
+import { usernameSchema } from "@/features/auth/components/schemas";
 
-const changeUsernameSchema = z.object({
-  username: z
-    .string()
-    .trim()
-    .min(3, "Username must be at least 3 characters.")
-    .max(30, "Username must be at most 30 characters.")
-    .regex(
-      /^[A-Za-z0-9_]+$/,
-      "Username can only contain letters, numbers, and underscores.",
-    ),
-});
+import { USERNAME_CHANGE_COOLDOWN_DAYS } from "../utils";
 
 type ChangeUsernameModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: (username: string) => void;
 };
 
 export function ChangeUsernameModal(props: ChangeUsernameModalProps) {
   const auth = useAuthSession();
-  const [username, setUsername] = createSignal("");
-  const [validationMessage, setValidationMessage] = createSignal<string | null>(
-    null,
-  );
-  const [isSubmitting, setIsSubmitting] = createSignal(false);
+
+  const {
+    fields,
+    setFields,
+    setField,
+    error,
+    setError,
+    submitting,
+    setSubmitting,
+    validate,
+  } = createFormState({ username: "" });
 
   createEffect(() => {
     if (!props.isOpen) return;
 
-    setUsername("");
-    setValidationMessage(null);
-    setIsSubmitting(false);
+    setFields("username", "");
+    setError(null);
+    setSubmitting(false);
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -59,43 +54,38 @@ export function ChangeUsernameModal(props: ChangeUsernameModalProps) {
     });
   });
 
-  const handleSubmit = async (event: SubmitEvent) => {
+  const handleSubmit = async (event: Event) => {
     event.preventDefault();
 
     const currentUsername = auth.username();
-    const result = changeUsernameSchema.safeParse({
-      username: username(),
-    });
+    const data = validate(usernameSchema);
 
-    if (!result.success) {
-      setValidationMessage(getFirstValidationMessage(result.error.issues));
+    if (!data) {
       return;
     }
 
-    if (result.data.username === currentUsername) {
-      setValidationMessage("Please choose a different username.");
+    if (data.username === currentUsername) {
+      setError("Please choose a different username.");
       return;
     }
 
-    setValidationMessage(null);
-    setIsSubmitting(true);
+    setError(null);
+    setSubmitting(true);
 
     try {
       await unwrap(
         api.users.username.patch({
-          username: result.data.username,
+          username: data.username,
         }),
       );
 
       toast.success("Username updated successfully.");
-      await authClient.getSession();
-      props.onSuccess?.(result.data.username);
-      props.onClose();
-    } catch (error) {
-      toastApiError(error);
+      window.location.replace(`/profile/${encodeURIComponent(data.username)}`);
+    } catch (err) {
+      toastApiError(err);
       props.onClose();
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
@@ -110,51 +100,40 @@ export function ChangeUsernameModal(props: ChangeUsernameModalProps) {
             onClick={props.onClose}
           />
 
-          <div class="relative w-full max-w-sm overflow-hidden rounded-xl bg-(--sub-alt) p-5">
-            <div class="mb-4 flex items-center justify-between">
-              <h3 class="text-lg font-bold text-(--main) lowercase">
-                change username
-              </h3>
-              <Button
-                type="button"
-                onClick={props.onClose}
-                class="h-7 w-7 bg-transparent p-0 text-(--sub) hover:bg-(--sub-alt) hover:text-(--main)"
-              >
-                <X size={18} />
-              </Button>
-            </div>
+          <div class="relative w-full max-w-sm overflow-hidden rounded-xl bg-(--sub-alt) p-4">
+            <Button
+              type="button"
+              onClick={props.onClose}
+              class="absolute top-3 right-3 h-7 w-7 bg-transparent p-0 text-(--sub) hover:bg-transparent hover:text-(--main)"
+            >
+              <X size={18} />
+            </Button>
 
-            <form class="flex flex-col gap-3" onSubmit={handleSubmit}>
-              <p class="text-sm text-(--sub) opacity-70">
-                you can only change your username once every 7 days.
+            <form class="flex flex-col gap-2.5" onSubmit={handleSubmit}>
+              <p class="pr-8 text-sm leading-normal text-(--sub) opacity-70">
+                you can only change your username once every{" "}
+                {USERNAME_CHANGE_COOLDOWN_DAYS} days.
               </p>
 
               <div class="flex gap-2">
                 <div class="flex-1">
                   <Input
-                    value={username()}
-                    onInput={(event) => {
-                      setUsername(event.currentTarget.value);
-                      setValidationMessage(null);
-                    }}
-                    placeholder="change username..."
-                    class="h-11 border border-(--main)/30 bg-transparent px-4"
-                    error={Boolean(validationMessage())}
-                    disabled={isSubmitting()}
+                    value={fields.username}
+                    onInput={setField("username")}
+                    placeholder="new username"
+                    class="h-10 border border-(--main)/30 bg-transparent px-4"
+                    error={Boolean(error())}
+                    disabled={submitting()}
                   />
-                  <Show when={validationMessage()}>
-                    {(message) => (
-                      <p class="mt-1 text-xs text-(--error)">{message()}</p>
-                    )}
-                  </Show>
+                  <FormError message={error()} class="text-xs" />
                 </div>
 
                 <Button
                   type="submit"
-                  disabled={isSubmitting()}
-                  class="h-11 px-5 bg-(--main) text-(--sub-alt) hover:opacity-90"
+                  disabled={submitting()}
+                  class="h-10 px-4 bg-(--main) text-(--sub-alt) enabled:hover:opacity-90"
                 >
-                  {isSubmitting() ? "..." : "save"}
+                  {submitting() ? "..." : "save"}
                 </Button>
               </div>
             </form>
