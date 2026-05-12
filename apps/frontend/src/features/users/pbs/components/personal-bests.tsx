@@ -25,27 +25,33 @@ export function PersonalBestCard(props: PersonalBestCardProps) {
           }}
         >
           <For each={props.difficulties}>
-            {(difficulty) => {
-              const pb = props.pbs[difficulty];
-
-              return (
-                <div class="flex flex-col items-center gap-1 text-center">
-                  <div class="text-[10px] font-bold uppercase tracking-widest text-(--sub) opacity-60">
-                    {difficulty}
-                  </div>
-                  <div
-                    class={`text-2xl font-bold leading-none tracking-tighter sm:text-4xl ${
-                      !pb ? "text-(--sub) opacity-15" : "text-(--text)"
-                    }`}
-                  >
-                    {pb ? pb.bestScore : "-"}
-                  </div>
-                  <div class="text-[10px] font-medium tracking-wider text-(--sub) opacity-50 sm:text-[11px]">
-                    {pb ? <span>{formatDateTime(pb.createdAt)}</span> : "-"}
-                  </div>
+            {(difficulty) => (
+              <div class="flex flex-col items-center gap-1 text-center">
+                <div class="text-[10px] font-bold uppercase tracking-widest text-(--sub) opacity-60">
+                  {difficulty}
                 </div>
-              );
-            }}
+                <div
+                  class={`text-2xl font-bold leading-none tracking-tighter sm:text-4xl ${
+                    !props.pbs[difficulty]
+                      ? "text-(--sub) opacity-15"
+                      : "text-(--text)"
+                  }`}
+                >
+                  {props.pbs[difficulty]
+                    ? props.pbs[difficulty].bestScore
+                    : "-"}
+                </div>
+                <div class="text-[10px] font-medium tracking-wider text-(--sub) opacity-50 sm:text-[11px]">
+                  {props.pbs[difficulty] ? (
+                    <span>
+                      {formatDateTime(props.pbs[difficulty].createdAt)}
+                    </span>
+                  ) : (
+                    "-"
+                  )}
+                </div>
+              </div>
+            )}
           </For>
         </div>
       </div>
