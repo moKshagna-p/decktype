@@ -60,15 +60,15 @@ export function Navbar() {
           <User size={18} strokeWidth={2} class="shrink-0" />
           <div
             class={cn(
-              "truncate transition-all",
+              "hidden sm:block transition-all",
               auth.username().length > 25
-                ? "max-w-[8rem] text-[0.65rem] sm:max-w-[15rem] sm:text-[10px]"
+                ? "max-w-[15rem] text-xs"
                 : auth.username().length > 18
-                  ? "max-w-[9rem] text-xs sm:max-w-[12rem] sm:text-xs"
-                  : "max-w-[10rem] text-sm sm:max-w-[14rem] sm:text-base",
+                  ? "max-w-[12rem] text-xs"
+                  : "max-w-[14rem] text-base",
             )}
           >
-            <p class="leading-none">{auth.username()}</p>
+            <p class="leading-tight">{auth.username()}</p>
           </div>
         </A>
       </div>
