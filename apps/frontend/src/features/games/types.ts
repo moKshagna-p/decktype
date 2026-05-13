@@ -5,7 +5,11 @@ export type GameViewProps = {
   wordBankId?: WordBankId | null;
 };
 
-export type GameId = "falling-words";
+export type GameId = "falling-words" | "survival";
+
+export type DifficultyKey = "easy" | "medium" | "hard";
+
+export type GamePhase = "idle" | "running" | "paused" | "game-over";
 
 export type GameModule = {
   id: GameId;
@@ -13,5 +17,7 @@ export type GameModule = {
   description: string;
   defaultWordBankId: WordBankId;
   difficulties: string[];
+  difficultyKeys: readonly DifficultyKey[];
+  minScores: Record<DifficultyKey, number>;
   View: Component<GameViewProps>;
 };

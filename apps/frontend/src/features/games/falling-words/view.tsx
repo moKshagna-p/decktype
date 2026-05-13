@@ -1,6 +1,6 @@
 import { Globe, Keyboard } from "lucide-solid";
 import { useAuthSession } from "@/features/auth/hooks";
-import type { GameViewProps } from "@/features/games/types";
+import type { GameViewProps, DifficultyKey } from "@/features/games/types";
 import { useCreateResultMutation } from "@/features/users/results/api";
 import { toast } from "@/lib/toast";
 import { DifficultySelector } from "../components/difficulty-selector";
@@ -10,11 +10,11 @@ import { useFallingWordsGame } from "./use-falling-words-game";
 import { fallingWordsGameMeta } from "./meta";
 import { difficultyKeys } from "./difficulty";
 
-const MINIMUM_SCORES_BY_DIFFICULTY = {
+const MINIMUM_SCORES_BY_DIFFICULTY: Record<DifficultyKey, number> = {
   easy: 20,
   medium: 15,
   hard: 10,
-} as const;
+};
 
 const getShortResultMessage = (
   difficulty: keyof typeof MINIMUM_SCORES_BY_DIFFICULTY,
