@@ -1,6 +1,7 @@
 import { A } from "@solidjs/router";
 import { User, Shield } from "lucide-solid";
 import { useAuthSession } from "@/features/auth/hooks";
+import { cn } from "@/lib/cn";
 
 const routes = [
   { label: "Leaderboard", path: "/leaderboard" },
@@ -53,12 +54,21 @@ export function Navbar() {
           }
           activeClass="text-(--text)"
           inactiveClass="hover:text-(--text)"
-          class="flex items-center gap-1 sm:gap-2 transition"
+          class="flex items-center gap-1.5 sm:gap-2 transition"
           aria-label={`Profile: ${auth.username()}`}
         >
-          <User size={18} strokeWidth={2} />
-          <div class="hidden max-w-32 truncate sm:block">
-            <p class="text-sm leading-normal sm:text-base">{auth.username()}</p>
+          <User size={18} strokeWidth={2} class="shrink-0" />
+          <div
+            class={cn(
+              "truncate transition-all",
+              auth.username().length > 25
+                ? "max-w-[8rem] text-[0.65rem] sm:max-w-[15rem] sm:text-[10px]"
+                : auth.username().length > 18
+                  ? "max-w-[9rem] text-xs sm:max-w-[12rem] sm:text-xs"
+                  : "max-w-[10rem] text-sm sm:max-w-[14rem] sm:text-base",
+            )}
+          >
+            <p class="leading-none">{auth.username()}</p>
           </div>
         </A>
       </div>
