@@ -54,13 +54,15 @@ function View(props: GameViewProps) {
 
         <div class="pointer-events-none relative z-10 flex h-full flex-col items-center justify-between px-10 pt-10 pb-6">
           <div />
-          <Hud
-            health={game.health()}
-            score={metrics.score()}
-            wpm={metrics.wpm()}
-            accuracy={metrics.accuracy()}
-            isTakingDamage={game.isShaking()}
-          />
+          <Show when={game.phase() !== "game-over"}>
+            <Hud
+              health={game.health()}
+              score={metrics.score()}
+              wpm={metrics.wpm()}
+              accuracy={metrics.accuracy()}
+              isTakingDamage={game.isShaking()}
+            />
+          </Show>
         </div>
         <GameInput
           ref={actions.setInputRef}

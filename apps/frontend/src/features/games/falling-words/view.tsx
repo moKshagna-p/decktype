@@ -1,3 +1,4 @@
+import { Show } from "solid-js";
 import { Globe, Keyboard } from "lucide-solid";
 import { useAuthSession } from "@/features/auth/hooks";
 import type { GameViewProps, DifficultyKey } from "@/features/games/types";
@@ -94,7 +95,9 @@ function FallingWordsView(props: GameViewProps) {
 
         <div class="pointer-events-none relative z-10 flex h-full min-h-[60vh] flex-col items-center justify-between px-10 pt-10 pb-6">
           <div />
-          <Hud score={session.score()} typedValue={session.currentInput()} />
+          <Show when={session.phase() !== "game-over"}>
+            <Hud score={session.score()} typedValue={session.currentInput()} />
+          </Show>
         </div>
 
         <input
