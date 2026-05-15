@@ -213,9 +213,19 @@ export function useEngine(
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Tab" || e.key === "Escape") {
+    if (e.key === "Escape") {
       e.preventDefault();
       resetGame();
+      return;
+    }
+
+    if (
+      e.key === "Enter" &&
+      (state.phase === "idle" || state.phase === "game-over")
+    ) {
+      e.preventDefault();
+      resetGame();
+      startGame();
     }
   };
 

@@ -92,7 +92,7 @@ export function Heart(props: HeartProps) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 60 60"
-      class={`drop-shadow-sm ${props.class || ""}`}
+      class={props.class || ""}
       style={{
         "image-rendering": "pixelated",
         "shape-rendering": "crispEdges",
