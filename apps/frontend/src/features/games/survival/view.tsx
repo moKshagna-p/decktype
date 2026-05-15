@@ -1,10 +1,10 @@
 import { Show } from "solid-js";
 import type { GameViewProps } from "@/features/games/types";
-import { meta } from ".";
+import { meta } from "./meta";
 import { useEngine } from "./engine";
 import { useSubmitGameResult } from "@/features/games/hooks";
 import { DifficultySelector } from "../components/difficulty-selector";
-import { Hud } from "./components/hud";
+import { SurvivalHud as Hud } from "./components/survival-hud";
 import { Words } from "./components/words";
 import { GameOver } from "@/features/games/components/game-over";
 import { GameInput } from "../components/game-input";
