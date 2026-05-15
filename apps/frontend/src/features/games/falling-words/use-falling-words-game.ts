@@ -244,9 +244,18 @@ export function useFallingWordsGame(
   const handleKeyDown = (
     event: KeyboardEvent & { currentTarget: HTMLInputElement },
   ) => {
-    if (event.key === "Tab" || event.key === "Escape") {
+    if (event.key === "Escape") {
       event.preventDefault();
       resetGame();
+      return;
+    }
+
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      if (phase() === "idle" || phase() === "game-over") {
+        startGame();
+      }
     }
   };
 
