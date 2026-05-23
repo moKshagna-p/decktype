@@ -16,7 +16,7 @@ const englishCore1kWords = [
   "are",
   "with",
   "as",
-  "i",
+  "I",
   "his",
   "they",
   "be",
