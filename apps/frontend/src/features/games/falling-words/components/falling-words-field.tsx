@@ -1,6 +1,8 @@
 import { For } from "solid-js";
+
 import { Kbd } from "@/components/ui/kbd";
-import type { GamePhase } from "@/features/games/types";
+
+import type { GamePhase } from "../../core/types";
 import type { FallingWord } from "../types";
 
 type FallingWordsFieldProps = {
