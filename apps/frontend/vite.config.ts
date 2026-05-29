@@ -12,6 +12,7 @@ const rootPackageJson = JSON.parse(
 ) as { version: string };
 
 export default defineConfig({
+  server: { open: true },
   define: {
     __APP_VERSION__: JSON.stringify(rootPackageJson.version),
   },
