@@ -1,8 +1,6 @@
-import type { DifficultyKey, GamePhase } from "@/features/games/types";
-export type { DifficultyKey, GamePhase };
+import type { DifficultyKey } from "@/features/games/types";
 
 export type DifficultyConfig = {
-  key: DifficultyKey;
   spawnIntervalMs: number;
   baseSpeed: number;
   speedJitter: number;

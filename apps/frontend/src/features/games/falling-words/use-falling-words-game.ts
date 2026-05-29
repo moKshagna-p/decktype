@@ -7,14 +7,45 @@ import {
 } from "solid-js";
 import { getWordBank } from "@/features/content/word-banks/manager";
 import type { WordBankId } from "@/features/content/word-banks/types";
-import { getDifficulty } from "./difficulty";
-import { createFallingWord } from "./engine";
+import type { DifficultyKey, GamePhase } from "@/features/games/types";
 import type {
-  DifficultyKey,
+  DifficultyConfig,
   FallingWord,
-  GamePhase,
   UseFallingWordsGameOptions,
 } from "./types";
+
+const difficultyConfigs: Record<DifficultyKey, DifficultyConfig> = {
+  easy: { spawnIntervalMs: 1800, baseSpeed: 68, speedJitter: 20, gravity: 6 },
+  medium: { spawnIntervalMs: 1250, baseSpeed: 94, speedJitter: 28, gravity: 9 },
+  hard: { spawnIntervalMs: 900, baseSpeed: 124, speedJitter: 36, gravity: 12 },
+};
+
+const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+
+function createFallingWord(
+  id: number,
+  width: number,
+  words: string[],
+  difficulty: DifficultyConfig,
+) {
+  const text = words[Math.floor(Math.random() * words.length)]!;
+  const wordWidth = Math.max(96, text.length * 18);
+  const safeWidth = Math.max(width - wordWidth - 24, 24);
+  const x = rand(24, safeWidth);
+
+  const word: FallingWord = {
+    id,
+    text,
+    x,
+    y: rand(-120, -40),
+    velocityX: rand(-16, 16),
+    velocityY: difficulty.baseSpeed + rand(0, difficulty.speedJitter),
+    rotation: rand(-10, 10),
+    angularVelocity: rand(-12, 12),
+  };
+
+  return word;
+}
 
 function formatScore(elapsedMs: number) {
   return Math.floor(elapsedMs / 1000);
@@ -49,7 +80,7 @@ export function useFallingWordsGame(
   const [currentInput, setCurrentInput] = createSignal("");
   const [elapsedMs, setElapsedMs] = createSignal(0);
 
-  const selectedDifficulty = createMemo(() => getDifficulty(difficulty()));
+  const selectedDifficulty = createMemo(() => difficultyConfigs[difficulty()]);
   const score = createMemo(() => formatScore(elapsedMs()));
 
   const focusedWordId = createMemo((prevFocusedWordId?: number | null) => {
