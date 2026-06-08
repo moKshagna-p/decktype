@@ -7,6 +7,6 @@ export const meta: GameModule = {
   description: "Type as fast as you can without making mistakes.",
   defaultWordBankId: "english/core-1k",
   difficultyKeys: ["easy", "medium", "hard"] as const,
-  minScores: { easy: 15, medium: 10, hard: 5 },
+  minScores: { easy: 50, medium: 30, hard: 15 },
   View,
 };

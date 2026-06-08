@@ -8,10 +8,9 @@ import { serializeResult, serializeUserPBs } from "./serializers";
 import type { CreateResultInput, GetUserResultsInput } from "./types";
 
 // TODO: Move rules and shared configs to a new package
-const FALLING_WORDS_MINIMUM_SCORES = {
-  easy: 20,
-  medium: 15,
-  hard: 10,
+const MINIMUM_SCORES: Record<string, Record<string, number>> = {
+  "falling-words": { easy: 20, medium: 15, hard: 10 },
+  survival: { easy: 50, medium: 30, hard: 15 },
 } as const;
 
 const getResultValidationMessage = (
@@ -19,18 +18,11 @@ const getResultValidationMessage = (
   difficulty: string,
   score: number,
 ) => {
-  if (gameId !== "falling-words") {
-    return null;
-  }
+  const gameMinScores = MINIMUM_SCORES[gameId];
+  if (!gameMinScores) return null;
 
-  const minimumScore =
-    FALLING_WORDS_MINIMUM_SCORES[
-      difficulty as keyof typeof FALLING_WORDS_MINIMUM_SCORES
-    ];
-
-  if (minimumScore === undefined || score >= minimumScore) {
-    return null;
-  }
+  const minimumScore = gameMinScores[difficulty];
+  if (minimumScore === undefined || score >= minimumScore) return null;
 
   return `Result not saved. Test too short. Minimum score for ${difficulty} is ${minimumScore}.`;
 };
