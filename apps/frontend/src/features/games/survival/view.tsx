@@ -35,6 +35,7 @@ function View(props: GameViewProps) {
         />
       </div>
       <div
+        onClick={actions.focusInput}
         class={`relative min-h-[60vh] overflow-hidden rounded-2xl transition-colors hover:bg-(--sub-alt)/20 ${
           game.isShaking()
             ? "animate-damage bg-(--error)/10"

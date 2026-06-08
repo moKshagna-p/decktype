@@ -10,7 +10,7 @@ export function GameInput(props: GameInputProps) {
     <input
       ref={props.ref}
       value={props.value}
-      class="absolute -left-[9999px] top-0 opacity-0"
+      class="sr-only opacity-0"
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"

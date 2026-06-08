@@ -1,4 +1,4 @@
-import { createMemo, onCleanup, createEffect } from "solid-js";
+import { createMemo, onCleanup, createEffect, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { getWordBank } from "@/features/content/word-banks/manager";
@@ -234,6 +234,8 @@ export function useEngine(
     }
   };
 
+  const focusInput = () => inputRef?.focus();
+
   onCleanup(() => stopTimer());
 
   createEffect(() => {
@@ -241,6 +243,8 @@ export function useEngine(
       setState("activeWords", generateWords(WORD_BATCH));
     }
   });
+
+  onMount(() => focusInput());
 
   return {
     game: {
@@ -267,7 +271,7 @@ export function useEngine(
       setInputRef: (el: HTMLInputElement) => {
         inputRef = el;
       },
-      focusInput: () => inputRef?.focus(),
+      focusInput,
       resetGame,
     },
   };
