@@ -6,7 +6,6 @@ type HudProps = {
   health: number;
   score: number;
   wpm: number;
-  accuracy: number;
   isTakingDamage?: boolean;
 };
 
@@ -14,7 +13,6 @@ export function Hud(props: HudProps) {
   return (
     <div class="flex items-center gap-12 font-mono">
       <GameStat label="score" value={props.score.toLocaleString()} highlight />
-      <GameStat label="acc" value={`${Math.round(props.accuracy * 100)}%`} />
       <GameStat label="wpm" value={props.wpm} />
 
       <div class="flex flex-col gap-1">

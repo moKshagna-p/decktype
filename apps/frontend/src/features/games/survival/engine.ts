@@ -85,9 +85,7 @@ export function useEngine(
   );
 
   const score = createMemo(() =>
-    Math.floor(
-      (state.totalCorrectChars * metrics().wpm * metrics().accuracy) / 100,
-    ),
+    Math.floor((state.totalCorrectChars * metrics().wpm) / 100),
   );
 
   const stopTimer = () => {
@@ -169,7 +167,7 @@ export function useEngine(
       e.inputType === "deleteWordBackward" ||
       e.inputType === "deleteWordForward"
     ) {
-      setState("currentInput", value);
+      e.currentTarget.value = state.currentInput;
       return;
     }
 
@@ -215,6 +213,11 @@ export function useEngine(
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      return;
+    }
+
     if (e.key === "Escape") {
       e.preventDefault();
       resetGame();
@@ -248,7 +251,6 @@ export function useEngine(
     },
     metrics: {
       wpm: () => metrics().wpm,
-      accuracy: () => metrics().accuracy,
       score,
     },
     words: {

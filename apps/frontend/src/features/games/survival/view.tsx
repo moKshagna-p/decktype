@@ -60,7 +60,6 @@ function View(props: GameViewProps) {
               health={game.health()}
               score={metrics.score()}
               wpm={metrics.wpm()}
-              accuracy={metrics.accuracy()}
               isTakingDamage={game.isShaking()}
             />
           </Show>
