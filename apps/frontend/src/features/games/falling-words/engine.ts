@@ -78,6 +78,8 @@ export function useEngine(
   let runStartTime = 0;
   let elapsedBeforeRun = 0;
 
+  let pauseStartTime = 0;
+
   const [phase, setPhase] = createSignal<GamePhase>("idle");
   const [difficulty, setDifficulty] = createSignal<DifficultyKey>("easy");
   const [fieldWidth, setFieldWidth] = createSignal(0);
@@ -85,6 +87,7 @@ export function useEngine(
   const [activeWords, setActiveWords] = createSignal<FallingWord[]>([]);
   const [currentInput, setCurrentInput] = createSignal("");
   const [elapsedMs, setElapsedMs] = createSignal(0);
+  const [loopKey, setLoopKey] = createSignal(0);
 
   const config = createMemo(() => difficultyConfigs[difficulty()]);
   const score = createMemo(() => formatScore(elapsedMs()));
@@ -269,15 +272,37 @@ export function useEngine(
     }
   };
 
-  const handleVisibilityChange = () => {
-    if (document.hidden && phase() === "running") endGame();
+  const pauseGame = () => {
+    if (phase() !== "running") return;
+    stopLoop();
+    elapsedBeforeRun = getElapsedMsNow();
+    pauseStartTime = performance.now();
   };
 
-  const handleWindowBlur = () => {
-    if (phase() === "running") endGame();
+  const resumeGame = () => {
+    if (phase() !== "running" || pauseStartTime === 0) return;
+    const duration = performance.now() - pauseStartTime;
+    runStartTime += duration;
+    lastSpawnTime += duration;
+    pauseStartTime = 0;
+    setLoopKey((k) => k + 1);
   };
+
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      pauseGame();
+      return;
+    }
+    resumeGame();
+    setTimeout(focusInput, 0);
+  };
+
+  const handleWindowBlur = () => pauseGame();
+
+  const handleWindowFocus = () => resumeGame();
 
   createEffect(() => {
+    loopKey();
     if (phase() !== "running") {
       stopLoop();
       return;
@@ -349,11 +374,13 @@ export function useEngine(
     if (fieldRef) observer.observe(fieldRef);
 
     window.addEventListener("blur", handleWindowBlur);
+    window.addEventListener("focus", handleWindowFocus);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     onCleanup(() => {
       observer.disconnect();
       window.removeEventListener("blur", handleWindowBlur);
+      window.removeEventListener("focus", handleWindowFocus);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     });
   });
